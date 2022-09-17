@@ -1,4 +1,8 @@
 async function ttblCli(params) {
+	let path == NL_PATH
+	if (NL_PATH == '.') {
+		path += '/modules/ttbl-cli/src'
+	}
 	return await Neutralino.os.execCommand(NL_PATH + '/ttbl ' + params);
 }
 
@@ -7,6 +11,7 @@ export async function ttblSync() {
 }
 
 export async function getClasses() {
+	document.getElementById('test').innerText = NL_PATH
 	let classes = await ttblCli('-3 -mro')
 	classes = classes.stdOut.split(/\r?\n/).filter(element => element);
 	for (let sub in classes) {
