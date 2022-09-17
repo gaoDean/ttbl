@@ -1,5 +1,5 @@
 {
-  "applicationId": "js.neutralino.sample",
+  "applicationId": "ttbl.timetable",
   "version": "1.0.0",
   "defaultMode": "window",
   "port": 0,
@@ -15,6 +15,7 @@
   "nativeAllowList": [
     "app.*",
     "os.*",
+	"window.*",
     "debug.log"
   ],
   "globalVariables": {
@@ -32,7 +33,7 @@
       "enableInspector": true,
       "borderless": false,
       "maximize": false,
-      "hidden": false,
+      "hidden": true,
       "resizable": true,
       "exitProcessOnClose": true
     },
