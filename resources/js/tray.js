@@ -6,10 +6,15 @@ export async function setClassesToTray() {
 		icon: '/resources/img/trayIcon.png',
 		menuItems: []
 	};
+
+	let msg = classes.shift().period;
+	if (msg == "No token provided") {
+		await Neutralino.app.exit()
+	}
 	// add the Here's <date> part
 	tray.menuItems.push({
 			id: 'date',
-			text: classes.shift().period
+			text: msg
 	}, {
 			text: '-'
 	});
