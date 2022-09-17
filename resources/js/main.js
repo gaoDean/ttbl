@@ -2,7 +2,7 @@ let datadir = '~/.local/share/ttbl'
 let cachedir = '~/.cache/ttbl'
 
 async function getClasses() {
-	let classes = await Neutralino.os.execCommand('resources/modules/terminaltimetable/src/ttbl -3 -mro');
+	let classes = await Neutralino.os.execCommand('resources/modules/ttbl-cli/src/ttbl -3 -mro');
 	classes = classes.stdOut.split(/\r?\n/).filter(element => element);
 	for (let sub in classes) {
 		classes[sub] = classes[sub].split(/;/).filter(element => element);
