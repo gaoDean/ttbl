@@ -18,8 +18,6 @@
 	"window.*",
     "debug.log"
   ],
-  "globalVariables": {
-  },
   "modes": {
     "window": {
       "title": "ttbl",
@@ -29,35 +27,13 @@
       "minHeight": 200,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/resources/icons/appIcon.png",
+      "icon": "/resources/img/appIcon.png",
       "enableInspector": true,
       "borderless": false,
       "maximize": false,
       "hidden": true,
       "resizable": true,
-      "exitProcessOnClose": true
-    },
-    "browser": {
-      "globalVariables": {
-      },
-      "nativeBlockList": [
-        "filesystem.*"
-      ]
-    },
-    "cloud": {
-      "url": "/resources/#cloud",
-      "nativeAllowList": [
-        "app.*"
-      ]
-    },
-    "chrome": {
-      "width": 800,
-      "height": 500,
-      "args": "--user-agent=\"Neutralinojs chrome mode\"",
-      "nativeBlockList": [
-        "filesystem.*",
-        "os.*"
-      ]
+      "exitProcessOnClose": false
     }
   },
   "cli": {

@@ -2,7 +2,7 @@ let datadir = '~/.local/share/ttbl'
 let cachedir = '~/.cache/ttbl'
 
 async function getClasses() {
-	let classes = await Neutralino.os.execCommand('ttbl -3 -mro');
+	let classes = await Neutralino.os.execCommand('resources/modules/terminaltimetable/src/ttbl -3 -mro');
 	classes = classes.stdOut.split(/\r?\n/).filter(element => element);
 	for (let sub in classes) {
 		classes[sub] = classes[sub].split(/;/).filter(element => element);
@@ -18,7 +18,7 @@ async function getClasses() {
 async function setClassesToTray() {
 	let classes = await getClasses()
 	let tray = {
-		icon: '/resources/icons/trayIcon.png',
+		icon: '/resources/img/trayIcon.png',
 		menuItems: []
 	};
 	for (const cls in classes) {
@@ -33,29 +33,27 @@ async function setClassesToTray() {
 		text: '-'
 	}, {
 		id: 'opts',
-		text: 'Options'
+		text: 'Preferences...'
 	}, {
 		id: 'quit',
-		text: 'Quit'
+		text: 'Quit Timetable'
 	});
 	await Neutralino.os.setTray(tray);
 }
 
-function onTrayMenuItemClicked(event) {
+Neutralino.init();
+setClassesToTray()
+await Neutralino.events.on('trayMenuItemClicked', async () => {
 	let id = event.detail.id
 	switch (id) {
 		case 'quit':
 			Neutralino.app.exit();
 			break;
 		case 'opts':
+			await Neutralino.window.show();
 			break;
 	}
-}
-
-Neutralino.init();
-await Neutralino.window.hide();
-setClassesToTray()
-console.log(await Neutralino.window.isVisible());
-await Neutralino.events.on('trayMenuItemClicked', onTrayMenuItemClicked);
-
-// console.log(classes);
+});
+Neutralino.events.on("windowClose", () => {
+    Neutralino.window.hide();
+});
