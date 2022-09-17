@@ -1,5 +1,5 @@
 async function ttblCli(params) {
-	return await Neutralino.os.execCommand('resources/modules/ttbl-cli/src/ttbl ' + params);
+	return await Neutralino.os.execCommand(NL_PATH + '/ttbl ' + params);
 }
 
 export async function ttblSync() {

@@ -2,16 +2,10 @@
   "applicationId": "ttbl.timetable",
   "version": "1.0.0",
   "defaultMode": "window",
-  "port": 0,
   "documentRoot": "/resources/",
   "url": "/",
   "enableServer": true,
   "enableNativeAPI": true,
-  "tokenSecurity": "one-time",
-  "logging": {
-    "enabled": true,
-    "writeToLogFile": true
-  },
   "nativeAllowList": [
     "app.*",
     "os.*",
@@ -25,14 +19,8 @@
       "height": 500,
       "minWidth": 400,
       "minHeight": 200,
-      "fullScreen": false,
-      "alwaysOnTop": false,
       "icon": "/resources/img/appIcon.png",
-      "enableInspector": true,
-      "borderless": false,
-      "maximize": false,
       "hidden": true,
-      "resizable": true,
       "exitProcessOnClose": false
     }
   },
