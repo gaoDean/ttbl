@@ -1,5 +1,13 @@
+async function ttblCli(params) {
+	return await Neutralino.os.execCommand('resources/modules/ttbl-cli/src/ttbl ' + params);
+}
+
+export async function ttblSync() {
+	await ttblCli('-sync 14 2')
+}
+
 export async function getClasses() {
-	let classes = await Neutralino.os.execCommand('resources/modules/ttbl-cli/src/ttbl -3 -mro');
+	let classes = await ttblCli('-3 -mro')
 	classes = classes.stdOut.split(/\r?\n/).filter(element => element);
 	for (let sub in classes) {
 		classes[sub] = classes[sub].split(/;/).filter(element => element);
