@@ -1,18 +1,18 @@
 async function ttblCli(params) {
-	let path == NL_PATH
+	let path = NL_PATH;
 	if (NL_PATH == '.') {
-		path += '/modules/ttbl-cli/src'
+		path += '/modules/ttbl-cli/src';
 	}
-	return await Neutralino.os.execCommand(NL_PATH + '/ttbl ' + params);
+	return await Neutralino.os.execCommand(path + '/ttbl ' + params);
 }
 
 export async function ttblSync() {
-	await ttblCli('-sync 14 2')
+	let output = await ttblCli('--sync 14 2');
+	return output.stdOut;
 }
 
 export async function getClasses() {
-	document.getElementById('test').innerText = NL_PATH
-	let classes = await ttblCli('-3 -mro')
+	let classes = await ttblCli('-0 --mro')
 	classes = classes.stdOut.split(/\r?\n/).filter(element => element);
 	for (let sub in classes) {
 		classes[sub] = classes[sub].split(/;/).filter(element => element);

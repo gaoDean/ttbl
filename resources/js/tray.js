@@ -1,13 +1,14 @@
 import * as cli from "./cli.js";
 
 export async function setClassesToTray() {
-	let classes = await cli.getClasses();
+	let classes = []
+	classes = await cli.getClasses();
 	let tray = {
 		icon: '/resources/img/trayIcon.png',
 		menuItems: []
 	};
 
-	let msg = classes.shift().period;
+	let msg = classes.shift()['period'];
 	if (msg == "No token provided") {
 		await Neutralino.app.exit()
 	}
@@ -50,7 +51,7 @@ await Neutralino.events.on('trayMenuItemClicked', async () => {
 			break;
 		case 'sync':
 			await cli.sync();
-			break
+			break;
 		case 'opts':
 			await Neutralino.window.show(); // show the window
 			break;

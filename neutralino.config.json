@@ -22,7 +22,7 @@
       "alwaysOnTop": true,
       "icon": "/resources/img/appIcon.png",
       "enableInspector": true,
-      "hidden": true,
+      "hidden": false,
       "resizable": true,
       "exitProcessOnClose": false
     }
