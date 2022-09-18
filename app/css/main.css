@@ -1,3 +1,15 @@
 *:required:invalid {
   border-color: #c00000;
 }
+
+.grid>* {
+    padding: calc(var(--spacing)/ 2) 0;
+    border-radius: var(--border-radius);
+    background: var(--code-background-color);
+    font-size: 87.5%;
+    text-align: center;
+}
+
+.grid {
+	padding-bottom: calc(var(--spacing)/ 3);
+}

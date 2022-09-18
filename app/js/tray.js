@@ -1,9 +1,9 @@
-import * as cli from "../cli/cli.js";
+import { getClasses, fetchTimetable } from "./cli.js";
 
 async function setClassesToTray() {
-	let classes = []
+	let classes = [];
 	try {
-		classes = await cli.getClasses();
+		classes = await getClasses();
 	}	catch(err) {
 		console.log(err);
 		window.location = "login.html";
@@ -16,7 +16,7 @@ async function setClassesToTray() {
 
 	let msg = classes.shift()["period"];
 	if (msg == "No token provided") {
-		await Neutralino.app.exit()
+		await Neutralino.app.exit();
 	}
 	// add the Here"s <date> part
 	tray.menuItems.push({
@@ -28,7 +28,7 @@ async function setClassesToTray() {
 	let padding = "       "
 	// add all the other classes
 	for (const cls in classes) {
-		let rpad = padding.substring(classes[cls]["room"].length)
+		let rpad = padding.substring(classes[cls]["room"].length);
 		tray.menuItems.push({
 				id: classes[cls]["period"],
 				text: `${classes[cls]["period"]}\t${classes[cls]["room"]}${rpad}\t${classes[cls]["class"]}`
@@ -59,7 +59,7 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 			break;
 		case "sync":
 			try {
-				await cli.fetchTimetable();
+				await fetchTimetable();
 			}	catch(err) {
 				console.log(err);
 			}
