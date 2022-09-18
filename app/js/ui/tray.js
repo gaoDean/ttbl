@@ -1,4 +1,4 @@
-import * as cli from "./cli.js";
+import * as cli from "../cli/cli.js";
 
 async function setClassesToTray() {
 	let classes = []
