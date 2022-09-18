@@ -13,3 +13,10 @@ run:
 runbin:
 	@echo "Running mac binary"
 	@./dist/ttbl/ttbl-mac_x64
+
+.PHONY: update
+update:
+	@echo "Updating ttbl-cli"
+	@cd modules/ttbl-cli && git pull -q
+	@echo "Updating pico"
+	@cd modules/pico && git pull -q

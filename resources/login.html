@@ -10,10 +10,18 @@
   <body>
 		<main class="container">
 			<div id="neutralinoapp">
+				<div class="grid">
+					<input type="text" id="login" placeholder="Student Number" required="">
+					<input type="password" id="password" placeholder="Password" required="">
+					<button type="submit" id="submit" aria-busy="false" onclick="event.preventDefault()">
+						Login
+					</button>
+				</div>
+				<p id="login_msg">This will take 15-30 seconds, but you'll only need to do this once.</p>
 			</div>
 		</main>
     <script src="js/neutralino.js"></script>
     <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/tray.js"></script>
+    <script type="module" src="js/token.js"></script>
   </body>
 </html>
