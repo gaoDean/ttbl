@@ -1,3 +1,7 @@
+/* requires { Neutralino, dayjs }
+
+	== sets up background syncing of timetable == */
+
 import { fetchTimetable } from "./cli.js"
 
 // schedule syncing every day
@@ -7,8 +11,9 @@ function scheduleSync(hours, minutes, seconds) {
 	const desired = dayjs(dayjs().format("YYYY-MM-DDT" + hours + ":" + minutes + ":" + seconds + "Z"));
 	let delta_ms = dayjs(desired.diff(dayjs())); // diff between desired time and current time
 	if (delta_ms < 0) {
-		delta_ms = delta_ms.add(1, "day") // if desired time has already passed, move to next day
+		delta_ms = delta_ms.add(1, "day"); // if desired time has already passed, move to next day
 	}
+	console.log("scheduled to run at " + dayjs(delta_ms).add(dayjs()).format());
 
 	// the following will run fetchTimetable at the desired time every day
 	setTimeout(setupInterval, delta_ms); // run setupInterval() in delta_ms milliseconds
@@ -18,4 +23,4 @@ function scheduleSync(hours, minutes, seconds) {
 	}
 }
 
-scheduleSync("05", "00", "00")
+scheduleSync("08", "00", "00");

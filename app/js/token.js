@@ -1,3 +1,7 @@
+/* requires { Neutralino }
+
+	== login and tokens == */
+
 import { fetchToken } from "./cli.js";
 
 function loginMsg(msg) {

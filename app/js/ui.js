@@ -1,3 +1,7 @@
+/* requires { Neutralino }
+
+	== the ui for the window == */
+
 import { getClasses } from "./cli.js"
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
@@ -37,7 +41,6 @@ async function setClassesToUI() {
 	// add all the other classes
 	for (const cls in classes) {
 		let cur_class = classes[cls];
-		let rpad = padding.substring(cur_class["room"].length)
 		let classDiv = addElement(main, "div", "", [[ "class", "grid" ]]);
 		addElement(classDiv, "div", cur_class["period"]);
 		addElement(classDiv, "div", cur_class["room"]);

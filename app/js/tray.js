@@ -1,4 +1,12 @@
+/* requires { Neutralino, dayjs }
+
+	== sets up the tray menu == */
+
 import { getClasses, fetchTimetable } from "./cli.js";
+
+function ended(time, cur) {
+	console.log(time)
+}
 
 async function setClassesToTray() {
 	let classes = [];
@@ -28,7 +36,9 @@ async function setClassesToTray() {
 	let padding = "       "
 	// add all the other classes
 	for (const cls in classes) {
+		let cur_class = classes[cls];
 		let rpad = padding.substring(classes[cls]["room"].length);
+		let hasended = ended(cur_class);
 		tray.menuItems.push({
 				id: classes[cls]["period"],
 				text: `${classes[cls]["period"]}\t${classes[cls]["room"]}${rpad}\t${classes[cls]["class"]}`
