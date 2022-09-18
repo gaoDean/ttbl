@@ -1,6 +1,5 @@
 import * as cli from "./cli.js";
 
-
 function loginMsg(msg) {
 	document.getElementById("login_msg").innerText = msg;
 }
