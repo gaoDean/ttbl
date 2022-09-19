@@ -5,8 +5,8 @@ on:
     branches: [ main ]
 
 jobs:
-  deploy-macos-linux:
-    name: Compile MacOS/Linux Application
+  deploy:
+    name: Compile Application
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,6 +31,18 @@ jobs:
           name: ttbl-mac_x64
           path: dist/ttbl/ttbl-mac_x64.app
 
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
+        with:
+          name: ttbl-win_x64
+          path: dist/ttbl/ttbl-win_x64.exe
+
+      - name: Upload WebView2Loader.ddl
+        uses: actions/upload-artifact@v3
+        with:
+          name: WebView2Loader.ddl
+          path: dist/ttbl/WebView2Loader.dll
+
       - name: Upload ttbl-linux_arm64
         uses: actions/upload-artifact@v3
         with:
@@ -48,37 +60,3 @@ jobs:
         with:
           name: ttbl-linux_x64
           path: dist/ttbl/ttbl-linux_x64
-  deploy-windows:
-    name: Compile Windows Application
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-
-      - name: Build App
-        run: |
-          npm i -g @neutralinojs/neu
-          git submodule update --init --recursive
-          neu update
-          neu build
-
-      - name: Upload Windows
-        uses: actions/upload-artifact@v3
-        with:
-          name: ttbl-win_x64
-          path: dist/ttbl/ttbl-win_x64.app
-
-      - name: Upload WebView2Loader.ddl
-        uses: actions/upload-artifact@v3
-        with:
-          name: WebView2Loader.ddl
-          path: dist/ttbl/WebView2Loader.ddl
-
-      - name: Upload Windows Folder
-        uses: actions/upload-artifact@v3
-        with:
-          name: ttbl-win
-          path: dist/ttbl
