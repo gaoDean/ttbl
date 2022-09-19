@@ -7,5 +7,5 @@ Neutralino.events.on("windowClose", () => {
     Neutralino.window.hide();
 });
 
-import { scheduleSync } from "./time.js";
+import { scheduleSync } from "./helper/time.js";
 scheduleSync("08", "00", "00");

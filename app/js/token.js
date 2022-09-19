@@ -2,7 +2,7 @@
 
 	== login and tokens == */
 
-import { fetchToken } from "./cli.js";
+import { fetchToken } from "./helper/cli.js";
 
 function loginMsg(msg) {
 	document.getElementById("login_msg").innerText = msg;

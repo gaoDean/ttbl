@@ -2,8 +2,8 @@
 
 	== sets up the tray menu == */
 
-import { getClasses, fetchTimetable } from "./cli.js";
-import { inThePast } from "./time.js";
+import { getClasses, fetchTimetable } from "./helper/cli.js";
+import { inThePast } from "./helper/time.js";
 
 async function setClassesToTray() {
 	let classes = [];
