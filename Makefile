@@ -22,12 +22,13 @@ build:
 setup:
 	@echo "Setting up the environment"
 	@npm i -g @neutralinojs/neu
+	@git submodule update --init --recursive
 	@neu update
 
 .PHONY: update
 update:
 	@echo "Updating submodules"
-	@git submodule update --init --recursive
+	@git submodule update --remote --merge --recursive
 	@cp modules/pico/css/pico.min.css app/css/
 	@cp modules/pico/css/pico.min.css.map app/css/
 
