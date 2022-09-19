@@ -15,28 +15,27 @@ function busy(bool) {
 async function getToken() {
 	let student_id = document.getElementById("login").value;
 	let password = document.getElementById("password").value;
-	console.log(student_id,  password)
 	if (student_id == "" || password == "") {
 		loginMsg("You missed the login or the password.");
 		return;
 	}
 	try {
-		busy(true)
-		loginMsg("Trying to fetch token")
+		busy(true);
+		loginMsg("Trying to fetch token");
 		await fetchToken(student_id, password);
 	}	catch(err) {
-		busy(false)
-		loginMsg("Login failed, check if you entered the correct password.")
+		busy(false);
+		loginMsg("Login failed, check if you entered the correct password.");
 		console.log(err);
 		return;
 	}
-	busy(false)
-	loginMsg("Token fetched successfully")
+	busy(false);
+	loginMsg("Token fetched successfully");
 	window.location = "index.html";
 }
 
 document.getElementById("submit").addEventListener("click", function() {
-	getToken()
+	getToken();
 });
 
 Neutralino.window.show();

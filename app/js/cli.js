@@ -23,7 +23,6 @@ export async function fetchTimetable() {
 // fetch the token using ttbl-cli
 export async function fetchToken(student_id, pass) {
 	let output = await ttblRun(`--token "${student_id}" "${pass}"`);
-	console.log(output.exitCode)
 	if (output.exitCode > 0) {
 		throw new Error("Couldn't fetch token");
 	}
@@ -31,7 +30,7 @@ export async function fetchToken(student_id, pass) {
 
 // get today's classes using ttbl-cli
 export async function getClasses() {
-	let classes = await ttblRun("-3", true)
+	let classes = await ttblRun("-3", true);
 	if (classes.exitCode > 0) {
 		throw new Error("No token provided");
 	}

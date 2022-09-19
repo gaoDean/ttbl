@@ -2,7 +2,7 @@
 
 	== the ui for the window == */
 
-import { getClasses } from "./cli.js"
+import { getClasses } from "./cli.js";
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };
@@ -10,14 +10,14 @@ function addElement(parent_element, tag, inner, attributes) {
 	let element = document.createElement(tag);
 	element.textContent = inner;
 	for (let attr in attributes) {
-		element.setAttribute(attributes[attr][0], attributes[attr][1])
+		element.setAttribute(attributes[attr][0], attributes[attr][1]);
 	}
 	return parent_element.appendChild(element);
 }
 
 function addElementRecurse(parent_element, tag1, tag2, inner, attributes) {
-	let element = addElement(parent_element, tag1)
-	return addElement(element, tag2, inner, attributes)
+	let element = addElement(parent_element, tag1);
+	return addElement(element, tag2, inner, attributes);
 }
 
 async function setClassesToUI() {
@@ -48,4 +48,4 @@ async function setClassesToUI() {
 	}
 }
 
-setClassesToUI()
+setClassesToUI();

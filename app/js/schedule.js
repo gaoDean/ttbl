@@ -2,7 +2,7 @@
 
 	== sets up background syncing of timetable == */
 
-import { fetchTimetable } from "./cli.js"
+import { fetchTimetable } from "./cli.js";
 
 // schedule syncing every day
 // (string 00-23, string 00-59, string 00-59) [ must be two digits ]
