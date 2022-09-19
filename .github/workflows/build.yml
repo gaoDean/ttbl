@@ -24,8 +24,39 @@ jobs:
           cd dist/ttbl
           mv ttbl-mac_x64 ttbl-mac_x64.app
           chmod +x ttbl-mac_x64.app
-      - name: Upload Artifacts
+
+      - name: Upload MacOS
         uses: actions/upload-artifact@v3
         with:
-          name: build
-          path: dist/ttbl
+          name: ttbl-mac_x64
+          path: dist/ttbl/ttbl-mac_x64.app
+
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
+        with:
+          name: ttbl-win_x64
+          path: dist/ttbl/ttbl-win_x64.app
+
+      - name: Upload WebView2Loader.ddl
+        uses: actions/upload-artifact@v3
+        with:
+          name: WebView2Loader.ddl
+          path: dist/ttbl/WebView2Loader.ddl
+
+      - name: Upload ttbl-linux_arm64
+        uses: actions/upload-artifact@v3
+        with:
+          name: ttbl-linux_arm64
+          path: dist/ttbl/ttbl-linux_arm64
+
+      - name: Upload ttbl-linux_armhf
+        uses: actions/upload-artifact@v3
+        with:
+          name: ttbl-linux_armhf
+          path: dist/ttbl/ttbl-linux_armhf
+
+      - name: Upload ttbl-linux_x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: ttbl-linux_x64
+          path: dist/ttbl/ttbl-linux_x64
