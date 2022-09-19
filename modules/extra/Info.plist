@@ -19,8 +19,6 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>10.12</string>
 	<key>LSUIElement</key>
-	<true/>
-	<key>LSBackgroundOnly</key>
-	<string>1</string>
+	<string>true</string>
 </dict>
 </plist>
