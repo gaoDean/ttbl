@@ -17,7 +17,9 @@ jobs:
 
       - name: Build App
         run: |
+          make test
           make setup
+          make update
           make
           mkdir dist/macos
           mv dist/ttbl.app dist/macos/ttbl.app

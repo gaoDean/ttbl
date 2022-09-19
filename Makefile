@@ -22,15 +22,12 @@ build:
 setup:
 	@echo "Setting up the environment"
 	@npm i -g @neutralinojs/neu
-	@git submodule update --init --recursive
 	@neu update
 
 .PHONY: update
 update:
-	@echo "Updating ttbl-cli"
-	@cd modules/ttbl-cli && git pull -q
-	@echo "Updating pico"
-	@cd modules/pico && git pull -q
+	@echo "Updating submodules"
+	@git submodule update --init --recursive
 	@cp modules/pico/css/pico.min.css app/css/
 	@cp modules/pico/css/pico.min.css.map app/css/
 
