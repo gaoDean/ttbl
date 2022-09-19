@@ -19,12 +19,14 @@ jobs:
         run: |
           make setup
           make
+          mkdir dist/macos
+          mv dist/ttbl.app dist/macos/ttbl.app
 
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
         with:
-          name: ttbl-mac_x64.app
-          path: dist/ttbl.app
+          name: ttbl-mac_x64
+          path: dist/macos
 
       - name: Upload Windows
         uses: actions/upload-artifact@v3
