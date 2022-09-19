@@ -4,11 +4,7 @@
 
 // run a ttbl command
 async function ttblRun(params, parse) {
-	let path = NL_PATH;
-	// when building, the ttbl-cli binary gets put in ./
-	if (NL_PATH == ".") {
-		path += "/modules/ttbl-cli/src"; // when "neu run", ttbl is in that path
-	}
+	let path = NL_PATH + "/modules/ttbl-cli/src"; // when "neu run", ttbl is in that path
 	if (parse) {
 		return await Neutralino.os.execCommand(path + "/ttblparse " + params);
 	}	else {
