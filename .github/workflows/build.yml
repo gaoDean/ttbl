@@ -24,6 +24,7 @@ jobs:
           cd dist/ttbl
           mv ttbl-mac_x64 ttbl-mac_x64.app
           chmod +x ttbl-mac_x64.app
+          # ideally replace neu build downwards with `make build`
 
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
