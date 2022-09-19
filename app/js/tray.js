@@ -1,13 +1,9 @@
-/* requires { Neutralino, dayjs }
+/* requires { Neutralino }
 
 	== sets up the tray menu == */
 
 import { getClasses, fetchTimetable } from "./cli.js";
-
-// if <time> is in the past, return true
-function inThePast(time) {
-	return dayjs(time).diff(dayjs()) < 0;
-}
+import { inThePast } from "./time.js";
 
 async function setClassesToTray() {
 	let classes = [];
@@ -42,7 +38,7 @@ async function setClassesToTray() {
 		let shownText = `${classes[cls]["period"]}\t`
 			+ `${classes[cls]["room"]}${rpad}\t`
 			+ `${classes[cls]["class"]}`;
-		console.log(ended(cur_class["end"]));
+		// this adds the class to the tray menu
 		tray.menuItems.push({
 				id: classes[cls]["period"],
 				text: shownText,

@@ -3,6 +3,7 @@
 	== the ui for the window == */
 
 import { getClasses } from "./cli.js";
+import { inThePast } from "./time.js";
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };

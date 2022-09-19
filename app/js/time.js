@@ -1,12 +1,17 @@
-/* requires { Neutralino, dayjs }
+/* requires { dayjs }
 
 	== sets up background syncing of timetable == */
 
 import { fetchTimetable } from "./cli.js";
 
+// if <time> is in the past, return true
+export function inThePast(time) {
+	return dayjs(time).diff(dayjs()) < 0;
+}
+
 // schedule syncing every day
 // (string 00-23, string 00-59, string 00-59) [ must be two digits ]
-function scheduleSync(hours, minutes, seconds) {
+export function scheduleSync(hours, minutes, seconds) {
 	const ms_in_day = 86400000; // 1000(ms) * 60(s) * 60(m) * 24(h)
 	const desired = dayjs(dayjs().format("YYYY-MM-DDT" + hours + ":" + minutes + ":" + seconds + "Z"));
 	let delta_ms = dayjs(desired.diff(dayjs())); // diff between desired time and current time
@@ -22,5 +27,3 @@ function scheduleSync(hours, minutes, seconds) {
 		setInterval(await fetchTimetable(), ms_in_day);
 	}
 }
-
-scheduleSync("08", "00", "00");
