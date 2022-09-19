@@ -35,7 +35,7 @@ async function setClassesToTray() {
 	for (const cls in classes) {
 		let cur_class = classes[cls];
 		let rpad = padding.substring(classes[cls]["room"].length);
-		let shownText = `${classes[cls]["period"]}\t`
+		let shownText = `${classes[cls]["period"]}\t` // join
 			+ `${classes[cls]["room"]}${rpad}\t`
 			+ `${classes[cls]["class"]}`;
 		// this adds the class to the tray menu

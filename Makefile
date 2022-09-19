@@ -33,3 +33,7 @@ update:
 	@cd modules/pico && git pull -q
 	@cp modules/pico/css/pico.min.css app/css/
 	@cp modules/pico/css/pico.min.css.map app/css/
+
+.PHONY: test
+test:
+	@sh modules/extra/semi.sh

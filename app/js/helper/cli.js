@@ -32,7 +32,6 @@ export async function fetchToken(student_id, pass) {
 export async function getClasses() {
 	// ttblparse expects the time when it should fetch tomorrows' class today as the second arg
 	let classes = await ttblRun("-4 17 " + NL_PATH, true);
-	console.log(classes)
 	if (classes.exitCode > 0) {
 		throw new Error("No token provided");
 	}
