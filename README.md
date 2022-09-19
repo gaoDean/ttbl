@@ -16,4 +16,4 @@ Note: still in development
 ## Credit
 * This app was built with [Neutralinojs](https://github.com/neutralinojs/neutralinojs).
 * This app uses [dayjs](https://github.com/iamkun/dayjs) to implement asynchronous syncing.
-* [ttbl-cli](https://github.com/gaoDean/ttbl-cli) uses the CaulfieldLife endpoints from [here](https://github.com/garv-shah/caulfieldsync).
+* [ttbl-cli](https://github.com/gaoDean/ttbl-cli) uses [CaulfieldSync](https://caulfieldsync.vercel.app) to access the CaulfieldLife endpoints.
