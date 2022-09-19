@@ -4,8 +4,9 @@
 
 import { getClasses, fetchTimetable } from "./cli.js";
 
-function ended(time, cur) {
-	console.log(time)
+// if <time> is in the past, return true
+function inThePast(time) {
+	return dayjs(time).diff(dayjs()) < 0;
 }
 
 async function setClassesToTray() {
@@ -33,15 +34,19 @@ async function setClassesToTray() {
 	}, {
 			text: "-"
 	});
-	let padding = "       "
+	let padding = "       ";
 	// add all the other classes
 	for (const cls in classes) {
 		let cur_class = classes[cls];
 		let rpad = padding.substring(classes[cls]["room"].length);
-		let hasended = ended(cur_class);
+		let shownText = `${classes[cls]["period"]}\t`
+			+ `${classes[cls]["room"]}${rpad}\t`
+			+ `${classes[cls]["class"]}`;
+		console.log(ended(cur_class["end"]));
 		tray.menuItems.push({
 				id: classes[cls]["period"],
-				text: `${classes[cls]["period"]}\t${classes[cls]["room"]}${rpad}\t${classes[cls]["class"]}`
+				text: shownText,
+				isDisabled: inThePast(cur_class["end"])
 		});
 	}
 	// the preferences and quit options
@@ -80,4 +85,4 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 	}
 });
 
-setClassesToTray()
+setClassesToTray();
