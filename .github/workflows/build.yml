@@ -1,0 +1,31 @@
+name: Create Executables
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Compile Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Build App
+        run: |
+          npm i -g @neutralinojs/neu
+          git submodule update --init --recursive
+          neu update
+          neu build
+          cd dist/ttbl
+          mv ttbl-mac_x64 ttbl-mac_x64.app
+          chmod +x ttbl-mac_x64.app
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist/ttbl

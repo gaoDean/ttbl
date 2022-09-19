@@ -12,3 +12,6 @@ neutralino.js
 .storage
 *.log
 /.tmp
+
+# IntelliJ Based Files
+/.idea/
