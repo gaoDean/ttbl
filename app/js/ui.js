@@ -27,7 +27,6 @@ async function setClassesToUI() {
 		classes = await getClasses();
 	}	catch(err) {
 		console.log(err);
-		window.location = "login.html";
 		return;
 	}
 	let msg = classes.shift()["period"];
@@ -42,10 +41,11 @@ async function setClassesToUI() {
 	// add all the other classes
 	for (const cls in classes) {
 		let cur_class = classes[cls];
-		let classDiv = addElement(main, "div", "", [[ "class", "grid" ]]);
-		addElement(classDiv, "div", cur_class["period"]);
-		addElement(classDiv, "div", cur_class["room"]);
-		addElement(classDiv, "div", cur_class["class"]);
+		let classDiv = addElement(main, "div", "");
+		addElement(classDiv, "small", cur_class["period"]);
+		addElement(classDiv, "h3", cur_class["class"]);
+		addElement(classDiv, "h4", cur_class["room"]);
+		addElement(classDiv, "p", cur_class["teacher"]);
 	}
 }
 

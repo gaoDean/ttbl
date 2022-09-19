@@ -11,18 +11,18 @@
 		<main class="container">
 			<div id="neutralinoapp">
 				<div class="grid">
-					<input type="text" id="login" placeholder="Student Number" required="">
-					<input type="password" id="password" placeholder="Password" required="">
+					<input type="text" id="login" placeholder="Student Number">
+					<input type="password" id="password" placeholder="Password">
 					<button type="submit" id="submit" aria-busy="false" onclick="event.preventDefault()">
 						Login
 					</button>
 				</div>
-				<p id="login_msg">This will take 15-30 seconds, but you'll only need to do this once.</p>
+				<p id="login_msg">This will take around 15 seconds, but you'll only need to do this once.</p>
 			</div>
 		</main>
     <script src="js/lib/neutralino.js"></script>
 		<script src="js/lib/dayjs.min.js"></script> <!-- main.js needs dayjs, need to fix -->
     <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/token.js"></script>
+    <script type="module" src="js/login.js"></script>
   </body>
 </html>

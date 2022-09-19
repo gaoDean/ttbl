@@ -14,7 +14,7 @@ async function ttblRun(params, parse) {
 
 // fetch the timetable using ttbl-cli
 export async function fetchTimetable() {
-	let output = await ttblRun("--sync 14 2");
+	let output = await ttblRun("--sync 14 7");
 	if (output.exitCode > 0) {
 		throw new Error("Couldn't fetch timetable");
 	}
@@ -33,6 +33,8 @@ export async function getClasses() {
 	// ttblparse expects the time when it should fetch tomorrows' class today as the second arg
 	let classes = await ttblRun("-4 17 " + NL_PATH, true);
 	if (classes.exitCode > 0) {
+		window.location = "login.html";
+		Neutralino.window.show()
 		throw new Error("No token provided");
 	}
 	classes = classes.stdOut.split(/\r?\n/).filter(element => element); // split by newline
