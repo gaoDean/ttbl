@@ -9,4 +9,4 @@ result=$(cd app/js && cat helper/cli.js helper/time.js main.js token.js tray.js 
 /^\s*[+]/d ;
 /\/\/ join/d ;
 /^\s*$/d')
-[ $(echo "$result" | wc -l) -ne "0" ] && exit 1
+[ $(echo "$result" | wc -w) -ne "0" ] && echo "$result" | wc -w

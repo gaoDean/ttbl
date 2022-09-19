@@ -17,7 +17,6 @@ jobs:
 
       - name: Build App
         run: |
-          make test
           make setup
           make update
           make
