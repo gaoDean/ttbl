@@ -11,7 +11,6 @@ async function setClassesToTray() {
 		classes = await getClasses();
 	}	catch(err) {
 		console.log(err);
-		window.location = "login.html";
 		return;
 	}
 	let tray = {
@@ -74,6 +73,7 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 			}	catch(err) {
 				console.log(err);
 			}
+			setClassesToTray();
 			break;
 		case "opts":
 			await Neutralino.window.show(); // show the window
