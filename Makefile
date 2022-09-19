@@ -18,15 +18,12 @@ build:
 	@cp app/img/appIcon.png 		$(MACOS)/Resources/
 	@echo "Finished"
 
-.PHONY: run
-run:
-	@echo "Running"
-	@neu run 2>&1 1>/dev/null
-
-.PHONY: runbin
-runbin:
-	@echo "Running mac binary"
-	@./dist/ttbl/ttbl-mac_x64
+.PHONY: setup
+setup:
+	@echo "Setting up the environment"
+	@npm i -g @neutralinojs/neu
+	@git submodule update --init --recursive
+	@neu update
 
 .PHONY: update
 update:

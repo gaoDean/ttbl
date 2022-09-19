@@ -17,20 +17,14 @@ jobs:
 
       - name: Build App
         run: |
-          npm i -g @neutralinojs/neu
-          git submodule update --init --recursive
-          neu update
-          neu build
-          cd dist/ttbl
-          mv ttbl-mac_x64 ttbl-mac_x64.app
-          chmod +x ttbl-mac_x64.app
-          # ideally replace neu build downwards with `make build`
+          make setup
+          make
 
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
         with:
           name: ttbl-mac_x64
-          path: dist/ttbl/ttbl-mac_x64.app
+          path: dist/ttbl.app
 
       - name: Upload Windows
         uses: actions/upload-artifact@v3
