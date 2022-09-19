@@ -23,7 +23,7 @@ jobs:
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
         with:
-          name: ttbl-mac_x64
+          name: ttbl-mac_x64.app
           path: dist/ttbl.app
 
       - name: Upload Windows
