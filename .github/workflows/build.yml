@@ -60,3 +60,9 @@ jobs:
         with:
           name: ttbl-linux_x64
           path: dist/ttbl/ttbl-linux_x64
+
+      - name: Upload resources.neu
+        uses: actions/upload-artifact@v3
+        with:
+          name: resources.neu
+          path: dist/ttbl/resources.neu
