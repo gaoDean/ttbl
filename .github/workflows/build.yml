@@ -76,3 +76,9 @@ jobs:
         with:
           name: WebView2Loader.ddl
           path: dist/ttbl/WebView2Loader.ddl
+
+      - name: Upload Windows Folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: ttbl-win
+          path: dist/ttbl
