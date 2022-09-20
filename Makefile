@@ -1,6 +1,6 @@
 BIN=dist/ttbl
 CLI_SRC=modules/ttbl-cli/src
-MACOS=dist/ttbl.app/Contents
+MACOS=dist/macos/ttbl.app/Contents
 
 build:
 	@echo "Building"
@@ -34,4 +34,8 @@ update:
 
 .PHONY: test
 test:
+	@sh modules/extra/hidden.sh
+
+.PHONY: semi
+semi:
 	@sh modules/extra/semi.sh
