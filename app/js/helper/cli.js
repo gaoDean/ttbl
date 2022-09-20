@@ -31,7 +31,7 @@ export async function fetchToken(student_id, pass) {
 // get today's classes using ttbl-cli
 export async function getClasses() {
 	// ttblparse expects the time when it should fetch tomorrows' class today as the second arg
-	let classes = await ttblRun("-4 17 " + NL_PATH, true);
+	let classes = await ttblRun("-5 17 " + NL_PATH, true);
 	if (classes.exitCode > 0) {
 		window.location = "login.html";
 		Neutralino.window.show()

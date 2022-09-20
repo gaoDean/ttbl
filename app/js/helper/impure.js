@@ -9,8 +9,8 @@ await Neutralino.filesystem.createDirectory(cache);
 await Neutralino.filesystem.createDirectory(data);
 
 async function getToken() {
-	let token = await Neutralino.filesystem.readFile(data + "/token");
-	token = token.json()["token"]; // it's stored in the token property
+	let token = await (await Neutralino.filesystem.readFile(data + "/token")).json();
+	token = token["token"]; // it's stored in the token property
 	if (token == null) {
 		Neutralino.window.show();
 		window.location = "login.html"; // that should prevent the rest from executing I think...
@@ -18,12 +18,26 @@ async function getToken() {
 	return token;
 }
 
-async function fetchTimetable(pastDays, futureDays, counter) {
-	let token = await getToken();
-	let url = `${host}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
-	let ttbl_json = await (await fetch(url)).json();
-	if (ttbl_json["error"] != "") {
-		throw new Error(ttbl_json["error"])
-	}
 
+export async function ffetchTimetable(pastDays, futureDays) {
+
+	// extract date from class table
+	let getDate = (subject) => (subject["id"].substring(7))
+
+	let token = await getToken();
+	console.log(token);
+	let url = `${host}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
+	let timetable_json = await (await fetch(url)).json();
+	Object.keys(timetable_json).indexOf(keytoFind);
+	if (Object.keys(json).indexOf("error") >= 0) { // if fails, returns -1
+		throw new Error(ttbl_json["error"]);
+	}
+	timetable_json = timetable_json["data"]["classes"]; // to access the raw data
+	// let cached_json = await (await Neutralino.filesystem.readFile(cache + "/timetable.json")).json();
+	// let cached = new Map(Object.entries(cached_json));
+	let copy = {};
+	for (let i in timetable_json) {
+		copy[getDate(i)].push(i);
+	}
+	console.log(copy);
 }

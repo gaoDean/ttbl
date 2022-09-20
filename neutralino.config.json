@@ -10,7 +10,7 @@
     "app.*",
     "os.*",
 	"window.*",
-	"filesystem.*",
+	"storage.*",
     "debug.log"
   ],
   "modes": {
@@ -23,7 +23,7 @@
       "alwaysOnTop": true,
       "icon": "/app/img/appIcon.png",
       "enableInspector": true,
-      "hidden": true,
+      "hidden": false,
       "resizable": true,
       "exitProcessOnClose": false
     }
