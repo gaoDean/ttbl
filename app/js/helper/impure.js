@@ -82,7 +82,7 @@ export async function fetchTimetable(pastDays, futureDays) {
 		cached = {};
 	}
 
-	let copy = cached; // copy: key is date, value is array of classes for that day
+	let copy = {}; // copy: key is date, value is array of classes for that day
 	for (let i in fetched_timetable) {
 		let val = fetched_timetable[i];
 		let date = getDate(val);
@@ -92,6 +92,7 @@ export async function fetchTimetable(pastDays, futureDays) {
 		}
 		copy[date].push(val) // each key's value is an array of the classes
 	}
+	copy = Object.assign(cached, copy);
 	try {
 		await Neutralino.storage.setData("timetable", JSON.stringify(copy));
 	}	catch(err) {
