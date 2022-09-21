@@ -2,48 +2,59 @@
 
 	== impure functions, contact with the outside world == */
 
-let host1="https://caulfieldsync.vercel.app/api"
-let host="https://australia-southeast1-studentlife-a0531.cloudfunctions.net"
+let host="https://caulfieldsync.vercel.app/api"
+let hosttmp="https://australia-southeast1-studentlife-a0531.cloudfunctions.net"
 
 async function curl(url) {
-	let ret;
+	let result;
 	try {
-		ret = await fetch(url);
+		result = await fetch(url);
 	}	catch(err) {
 		throw new Error(err);
 	}
-	return await ret.json();
+	return await result.json();
 }
 
 async function getStorageValue(key) {
-	let value_json;
+	let data;
 	try {
-		value_json = await Neutralino.storage.getData(key);
+		data = await Neutralino.storage.getData(key);
 	}	catch(err) {
 		throw new Error("Entry not found: " + key + ".");
 	}
-	return value_json;
+	return data;
 }
 
 // export async function getTimetable()
 
 export async function fetchToken(student_id, password) {
-	console.log("test");
+
+	console.log("msg: Fetching token");
+
 	// let url = `${host}/token?username=${student_id}&password=${password}`;
-	let url = `${host}/apiToken?username=${student_id}&password=${password}`;
+	let url = `${hosttmp}/apiToken?username=${student_id}&password=${password}`;
 	let token = await curl(url);
 	if (Object.keys(token).indexOf("error") >= 0) { // if fails, returns -1
 		throw new Error(ttbl_json["error"]);
 	}
-	// the actual token is stored in the key "token"
-	await Neutralino.storage.setData("token", token["token"])
+	try {
+		// the actual token is stored in the key "token"
+		await Neutralino.storage.setData("token", token["token"]);
+	}	catch(err) {
+		console.log(err);
+	}
+
+	console.log("msg: Token fetched");
+
+	// successful, changing to home page
 	window.location = "index.html";
 }
 
 export async function fetchTimetable(pastDays, futureDays) {
-	console.log("fetching");
 
-	// extract date from class table
+	console.log("msg: Fetching timetable");
+
+	// function to extract date from class object
 	let getDate = (subject) => (subject["id"].substring(7));
 
 	let token;
@@ -51,31 +62,41 @@ export async function fetchTimetable(pastDays, futureDays) {
 		token = await getStorageValue("token");
 	}	catch(err) {
 		console.log(err);
-		// window.location = "login.html";
-		// Neutralino.window.show();
+		window.location = "login.html";
+		Neutralino.window.show();
 		return;
 	}
-	let url = `${host1}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
-	let timetable_json = await curl(url);
-	if (Object.keys(timetable_json).indexOf("error") >= 0) { // if indexOf fails, returns -1
-		throw new Error(timetable_json["error"]);
+
+	let url = `${host}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
+	let fetched_timetable = await curl(url);
+	if (Object.keys(fetched_timetable).indexOf("error") >= 0) { // if indexOf fails, returns -1
+		throw new Error(fetched_timetable["error"]);
 	}
-	timetable_json = timetable_json["data"]["classes"]; // to access the classes array
-	let cached_json;
+	fetched_timetable = fetched_timetable["data"]["classes"]; // to access the classes array
+
+	let cached;
 	try {
-		cached_json = await Neutralino.storage.getData("timetable");
+		cached = JSON.parse(await Neutralino.storage.getData("timetable"));
 	}	catch(err) {
-		console.log("No cached timetable");
-		cached_json = {};
+		console.log("msg: No cached timetable");
+		cached = {};
 	}
-	let cached = new Map(Object.entries(cached_json));
-	let copy = {};
-	for (let i in timetable_json) {
-		let val = timetable_json[i];
+
+	let copy = cached; // copy: key is date, value is array of classes for that day
+	for (let i in fetched_timetable) {
+		let val = fetched_timetable[i];
 		let date = getDate(val);
-		let cur = copy[date];
 		// if empty, init with <val> otherwise merge with val
-		copy[date] = (!cur) ? val : Object.assign(cur, val);
+		if (!copy[date]) { // if null
+			copy[date] = [];
+		}
+		copy[date].push(val) // each key's value is an array of the classes
 	}
-	console.log(copy);
+	try {
+		await Neutralino.storage.setData("timetable", JSON.stringify(copy));
+	}	catch(err) {
+		console.log(err);
+	}
+
+	console.log("msg: Timetable fetched");
 }
