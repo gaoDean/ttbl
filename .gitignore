@@ -10,8 +10,8 @@ neutralino.js
 
 # Neutralinojs related files
 .storage
+.tmp
 *.log
-/.tmp
 
 # IntelliJ Based Files
 /.idea/

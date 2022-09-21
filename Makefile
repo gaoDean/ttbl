@@ -36,6 +36,6 @@ update:
 test:
 	@sh modules/extra/hidden.sh
 
-.PHONY: semi
-semi:
+.PHONY: semicolon
+semicolon:
 	@sh modules/extra/semi.sh
