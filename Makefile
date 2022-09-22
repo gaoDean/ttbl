@@ -15,7 +15,7 @@ build:
 	@cp $(BIN)/resources.neu 		$(MACOS)/MacOS/
 	@cp modules/extra/Info.plist	$(MACOS)/
 	@cp app/img/appIcon.png 		$(MACOS)/Resources/
-	@tar -cf dist/macos/release/ttbl.tar dist/macos/ttbl.app
+	@cd dist/macos && tar -zcf release/ttbl.tar ttbl.app
 	@echo "Finished"
 
 run:
