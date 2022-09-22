@@ -1,8 +1,8 @@
-/* requires { Neutralino }
+/* requires { Neutralino, dayjs }
 
-	== the ui for the window == */
+	== the user interface == */
 
-import { getTimetable } from "./helper/impure.js";
+import { getTimetable, fetchTimetable } from "./helper/impure.js";
 import { inThePast, getMessage } from "./helper/time.js";
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
@@ -21,14 +21,24 @@ function addElementRecurse(parent_element, tag1, tag2, inner, attributes) {
 	return addElement(element, tag2, inner, attributes);
 }
 
-async function setClassesToUI() {
+async function setupUI() {
 	let date = dayjs().subtract(6, "day");
-	let timetable = (await getTimetable())[date.format("YYYYMMDD")]; // the day's classes
-
+	let ymd = date.format("YYYYMMDD");
 	let main = document.getElementById("main");
-	addElement(main, "h3", getMessage(!!timetable, date));
 
-	// add all the other classer
+	let timetable = await getTimetable();
+	let msg = getMessage(timetable, ymd);
+	timetable = timetable[ymd];
+
+	setClassesToGui(timetable, date, msg);
+	setClassesToTray(timetable, date, msg);
+}
+
+async function setClassesToGui(timetable, date, msg) {
+	let main = document.getElementById("main");
+	addElement(main, "h3", msg);
+
+	// add all the other classes
 	for (const i in timetable) {
 		let cur_class = timetable[i];
 		let classArt = addElement(main, "article", "");
@@ -40,7 +50,72 @@ async function setClassesToUI() {
 	}
 }
 
-setClassesToUI();
+async function setClassesToTray(timetable, date, msg) {
+	let tray = {
+		icon: "/app/img/trayIcon.png",
+		menuItems: []
+	};
+
+	tray.menuItems.push({
+		id: "date",
+		text: msg
+	}, {
+		text: "-"
+	});
+
+	let padding = "       ";
+	// add all the other classes
+	for (const i in timetable) {
+		let ptr_class = timetable[i];
+		let rpad = padding.substring(ptr_class["room"].length);
+		let shownText = `${ptr_class["periodName"]}\t` // join
+			+ `${ptr_class["room"]}${rpad}\t`
+			+ `${ptr_class["description"]}`;
+		// this adds the class to the tray menu
+		tray.menuItems.push({
+				id: ptr_class["periodName"],
+				text: shownText,
+				isDisabled: inThePast(ptr_class["endTime"])
+		});
+	}
+	// the preferences and quit options
+	tray.menuItems.push({
+		text: "-"
+	}, {
+		id: "opts",
+		text: "More..."
+	}, {
+		id: "sync",
+		text: "Sync Timetable"
+	}, {
+		id: "quit",
+		text: "Quit Timetable"
+	});
+	await Neutralino.os.setTray(tray);
+}
+
+// handle the preferences and quit events
+await Neutralino.events.on("trayMenuItemClicked", async () => {
+	let id = event.detail.id;
+	switch (id) {
+		case "quit":
+			Neutralino.app.exit();
+			break;
+		case "sync":
+			try {
+				await fetchTimetable();
+			}	catch(err) {
+				console.log(err);
+			}
+			setClassesToTray();
+			break;
+		case "opts":
+			await Neutralino.window.show(); // show the window
+			break;
+	}
+});
+
+setupUI();
 
 // i have nowhere else to put this
 import { scheduleSync } from "./helper/time.js";
