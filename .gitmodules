@@ -1,6 +1,3 @@
 [submodule "modules/pico"]
 	path = modules/pico
 	url = https://github.com/picocss/pico.git
-[submodule "modules/ttbl-cli"]
-	path = modules/ttbl-cli
-	url = https://github.com/gaoDean/ttbl-cli.git

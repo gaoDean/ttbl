@@ -2,7 +2,7 @@
   <h2 align="center">ttbl</h2>
 </p>
 <p align="center">
-	A fast gui interface to the CaulfieldLife timetable, powered by ttbl-cli
+	A fast gui interface to the CaulfieldLife timetable
 </p>
 <p align="center">
 	<a href="https://github.com/gaoDean/ttbl">
@@ -19,4 +19,4 @@ You can grab the latest build for your respective operating system [here](https:
 ## Credit
 * This app was built with [Neutralinojs](https://github.com/neutralinojs/neutralinojs).
 * This app uses [dayjs](https://github.com/iamkun/dayjs) to implement asynchronous syncing.
-* [ttbl-cli](https://github.com/gaoDean/ttbl-cli) uses [CaulfieldSync](https://caulfieldsync.vercel.app) to access the CaulfieldLife endpoints.
+* This app uses [CaulfieldSync](https://caulfieldsync.vercel.app) to access the CaulfieldLife endpoints.
