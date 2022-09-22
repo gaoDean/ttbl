@@ -56,11 +56,7 @@ export async function fetchToken(student_id, password) {
 	}	catch(err) {
 		console.log(err);
 	}
-
 	console.log("msg: Token fetched");
-
-	// successful, changing to home page
-	window.location = "index.html";
 }
 
 export async function fetchTimetable(pastDays, futureDays) {

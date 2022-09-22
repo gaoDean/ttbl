@@ -53,7 +53,7 @@ async function login() {
 	}
 
 	loginMsg("Token fetched successfully, fetching timetable");
-	fetchTimetable();
+	await fetchTimetable();
 	busy(false);
 	loginMsg("Timetable fetched");
 	window.location = "index.html";

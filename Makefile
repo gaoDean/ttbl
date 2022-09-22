@@ -15,9 +15,14 @@ build:
 	@echo "Finished"
 
 run:
-	@chmod +x $(BIN)/ttbl-mac_x64
 	@echo "Running ttbl"
-	@$(BIN)/ttbl-mac_x64
+	@open dist/macos/ttbl.app
+
+.PHONY: clean
+clean:
+	@echo "Removing dist/ and .storage/"
+	@rm -rf dist
+	@rm -rf .storage
 
 .PHONY: setup
 setup:
