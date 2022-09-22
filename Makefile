@@ -14,6 +14,7 @@ build:
 	@cp $(BIN)/resources.neu 		$(MACOS)/MacOS/
 	@cp modules/extra/Info.plist	$(MACOS)/
 	@cp app/img/appIcon.png 		$(MACOS)/Resources/
+	@chmod +x $(MACOS)/MacOS/ttbl
 	@echo "Finished"
 
 run:
