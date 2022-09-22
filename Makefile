@@ -10,6 +10,7 @@ build:
 	@echo "Making MacOS app"
 	@mkdir -p $(MACOS)/MacOS
 	@mkdir -p $(MACOS)/Resources
+	@chmod +x $(BIN)/ttbl-mac_x64
 	@cp $(BIN)/ttbl-mac_x64 		$(MACOS)/MacOS/ttbl
 	@cp $(BIN)/resources.neu 		$(MACOS)/MacOS/
 	@cp modules/extra/Info.plist	$(MACOS)/
