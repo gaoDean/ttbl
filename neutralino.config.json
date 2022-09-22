@@ -20,7 +20,7 @@
       "height": 500,
       "minWidth": 400,
       "minHeight": 200,
-      "alwaysOnTop": true,
+      "alwaysOnTop": false,
       "icon": "/app/img/appIcon.png",
       "enableInspector": true,
       "hidden": true,
