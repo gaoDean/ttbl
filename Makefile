@@ -1,6 +1,8 @@
 BIN=dist/ttbl
 MACOS=dist/macos/ttbl.app/Contents
 
+all: build
+
 build:
 	@echo "Building"
 	@rm -rf dist
@@ -18,30 +20,25 @@ run:
 	@echo "Running ttbl"
 	@open dist/macos/ttbl.app
 
-.PHONY: clean
 clean:
 	@echo "Removing dist/ and .storage/"
 	@rm -rf dist
 	@rm -rf .storage
 
-.PHONY: setup
 setup:
 	@echo "Setting up the environment"
 	@npm i -g @neutralinojs/neu
 	@git submodule update --init --recursive
 	@neu update
 
-.PHONY: update
 update:
 	@echo "Updating submodules"
 	@git submodule update --remote --merge --recursive
 	@cp modules/pico/css/pico.min.css app/css/
 	@cp modules/pico/css/pico.min.css.map app/css/
 
-.PHONY: test
 test:
 	@sh modules/extra/hidden.sh
 
-.PHONY: fmt
 fmt:
 	@sh modules/extra/semi.sh
