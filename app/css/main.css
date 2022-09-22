@@ -1,11 +1,11 @@
-.grid>* {
-    padding: calc(var(--spacing)/ 2) 0;
-    border-radius: var(--border-radius);
-    background: var(--code-background-color);
-    font-size: 87.5%;
-    text-align: center;
+
+article {
+	padding-top: calc(var(--spacing)) !important;
+	padding-bottom: calc(var(--spacing)/2) !important;
+	margin-top: var(--spacing) !important;
+	margin-bottom: var(--spacing) !important;
 }
 
-.grid {
-	padding-bottom: calc(var(--spacing)/ 3);
+hgroup {
+	margin: 0px !important;
 }

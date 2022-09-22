@@ -2,11 +2,27 @@
 
 	== sets up background syncing of timetable == */
 
-import { fetchTimetable } from "./cli.js";
+import { fetchTimetable } from "./impure.js";
 
 // if <time> is in the past, return true
 export function inThePast(time) {
 	return dayjs(time).diff(dayjs()) < 0;
+}
+
+// (boolean, dayjs date)
+export function getMessage(timetableExists, date) {
+	let msg;
+	if (!timetableExists) { // if there are no classes on that day
+		if (date.format("d") != 0 && date.format("d") != 6) {
+			msg = "It's " + date.format("dddd") + ". If it's not a holiday then something went wrong, try syncing the timetable again";
+		}	else {
+			// its a weekend
+			msg = "It's " + date.format("dddd") + ". There's no classes today, go do something productive.";
+		}
+	}	else {
+		msg = "It's " + date.format("dddd") + ".";
+	}
+	return msg;
 }
 
 // schedule syncing every day
