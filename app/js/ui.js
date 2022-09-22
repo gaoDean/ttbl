@@ -41,3 +41,7 @@ async function setClassesToUI() {
 }
 
 setClassesToUI();
+
+// i have nowhere else to put this
+import { scheduleSync } from "./helper/time.js";
+scheduleSync("08", "00", "00");

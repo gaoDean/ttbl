@@ -69,6 +69,7 @@ function addListeners() {
 
 	// on the "login" button clicked, try to fetch token
 	document.getElementById("submit").addEventListener("click", () => (login()));
+	document.getElementById("link").addEventListener("click", () => (Neutralino.os.open("https://github.com/gaoDean/ttbl")));
 }
 
 addListeners();
