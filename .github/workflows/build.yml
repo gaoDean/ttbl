@@ -22,14 +22,11 @@ jobs:
           make update
           make
 
-      - name: Tar files
-        run: tar -cvf ttbl-mac_x64.tar dist/macos/ttbl.app
-
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
         with:
           name: ttbl-mac_x64
-          path: ttbl-mac_x64.tar
+          path: dist/macos/release
 
       - name: Upload Windows
         uses: actions/upload-artifact@v3

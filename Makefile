@@ -10,11 +10,13 @@ build:
 	@echo "Making MacOS app"
 	@mkdir -p $(MACOS)/MacOS
 	@mkdir -p $(MACOS)/Resources
+	@mkdir -p dist/macos/release
 	@cp $(BIN)/ttbl-mac_x64 		$(MACOS)/MacOS/ttbl
 	@cp $(BIN)/resources.neu 		$(MACOS)/MacOS/
 	@cp modules/extra/Info.plist	$(MACOS)/
 	@cp app/img/appIcon.png 		$(MACOS)/Resources/
 	@chmod +x $(MACOS)/MacOS/ttbl
+	@cd dist/macos && tar -zcf release/ttbl.tar ttbl.app
 	@echo "Finished"
 
 run:
