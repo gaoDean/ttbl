@@ -10,7 +10,7 @@
     "app.*",
     "os.*",
 	"window.*",
-	"filesystem.*",
+	"storage.*",
     "debug.log"
   ],
   "modes": {

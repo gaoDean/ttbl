@@ -1,47 +1,42 @@
-/* requires { Neutralino }
+/* requires { Neutralino, dayjs }
 
 	== sets up the tray menu == */
 
-import { getClasses, fetchTimetable } from "./helper/cli.js";
-import { inThePast } from "./helper/time.js";
+// import { getClasses, fetchTimetable } from "./helper/cli.js";
+import { fetchTimetable, getTimetable } from "./helper/impure.js";
+import { inThePast, getMessage } from "./helper/time.js";
+
+const FUTURE_MAX = 10;
+const PAST_MAX = 10;
 
 async function setClassesToTray() {
-	let classes = [];
-	try {
-		classes = await getClasses();
-	}	catch(err) {
-		console.log(err);
-		return;
-	}
+	let date = dayjs().subtract(6, "day");
+	let timetable = (await getTimetable())[date.format("YYYYMMDD")]; // the day's classes
 	let tray = {
 		icon: "/app/img/trayIcon.png",
 		menuItems: []
 	};
 
-	let msg = classes.shift()["period"];
-	if (msg == "No token provided") {
-		await Neutralino.app.exit();
-	}
-	// add the Here"s <date> part
 	tray.menuItems.push({
-			id: "date",
-			text: msg
+		id: "date",
+		text: await getMessage(!!timetable, date)
 	}, {
-			text: "-"
+		text: "-"
 	});
+
 	let padding = "       ";
 	// add all the other classes
-	for (const cls in classes) {
-		let cur_class = classes[cls];
-		let rpad = padding.substring(classes[cls]["room"].length);
-		let shownText = `${classes[cls]["period"]}\t` // join
-			+ `${classes[cls]["room"]}${rpad}\t`
-			+ `${classes[cls]["class"]}`;
+	for (const i in timetable) {
+		let ptr_class = timetable[i];
+		let rpad = padding.substring(ptr_class["room"].length);
+		let shownText = `${ptr_class["periodName"]}\t` // join
+			+ `${ptr_class["room"]}${rpad}\t`
+			+ `${ptr_class["description"]}`;
 		// this adds the class to the tray menu
 		tray.menuItems.push({
-				id: classes[cls]["period"],
+				id: ptr_class["periodName"],
 				text: shownText,
-				isDisabled: inThePast(cur_class["end"])
+				isDisabled: inThePast(ptr_class["endTime"])
 		});
 	}
 	// the preferences and quit options
@@ -65,7 +60,7 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 	let id = event.detail.id;
 	switch (id) {
 		case "quit":
-			await Neutralino.app.exit();
+			Neutralino.app.exit();
 			break;
 		case "sync":
 			try {

@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # tests for no semicolons
+
 cd app/js
-result=$(cat helper/cli.js helper/time.js main.js token.js tray.js ui.js | sed -E '/\s*\/\//d ;
+result=$(find . -name '*.js' -exec cat {} \; | sed -E '
+/\s*\/\//d ;
 /; \/\//d ;
 /[;:,{}]$/d ;
 /\*\/$/d ;
@@ -10,7 +12,9 @@ result=$(cat helper/cli.js helper/time.js main.js token.js tray.js ui.js | sed -
 /^\s*[+]/d ;
 /\/\/ join/d ;
 /^\s*$/d')
-if [ $(echo "$result" | wc -w) -gt "0" ]; then
-	rg --fixed-strings "$result"
-fi
+
+echo "$result" | \
+while IFS= read -r line; do
+	rg --fixed-strings "$line" .
+done
 exit 0
