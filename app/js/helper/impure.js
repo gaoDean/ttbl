@@ -31,7 +31,7 @@ export async function getTimetable() {
 	}	catch(err) {
 		console.log("msg: Timetable not found");
 		try {
-			fetchTimetable();
+			await fetchTimetable();
 		}	catch(err) {
 			console.log(err);
 		}
