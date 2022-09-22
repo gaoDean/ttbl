@@ -14,6 +14,11 @@ build:
 	@cp app/img/appIcon.png 		$(MACOS)/Resources/
 	@echo "Finished"
 
+run:
+	@chmod +x $(BIN)/ttbl-mac_x64
+	@echo "Running ttbl"
+	@$(BIN)/ttbl-mac_x64
+
 .PHONY: setup
 setup:
 	@echo "Setting up the environment"

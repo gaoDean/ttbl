@@ -3,7 +3,6 @@
 	== impure functions, contact with the outside world == */
 
 let host="https://caulfieldsync.vercel.app/api"
-let hosttmp="https://australia-southeast1-studentlife-a0531.cloudfunctions.net"
 
 async function curl(url) {
 	let result;
@@ -46,7 +45,7 @@ export async function fetchToken(student_id, password) {
 	console.log("msg: Fetching token");
 
 	// let url = `${host}/token?username=${student_id}&password=${password}`;
-	let url = `${hosttmp}/apiToken?username=${student_id}&password=${password}`;
+	let url = `${host}/token?username=${student_id}&password=${password}`;
 	let token = await curl(url);
 	if (Object.keys(token).indexOf("error") >= 0) { // if fails, returns -1
 		throw new Error(ttbl_json["error"]);
