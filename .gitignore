@@ -15,3 +15,5 @@ neutralino.js
 
 # IntelliJ Based Files
 /.idea/
+
+node_modules

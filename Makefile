@@ -17,8 +17,10 @@ build:
 	@echo "Finished"
 
 run:
+	@$(MAKE) build
+	@chmod +x $(BIN)/ttbl-mac_x64
 	@echo "Running ttbl"
-	@open dist/macos/ttbl.app
+	@$(BIN)/ttbl-mac_x64
 
 clean:
 	@echo "Removing dist/ and .storage/"
