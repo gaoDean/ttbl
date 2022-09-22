@@ -26,7 +26,7 @@ async function overview(classes, date) {
 
 async function setClassesToTray() {
 	let classes = [];
-	let date = dayjs().subtract(6, "day")
+	let date = dayjs().subtract(6, "day");
 	try {
 		classes = JSON.parse(await Neutralino.storage.getData("timetable"));
 	}	catch(err) {
@@ -39,7 +39,7 @@ async function setClassesToTray() {
 		return;
 	}
 	console.log(classes);
-	console.log(date.format("YYYYMMDD"))
+	console.log(date.format("YYYYMMDD"));
 	classes = classes[date.format("YYYYMMDD")]; // the day's classes
 
 	let tray = {
