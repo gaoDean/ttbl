@@ -2,8 +2,8 @@
 
 	== the ui for the window == */
 
-import { getClasses } from "./helper/cli.js";
-import { inThePast } from "./helper/time.js";
+import { getTimetable } from "./helper/impure.js";
+import { inThePast, getMessage } from "./helper/time.js";
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };
@@ -22,30 +22,21 @@ function addElementRecurse(parent_element, tag1, tag2, inner, attributes) {
 }
 
 async function setClassesToUI() {
-	let classes = [];
-	try {
-		classes = await getClasses();
-	}	catch(err) {
-		console.log(err);
-		return;
-	}
-	let msg = classes.shift()["period"];
-	if (msg == "No token provided") {
-		await Neutralino.app.exit();
-	}
+	let date = dayjs().subtract(6, "day");
+	let timetable = (await getTimetable())[date.format("YYYYMMDD")]; // the day's classes
 
 	let main = document.getElementById("main");
-	addElement(main, "h3", msg);
+	addElement(main, "h3", getMessage(!!timetable, date));
 
-	let padding = "       ";
-	// add all the other classes
-	for (const cls in classes) {
-		let cur_class = classes[cls];
-		let classDiv = addElement(main, "div", "");
-		addElement(classDiv, "small", cur_class["period"]);
-		addElement(classDiv, "h3", cur_class["class"]);
-		addElement(classDiv, "h4", cur_class["room"]);
-		addElement(classDiv, "p", cur_class["teacher"]);
+	// add all the other classer
+	for (const i in timetable) {
+		let cur_class = timetable[i];
+		let classArt = addElement(main, "article", "");
+		let classDiv = addElement(classArt, "hgroup", "");
+		addElement(classDiv, "h4", cur_class["description"], [[ "style", "text-align: left; display: inline !important;" ]]);
+		addElement(classDiv, "small", "Period " + cur_class["periodName"], [[ "style", "display: inline; float: right" ]]);
+		addElement(classDiv, "h6", cur_class["room"]);
+		addElement(classDiv, "p", cur_class["teacherName"]);
 	}
 }
 

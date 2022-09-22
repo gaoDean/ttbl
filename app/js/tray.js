@@ -3,45 +3,15 @@
 	== sets up the tray menu == */
 
 // import { getClasses, fetchTimetable } from "./helper/cli.js";
-import { fetchTimetable } from "./helper/impure.js";
-import { inThePast } from "./helper/time.js";
+import { fetchTimetable, getTimetable } from "./helper/impure.js";
+import { inThePast, getMessage } from "./helper/time.js";
 
 const FUTURE_MAX = 10;
 const PAST_MAX = 10;
 
-async function overview(classes, date) {
-	let msg;
-	if (!classes) { // if there are no classes on that day
-		if (date.format("d") != 0 && date.format("d") != 6) {
-			msg = "It's " + date.format("dddd") + ". If it's not a holiday then something went wrong, try syncing the timetable again";
-		}	else {
-			// its a weekend
-			msg = "It's " + date.format("dddd") + ". There's no classes today, go do something productive.";
-		}
-	}	else {
-		msg = "It's " + date.format("dddd") + ".";
-	}
-	return msg;
-}
-
 async function setClassesToTray() {
-	let classes = [];
 	let date = dayjs().subtract(6, "day");
-	try {
-		classes = JSON.parse(await Neutralino.storage.getData("timetable"));
-	}	catch(err) {
-		console.log("msg: Timetable not found");
-		try {
-			fetchTimetable(FUTURE_MAX, PAST_MAX);
-		}	catch(err) {
-			console.log(err);
-		}
-		return;
-	}
-	console.log(classes);
-	console.log(date.format("YYYYMMDD"));
-	classes = classes[date.format("YYYYMMDD")]; // the day's classes
-
+	let timetable = (await getTimetable())[date.format("YYYYMMDD")]; // the day's classes
 	let tray = {
 		icon: "/app/img/trayIcon.png",
 		menuItems: []
@@ -49,24 +19,24 @@ async function setClassesToTray() {
 
 	tray.menuItems.push({
 		id: "date",
-		text: await overview(!!classes, date)
+		text: await getMessage(!!timetable, date)
 	}, {
 		text: "-"
 	});
 
 	let padding = "       ";
 	// add all the other classes
-	for (const cls in classes) {
-		let cur_class = classes[cls];
-		let rpad = padding.substring(classes[cls]["room"].length);
-		let shownText = `${classes[cls]["periodName"]}\t` // join
-			+ `${classes[cls]["room"]}${rpad}\t`
-			+ `${classes[cls]["description"]}`;
+	for (const i in timetable) {
+		let ptr_class = timetable[i];
+		let rpad = padding.substring(ptr_class["room"].length);
+		let shownText = `${ptr_class["periodName"]}\t` // join
+			+ `${ptr_class["room"]}${rpad}\t`
+			+ `${ptr_class["description"]}`;
 		// this adds the class to the tray menu
 		tray.menuItems.push({
-				id: classes[cls]["periodName"],
+				id: ptr_class["periodName"],
 				text: shownText,
-				isDisabled: inThePast(cur_class["endTime"])
+				isDisabled: inThePast(ptr_class["endTime"])
 		});
 	}
 	// the preferences and quit options
@@ -94,7 +64,7 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 			break;
 		case "sync":
 			try {
-				await fetchTimetable(FUTURE_MAX, PAST_MAX);
+				await fetchTimetable();
 			}	catch(err) {
 				console.log(err);
 			}

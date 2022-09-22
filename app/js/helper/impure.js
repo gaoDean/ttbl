@@ -25,7 +25,21 @@ async function getStorageValue(key) {
 	return data;
 }
 
-// export async function getTimetable()
+export async function getTimetable() {
+	let timetable;
+	try {
+		timetable = JSON.parse(await Neutralino.storage.getData("timetable"));
+	}	catch(err) {
+		console.log("msg: Timetable not found");
+		try {
+			fetchTimetable();
+		}	catch(err) {
+			console.log(err);
+		}
+		return;
+	}
+	return timetable;
+}
 
 export async function fetchToken(student_id, password) {
 
@@ -53,6 +67,13 @@ export async function fetchToken(student_id, password) {
 export async function fetchTimetable(pastDays, futureDays) {
 
 	console.log("msg: Fetching timetable");
+
+	if (!pastDays) {
+		pastDays = 10;
+	}
+	if (!futureDays) {
+		futureDays = 10;
+	}
 
 	// function to extract date from class object
 	let getDate = (subject) => (subject["id"].substring(7));
