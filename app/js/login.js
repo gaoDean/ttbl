@@ -59,6 +59,10 @@ async function login() {
 			return;
 		}
 	}	catch(err) {
+		if (err == "TypeError: Load failed") {
+			window.location = "login.html";
+			return;
+		}
 		loginMsg("Oh no, something went wrong.");
 		console.log(err);
 		return;

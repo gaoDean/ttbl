@@ -18,15 +18,16 @@ export function getMessage(timetable, ymd)
 	}
 	let msg;
 	let date = dayjs(ymd);
+	let start = `It's ${date.format("dddd")}, ${date.format("D")} ${date.format("MMMM")}.`;
 	if (timetable[ymd] == undefined || timetable[ymd].length == 0) {
 		if (date.format("d") != 0 && date.format("d") != 6) {
-			msg = "It's " + date.format("dddd") + ". If it's not a holiday then something went wrong, try syncing the timetable again";
+			msg = `${start} If it's not a holiday then something went wrong, try syncing the timetable again`;
 		}	else {
 			// its a weekend
-			msg = "It's " + date.format("dddd") + ". There's no classes today, go do something productive.";
+			msg = `${start} There's no classes today, go do something productive.`;
 		}
 	}	else {
-		msg = "It's " + date.format("dddd") + ".";
+		msg = start;
 	}
 	return msg;
 }

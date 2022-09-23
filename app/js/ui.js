@@ -5,6 +5,15 @@
 import { getTimetable, fetchTimetable } from "./helper/impure.js";
 import { inThePast, getMessage } from "./helper/time.js";
 
+let date = dayjs();
+let centered = true;
+
+function changeDate(offset) {
+	date = date.add(offset, "day");
+	updateUI();
+	centered = false;
+}
+
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };
 function addElement(parent_element, tag, inner, attributes)
@@ -25,7 +34,6 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 
 async function updateUI()
 {
-	let date = dayjs().subtract(7, "day");
 	let ymd = date.format("YYYYMMDD");
 	let main = document.getElementById("main");
 
@@ -36,11 +44,11 @@ async function updateUI()
 	let msg = getMessage(timetable, ymd);
 	timetable = timetable[ymd];
 
-	setClassesToGui(timetable, date, msg);
-	setClassesToTray(timetable, date, msg);
+	setClassesToGui(timetable, msg);
+	setClassesToTray(timetable, msg);
 }
 
-async function setClassesToGui(timetable, date, msg) {
+async function setClassesToGui(timetable, msg) {
 	let main = document.getElementById("main");
 	main.innerHTML = "";
 	addElement(main, "h3", msg);
@@ -57,7 +65,7 @@ async function setClassesToGui(timetable, date, msg) {
 	}
 }
 
-async function setClassesToTray(timetable, date, msg) {
+async function setClassesToTray(timetable, msg) {
 	let tray = {
 		icon: "/app/img/trayIcon.png",
 		menuItems: []
@@ -117,7 +125,25 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 	}
 });
 
+function addListeners() {
+	window.addEventListener("scroll", () => {
+		let x = window.pageXOffset;
+		let threshold = 1;
+		if (centered) {
+			if (x < -(threshold)) {
+				changeDate(-1);
+			}	else if (x > threshold) {
+				changeDate(1);
+			}
+		}	else if (x > -(threshold) && x < threshold) {
+			centered = true;
+		}
+		console.log(x);
+	});
+}
+
 updateUI();
+addListeners();
 
 // i have nowhere else to put this
 import { scheduleSync } from "./helper/time.js";

@@ -12,6 +12,7 @@ function goLogin()
 	}
 }
 
+// get from cache
 async function getStorageValue(key)
 {
 	let data;
@@ -24,6 +25,7 @@ async function getStorageValue(key)
 	return data;
 }
 
+// get from cache
 export async function getTimetable()
 {
 	let timetable;
@@ -37,6 +39,7 @@ export async function getTimetable()
 	return JSON.parse(timetable);
 }
 
+// fetch from endpoint
 export async function fetchToken(student_id, password)
 {
 	console.log("msg: Fetching token");
@@ -60,7 +63,8 @@ export async function fetchToken(student_id, password)
 	return 0;
 }
 
-export async function fetchTimetable(pastDays = 10, futureDays = 10)
+// fetch from endpoint
+export async function fetchTimetable(pastDays = 15, futureDays = 15)
 {
 	console.log("msg: Fetching timetable");
 
