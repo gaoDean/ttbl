@@ -59,7 +59,7 @@ async function login() {
 			return;
 		}
 	}	catch(err) {
-		loginMsg(err);
+		loginMsg("Oh no, something went wrong.");
 		console.log(err);
 		return;
 	}
