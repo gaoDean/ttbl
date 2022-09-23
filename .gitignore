@@ -17,3 +17,6 @@ neutralino.js
 /.idea/
 
 node_modules
+
+# Other
+modules/create-dmg

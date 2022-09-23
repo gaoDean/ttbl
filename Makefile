@@ -10,20 +10,25 @@ build:
 	@echo "Making MacOS app"
 	@mkdir -p $(MACOS)/MacOS
 	@mkdir -p $(MACOS)/Resources
-	@mkdir -p dist/macos/release
 	@cp $(BIN)/ttbl-mac_x64 		$(MACOS)/MacOS/ttbl
 	@cp $(BIN)/resources.neu 		$(MACOS)/MacOS/
 	@cp modules/extra/Info.plist	$(MACOS)/
 	@cp app/img/appIcon.png 		$(MACOS)/Resources/
 	@chmod +x $(MACOS)/MacOS/ttbl
-	@cd dist/macos && tar -zcf release/ttbl.tar ttbl.app
-	@echo "Finished"
 
 run:
 	@$(MAKE) build
 	@chmod +x $(BIN)/ttbl-mac_x64
 	@echo "Running ttbl"
 	@$(BIN)/ttbl-mac_x64
+
+dmg:
+	@echo "Cloning create-dmg"
+	@git clone https://github.com/create-dmg/create-dmg.git modules/create-dmg
+	@echo "Making dmg"
+	@modules/create-dmg/create-dmg \
+		--app-drop-link 600 185 \
+		dist/macos/ttbl\ installer.dmg dist/macos/ttbl.app/
 
 clean:
 	@echo "Removing dist/ and .storage/"

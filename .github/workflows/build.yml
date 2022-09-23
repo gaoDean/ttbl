@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     name: Compile Application
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -21,12 +21,13 @@ jobs:
           make setup
           make update
           make
+          make dmg
 
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
         with:
           name: ttbl-mac_x64
-          path: dist/macos/release
+          path: dist/macos/ttbl\ installer.dmg
 
       - name: Upload Windows
         uses: actions/upload-artifact@v3
