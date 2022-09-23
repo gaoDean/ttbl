@@ -2,118 +2,107 @@
 
 	== impure functions, contact with the outside world == */
 
-let host="https://caulfieldsync.vercel.app/api"
+let host="https://caulfieldsync.vercel.app/api";
 
-async function curl(url) {
-	let result;
-	try {
-		result = await fetch(url);
-	}	catch(err) {
-		throw new Error(err);
+function goLogin()
+{
+	if (window.location != "login.html") {
+		window.location = "login.html";
+		Neutralino.window.show();
 	}
-	return await result.json();
 }
 
-async function getStorageValue(key) {
+async function getStorageValue(key)
+{
 	let data;
 	try {
 		data = await Neutralino.storage.getData(key);
 	}	catch(err) {
-		throw new Error("Entry not found: " + key + ".");
+		console.log(err);
+		return undefined;
 	}
 	return data;
 }
 
-export async function getTimetable() {
+export async function getTimetable()
+{
 	let timetable;
 	try {
-		timetable = JSON.parse(await Neutralino.storage.getData("timetable"));
+		timetable = await Neutralino.storage.getData("timetable");
 	}	catch(err) {
 		console.log("msg: Timetable not found");
-		try {
-			await fetchTimetable();
-		}	catch(err) {
-			console.log(err);
-		}
+		goLogin();
 		return;
 	}
-	return timetable;
+	return JSON.parse(timetable);
 }
 
-export async function fetchToken(student_id, password) {
-
+export async function fetchToken(student_id, password)
+{
 	console.log("msg: Fetching token");
+	const url = `${host}/token?username=${student_id}&password=${password}`;
+	const res = await fetch(url);
 
-	// let url = `${host}/token?username=${student_id}&password=${password}`;
-	let url = `${host}/token?username=${student_id}&password=${password}`;
-	let token = await curl(url);
-	if (Object.keys(token).indexOf("error") >= 0) { // if fails, returns -1
-		throw new Error(ttbl_json["error"]);
+	if (res.status == 401) {
+		console.log("401")
+		return 1;
+	}	else if (res.status != 200) {
+		throw Error(`${res.status}: Could not fetch token due to an unknown reason`);
 	}
-	try {
-		// the actual token is stored in the key "token"
-		await Neutralino.storage.setData("token", token["token"]);
-	}	catch(err) {
-		console.log(err);
+
+	const token = (await res.json())["token"];
+	if (!token) {
+		console.log("msg: Token empty");
+		return 1;
 	}
+	await Neutralino.storage.setData("token", token);
 	console.log("msg: Token fetched");
+	return 0;
 }
 
-export async function fetchTimetable(pastDays, futureDays) {
-
+export async function fetchTimetable(pastDays = 10, futureDays = 10)
+{
 	console.log("msg: Fetching timetable");
-
-	if (!pastDays) {
-		pastDays = 10;
-	}
-	if (!futureDays) {
-		futureDays = 10;
-	}
 
 	// function to extract date from class object
 	let getDate = (subject) => (subject["id"].substring(7));
 
-	let token;
-	try {
-		token = await getStorageValue("token");
-	}	catch(err) {
-		console.log(err);
-		window.location = "login.html";
-		Neutralino.window.show();
+	const token = await getStorageValue("token");
+	if (token == undefined) {
+		goLogin();
 		return;
 	}
-
-	let url = `${host}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
-	let fetched_timetable = await curl(url);
-	if (Object.keys(fetched_timetable).indexOf("error") >= 0) { // if indexOf fails, returns -1
-		throw new Error(fetched_timetable["error"]);
-	}
-	fetched_timetable = fetched_timetable["data"]["classes"]; // to access the classes array
-
-	let cached;
-	try {
-		cached = JSON.parse(await Neutralino.storage.getData("timetable"));
-	}	catch(err) {
-		console.log("msg: No cached timetable");
-		cached = {};
+	const url = `${host}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
+	const res = await fetch(url);
+	if (res.status == 403) {
+		return 1;
+	}	else if (res.status != 200) {
+		throw Error(`${res.status}: Could not fetch the timetable due to an unknown reason`);
 	}
 
-	let copy = {}; // copy: key is date, value is array of classes for that day
+	// the info is stored in .data.classes
+	const fetched_timetable = (await res.json())["data"]["classes"]; // if status 200
+
+	// get cached timetable data or if that's null an empty object
+	let new_timetable = Neutralino.storage.getData("timetable")
+		.then((ret) => (JSON.parse(ret)), () => ({}));
+
+	// it leaves unchanged new_timetable values untouched, updates new ones
 	for (let i in fetched_timetable) {
 		let val = fetched_timetable[i];
 		let date = getDate(val);
-		// if empty, init with <val> otherwise merge with val
-		if (!copy[date]) { // if null
-			copy[date] = [];
+
+		// if empty, init with <val> otherwise add val to array
+		if (!new_timetable[date]) { // if null
+			new_timetable[date] = [];
 		}
-		copy[date].push(val) // each key's value is an array of the classes
-	}
-	copy = Object.assign(cached, copy);
-	try {
-		await Neutralino.storage.setData("timetable", JSON.stringify(copy));
-	}	catch(err) {
-		console.log(err);
+		// key is date, value is array of classes for that day
+		new_timetable[date].push(val)
 	}
 
+	await Neutralino.storage.setData("timetable", JSON.stringify(new_timetable));
+
 	console.log("msg: Timetable fetched");
+
+	return 0;
 }

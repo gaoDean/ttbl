@@ -5,14 +5,20 @@
 import { fetchTimetable } from "./impure.js";
 
 // if <time> is in the past, return true
-export function inThePast(time) {
+export function inThePast(time)
+{
 	return dayjs(time).diff(dayjs()) < 0;
 }
 
-// (boolean, dayjs date)
-export function getMessage(timetableExists, date) {
+// YYYYMMDD
+export function getMessage(timetable, ymd)
+{
+	if (!timetable) {
+		return undefined
+	}
 	let msg;
-	if (!timetableExists) { // if there are no classes on that day
+	let date = dayjs(ymd);
+	if (timetable[ymd] == undefined || timetable[ymd].length == 0) {
 		if (date.format("d") != 0 && date.format("d") != 6) {
 			msg = "It's " + date.format("dddd") + ". If it's not a holiday then something went wrong, try syncing the timetable again";
 		}	else {
@@ -27,7 +33,8 @@ export function getMessage(timetableExists, date) {
 
 // schedule syncing every day
 // (string 00-23, string 00-59, string 00-59) [ must be two digits ]
-export function scheduleSync(hours, minutes, seconds) {
+export function scheduleSync(hours, minutes, seconds)
+{
 	const ms_in_day = 86400000; // 1000(ms) * 60(s) * 60(m) * 24(h)
 	const desired = dayjs(dayjs().format("YYYY-MM-DDT" + hours + ":" + minutes + ":" + seconds + "Z"));
 	let delta_ms = dayjs(desired.diff(dayjs())); // diff between desired time and current time
