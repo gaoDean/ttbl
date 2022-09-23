@@ -41,19 +41,29 @@ async function login() {
 	}
 
 	// try to fetch the token
+	busy(true);
+	loginMsg("Trying to fetch token");
+
 	try {
-		busy(true);
-		loginMsg("Trying to fetch token");
-		await fetchToken(student_id.value, password.value);
+		if (await fetchToken(student_id.value, password.value) > 0) {
+			busy(false);
+			loginMsg("Authorisation failed. Make sure you have typed in your username and password correctly.");
+			return;
+		}
+
+		loginMsg("Token fetched successfully, fetching timetable");
+
+		if (await fetchTimetable() > 0) {
+			busy(false);
+			loginMsg("Something went wrong. Please try again.");
+			return;
+		}
 	}	catch(err) {
-		busy(false);
 		loginMsg(err);
 		console.log(err);
 		return;
 	}
 
-	loginMsg("Token fetched successfully, fetching timetable");
-	await fetchTimetable();
 	busy(false);
 	loginMsg("Timetable fetched");
 	window.location = "index.html";

@@ -7,7 +7,8 @@ import { inThePast, getMessage } from "./helper/time.js";
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };
-function addElement(parent_element, tag, inner, attributes) {
+function addElement(parent_element, tag, inner, attributes)
+{
 	let element = document.createElement(tag);
 	element.textContent = inner;
 	for (let attr in attributes) {
@@ -16,17 +17,22 @@ function addElement(parent_element, tag, inner, attributes) {
 	return parent_element.appendChild(element);
 }
 
-function addElementRecurse(parent_element, tag1, tag2, inner, attributes) {
+function addNestedElement(parent_element, tag1, tag2, inner, attributes)
+{
 	let element = addElement(parent_element, tag1);
 	return addElement(element, tag2, inner, attributes);
 }
 
-async function setupUI() {
-	let date = dayjs().subtract(6, "day");
+async function updateUI()
+{
+	let date = dayjs().subtract(7, "day");
 	let ymd = date.format("YYYYMMDD");
 	let main = document.getElementById("main");
 
 	let timetable = await getTimetable();
+	if (!timetable) {
+		return;
+	}
 	let msg = getMessage(timetable, ymd);
 	timetable = timetable[ymd];
 
@@ -36,17 +42,18 @@ async function setupUI() {
 
 async function setClassesToGui(timetable, date, msg) {
 	let main = document.getElementById("main");
+	main.innerHTML = "";
 	addElement(main, "h3", msg);
 
 	// add all the other classes
 	for (const i in timetable) {
 		let cur_class = timetable[i];
-		let classArt = addElement(main, "article", "");
-		let classDiv = addElement(classArt, "hgroup", "");
-		addElement(classDiv, "h4", cur_class["description"], [[ "style", "text-align: left; display: inline !important;" ]]);
-		addElement(classDiv, "small", "Period " + cur_class["periodName"], [[ "style", "display: inline; float: right" ]]);
-		addElement(classDiv, "h6", cur_class["room"]);
-		addElement(classDiv, "p", cur_class["teacherName"]);
+		let classGroup = addNestedElement(main, "article", "hgroup", "");
+
+		addElement(classGroup, "h4", cur_class["description"], [[ "style", "display: inline" ]]);
+		addElement(classGroup, "small", "Period " + cur_class["periodName"], [[ "style", "display: inline; float: right" ]]);
+		addElement(classGroup, "h6", cur_class["room"]);
+		addElement(classGroup, "p", cur_class["teacherName"]);
 	}
 }
 
@@ -82,7 +89,7 @@ async function setClassesToTray(timetable, date, msg) {
 	tray.menuItems.push({
 		text: "-"
 	}, {
-		id: "opts",
+		id: "more",
 		text: "More..."
 	}, {
 		id: "sync",
@@ -102,21 +109,16 @@ await Neutralino.events.on("trayMenuItemClicked", async () => {
 			Neutralino.app.exit();
 			break;
 		case "sync":
-			try {
-				await fetchTimetable();
-			}	catch(err) {
-				console.log(err);
-			}
-			setClassesToTray();
+			fetchTimetable().then(updateUI());
 			break;
-		case "opts":
+		case "more":
 			await Neutralino.window.show(); // show the window
 			break;
 	}
 });
 
-setupUI();
+updateUI();
 
 // i have nowhere else to put this
 import { scheduleSync } from "./helper/time.js";
-scheduleSync("08", "00", "00");
+scheduleSync("08", "00", "00"); // run in background
