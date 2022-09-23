@@ -4,6 +4,7 @@
   "defaultMode": "window",
   "documentRoot": "/app/",
   "url": "/",
+  "port": 0,
   "enableServer": true,
   "enableNativeAPI": true,
   "nativeAllowList": [
