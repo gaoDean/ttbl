@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NeutralinoJs</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/pico.min.css">
+  </head>
+  <body>
+		<main class="container">
+			<div id="neutralinoapp">
+				<hgroup style="padding-bottom: 30px">
+					<h1>Welcome to <a href="#" id="link">ttbl</a>!</h1>
+					<h3>By Dean Gao</h3>
+				</hgroup>
+				<div class="grid">
+					<input type="text" id="login" placeholder="Student Number">
+					<input type="password" id="password" placeholder="Password">
+					<button type="submit" id="submit" class="outline" aria-busy="false" onclick="event.preventDefault()">
+						Login
+					</button>
+				</div>
+				<small id="login_msg">The login will take around 15 seconds, but you'll only need to do this once.</small>
+			</div>
+		</main>
+    <script src="js/lib/neutralino.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/login.js"></script>
+  </body>
+</html>

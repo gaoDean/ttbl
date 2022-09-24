@@ -17,11 +17,11 @@ jobs:
 
       - name: Build App
         run: |
-          make test
-          make setup
-          make update
-          make
-          make dmg
+          # make test
+          # make setup
+          # make update
+          # make
+          # make dmg
 
       - name: Upload MacOS
         uses: actions/upload-artifact@v3
