@@ -16,20 +16,21 @@ export function getMessage(timetable, ymd)
 	if (!timetable) {
 		return undefined
 	}
-	let msg;
 	let date = dayjs(ymd);
-	let start = `It's ${date.format("dddd")}, ${date.format("D")} ${date.format("MMMM")}.`;
-	if (timetable[ymd] == undefined || timetable[ymd].length == 0) {
-		if (date.format("d") != 0 && date.format("d") != 6) {
-			msg = `${start} If it's not a holiday then something went wrong, try syncing the timetable again`;
+	let msg = `It's ${date.format("dddd")}, ${date.format("D")} ${date.format("MMMM")}.`;
+	let extra = null;
+
+	// If there are no classes today
+	if (timetable[ymd] === undefined || timetable[ymd].length === 0) {
+		// If the day is a weekend, i.e. Saturday or Sunday
+		if (date.format("d") === '0' || date.format("d") === '6') {
+			extra = "There's no classes today, go do something productive.";
 		}	else {
-			// its a weekend
-			msg = `${start} There's no classes today, go do something productive.`;
+			extra = "It's a holiday! (or something broke and syncing didn't work)";
 		}
-	}	else {
-		msg = start;
 	}
-	return msg;
+
+	return {msg: msg, extra: extra}
 }
 
 // schedule syncing every day

@@ -35,23 +35,26 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 async function updateUI()
 {
 	let ymd = date.format("YYYYMMDD");
-	let main = document.getElementById("main");
 
 	let timetable = await getTimetable();
 	if (!timetable) {
 		return;
 	}
-	let msg = getMessage(timetable, ymd);
+	let message = getMessage(timetable, ymd);
 	timetable = timetable[ymd];
 
-	setClassesToGui(timetable, msg);
-	setClassesToTray(timetable, msg);
+	setClassesToGui(timetable, message['msg'], message['extra']);
+	setClassesToTray(timetable, message['msg'], message['extra']);
 }
 
-async function setClassesToGui(timetable, msg) {
+async function setClassesToGui(timetable, msg, extra) {
 	let main = document.getElementById("timetable");
 	main.innerHTML = "";
-	addElement(main, "h3", msg);
+	document.getElementById("message").innerText = msg;
+
+	if (extra) {
+		main.innerHTML += `<p style="text-align: center; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%);">${extra}</p>`;
+	}
 
 	// add all the other classes
 	for (const i in timetable) {
@@ -65,7 +68,7 @@ async function setClassesToGui(timetable, msg) {
 	}
 }
 
-async function setClassesToTray(timetable, msg) {
+async function setClassesToTray(timetable, msg, extra) {
 	let tray = {
 		icon: "/app/img/trayIcon.png",
 		menuItems: []
@@ -74,7 +77,16 @@ async function setClassesToTray(timetable, msg) {
 	tray.menuItems.push({
 		id: "date",
 		text: msg
-	}, {
+	});
+
+	if (extra) {
+		tray.menuItems.push({
+			id: "extra",
+			text: extra
+		});
+	}
+
+	tray.menuItems.push({
 		text: "-"
 	});
 
@@ -138,7 +150,6 @@ function addListeners() {
 		}	else if (x > -(threshold) && x < threshold) {
 			centered = true;
 		}
-		console.log(x);
 	});
 	document.getElementById("date-past").addEventListener("click", () => changeDate(-1));
 	document.getElementById("date-future").addEventListener("click", () => changeDate(1));
