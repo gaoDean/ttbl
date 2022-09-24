@@ -60,10 +60,10 @@ async function login() {
 		}
 	}	catch(err) {
 		if (err == "TypeError: Load failed") {
-			window.location = "login.html";
-			return;
+			loginMsg("Something went wrong on the server, please try again."); // garv...
+		}	else {
+			loginMsg("Oh no, something went wrong.");
 		}
-		loginMsg("Oh no, something went wrong.");
 		console.log(err);
 		return;
 	}
