@@ -49,7 +49,7 @@ async function updateUI()
 }
 
 async function setClassesToGui(timetable, msg) {
-	let main = document.getElementById("main");
+	let main = document.getElementById("timetable");
 	main.innerHTML = "";
 	addElement(main, "h3", msg);
 
@@ -140,6 +140,8 @@ function addListeners() {
 		}
 		console.log(x);
 	});
+	document.getElementById("date-past").addEventListener("click", () => changeDate(-1));
+	document.getElementById("date-future").addEventListener("click", () => changeDate(1));
 }
 
 updateUI();
