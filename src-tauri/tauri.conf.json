@@ -2,8 +2,8 @@
   "build": {
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
-    "devPath": "../app",
-    "distDir": "../app"
+    "devPath": "../src",
+    "distDir": "../src"
   },
   "package": {
     "productName": "ttbl",
@@ -15,7 +15,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "",
       "copyright": "",
       "deb": {
         "depends": []
@@ -39,7 +39,7 @@
       },
       "resources": [],
       "shortDescription": "",
-      "targets": "all",
+      "targets": "dmg",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
@@ -58,9 +58,10 @@
     },
     "windows": [
       {
+		"visible": true,
+		"skipTaskbar": false,
         "fullscreen": false,
         "height": 600,
-        "resizable": true,
         "title": "ttbl",
         "width": 800
       }

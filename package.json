@@ -1,5 +1,14 @@
 {
+  "name": "ttbl",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri"
+  },
   "dependencies": {
     "@picocss/pico": "^1.5.5"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.1.0"
   }
 }
