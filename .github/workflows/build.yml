@@ -24,8 +24,8 @@ jobs:
       - name: install app dependencies and build it
         run: |
           npm install
-          npm run tauri build --target x86_64-apple-darwin
-          npm run tauri build --target aarch64-apple-darwin
+          cargo-tauri build --target x86_64-apple-darwin
+          cargo-tauri build --target aarch64-apple-darwin
       - uses: tauri-apps/tauri-action@v0
 
       - name: Upload macos-intel
