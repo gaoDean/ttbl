@@ -42,6 +42,7 @@ jobs:
   release:
     name: Check and upload to release
     runs-on: macos-latest
+    needs: deploy
     steps:
       - uses: actions/checkout@v2
 
