@@ -7,12 +7,16 @@ jobs:
     name: Compile Application
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm test
 
       - name: install Rust stable
         uses: actions-rs/toolchain@v1
@@ -24,8 +28,12 @@ jobs:
         run: |
           npm install
           cd src-tauri && cargo test
-          npx tauri build --target x86_64-apple-darwin
-          npx tauri build --target aarch64-apple-darwin
+
+      - name: build macos-intel
+        run: npx tauri build --target x86_64-apple-darwin
+
+      - name: build macos-m1
+        run: npx tauri build --target aarch64-apple-darwin
 
       - name: Upload macos-intel
         uses: actions/upload-artifact@v3
@@ -44,7 +52,7 @@ jobs:
     runs-on: macos-latest
     needs: deploy
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         if: startsWith(github.ref, 'refs/tags/')
 
       - name: Download macos-intel
