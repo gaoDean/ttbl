@@ -14,7 +14,7 @@ build:
 
 setup:
 	@echo "Installing Rust"
-	@curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+	@curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
 	@echo "Installing Node.js dependencies"
 	@npm install
 	@echo "Adding MacOS build targets"
