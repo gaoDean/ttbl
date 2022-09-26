@@ -9,18 +9,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - name: setup node
+        uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 16
+          cache: 'npm'
 
-      - name: Setup Environment
-        run: make setup
+      - name: install Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
-      - name: Build macos-intel
-        run: cargo-tauri build --target x86_64-apple-darwin
-
-      - name: Build macos-m1
-        run: cargo-tauri build --target aarch64-apple-darwin
+      - name: install app dependencies and build it
+        run: |
+          yarn
+          yarn build --target x86_64-apple-darwin
+          yarn build --target aarch64-apple-darwin
+      - uses: tauri-apps/tauri-action@v0
 
       - name: Upload macos-intel
         uses: actions/upload-artifact@v3
