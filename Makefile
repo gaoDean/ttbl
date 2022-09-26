@@ -1,25 +1,15 @@
-BIN=dist/ttbl
-MACOS=dist/macos/ttbl.app/Contents
-
 all: run
 
 run:
 	@npm run tauri dev
 
 build:
-	@echo "Building MacOS Intel"
-	@cargo-tauri build --target x86_64-apple-darwin
-	@echo "Building MacOS M1"
-	@cargo-tauri build --target aarch64-apple-darwin
+	@cd src-tauri && cargo test
+	@npm run tauri build
 
 setup:
-	@echo "Installing Rust"
-	@curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
 	@echo "Adding MacOS build targets"
 	@rustup target add aarch64-apple-darwin
 	@rustup target add x86_64-apple-darwin
 	@echo "Installing Node.js dependencies"
-	@npm install --save-dev @tauri-apps/cli
 	@npm install
-	@echo "Testing cargo"
-	@cd src-tauri && cargo test

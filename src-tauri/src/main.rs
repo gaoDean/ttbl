@@ -6,13 +6,16 @@
 use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent};
 use tauri::Manager;
 
+fn tray_add_item(menu: SystemTrayMenu, id: &str, desc: &str) -> SystemTrayMenu {
+    return menu.add_item(CustomMenuItem::new(id.to_string(), desc));
+}
 
-fn get_tray(opts: &[&str], desc: &[&str]) -> SystemTray {
+fn init_tray(opts: &[&str], desc: &[&str]) -> SystemTray {
     let mut menu = SystemTrayMenu::new()
         .add_native_item(SystemTrayMenuItem::Separator);
 
     for i in 0..opts.len() {
-        menu = menu.add_item(CustomMenuItem::new(opts[i].to_string(), desc[i]));
+        menu = tray_add_item(menu, opts[i], desc[i]);
     }
 
     return SystemTray::new().with_menu(menu);
@@ -32,10 +35,10 @@ fn handle_tray_event(app: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
                     window.hide().unwrap();
                     // you can also `set_selected`, `set_enabled` and `set_native_image` (macOS only).
                     item_handle.set_title("Show").unwrap();
-                }
+                },
                 _ => {}
             }
-        }
+        },
         _ => {}
     }
 }
@@ -43,7 +46,7 @@ fn handle_tray_event(app: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
 fn main() {
     let tray_opts: [&str; 3] = ["more", "sync", "quit"];
     let tray_opts_desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
-    let tray = get_tray(&tray_opts, &tray_opts_desc);
+    let tray = init_tray(&tray_opts, &tray_opts_desc);
 
     tauri::Builder::default()
         .system_tray(tray)
