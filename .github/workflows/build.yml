@@ -1,8 +1,6 @@
 name: Create Executables
 
-on:
-  push:
-    branches: [ main ]
+on: [push]
 
 jobs:
   deploy:
@@ -15,52 +13,29 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Build App
-        run: |
-          # make test
-          # make setup
-          # make update
-          # make
-          # make dmg
+      # install the latest Rust stable
+      - name: Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
-      - name: Upload MacOS
+      - name: Setup Environment
+        run: make setup
+
+      - name: Build macos-intel
+        run: cargo-tauri build --target x86_64-apple-darwin
+
+      - name: Build macos-m1
+        run: cargo-tauri build --target aarch64-apple-darwin
+
+      - name: Upload macos-intel
         uses: actions/upload-artifact@v3
         with:
-          name: ttbl-mac_x64
-          path: dist/macos/ttbl\ installer.dmg
+          name: ttbl-mac_intel
+          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
 
-      - name: Upload Windows
+      - name: Upload macos-m1
         uses: actions/upload-artifact@v3
         with:
-          name: ttbl-win_x64
-          path: dist/ttbl/ttbl-win_x64.exe
-
-      - name: Upload WebView2Loader.ddl
-        uses: actions/upload-artifact@v3
-        with:
-          name: WebView2Loader.ddl
-          path: dist/ttbl/WebView2Loader.dll
-
-      - name: Upload ttbl-linux_arm64
-        uses: actions/upload-artifact@v3
-        with:
-          name: ttbl-linux_arm64
-          path: dist/ttbl/ttbl-linux_arm64
-
-      - name: Upload ttbl-linux_armhf
-        uses: actions/upload-artifact@v3
-        with:
-          name: ttbl-linux_armhf
-          path: dist/ttbl/ttbl-linux_armhf
-
-      - name: Upload ttbl-linux_x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: ttbl-linux_x64
-          path: dist/ttbl/ttbl-linux_x64
-
-      - name: Upload resources.neu
-        uses: actions/upload-artifact@v3
-        with:
-          name: resources.neu
-          path: dist/ttbl/resources.neu
+          name: ttbl-mac_m1
+          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg

@@ -16,7 +16,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
