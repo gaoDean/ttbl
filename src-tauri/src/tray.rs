@@ -1,6 +1,5 @@
 
 use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent};
-use tauri::Manager;
 
 pub fn tray_add_item(menu: SystemTrayMenu, id: &str, desc: &str) -> SystemTrayMenu {
     return menu.add_item(CustomMenuItem::new(id.to_string(), desc));
@@ -20,17 +19,10 @@ pub fn init_tray(opts: &[&str], desc: &[&str]) -> SystemTray {
 pub fn handle_tray_event(app: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
     match evt {
         SystemTrayEvent::MenuItemClick { id, .. } => {
-            // get a handle to the clicked menu item
-            // note that `tray_handle` can be called anywhere,
-            // just get a `AppHandle` instance with `app.handle()` on the setup hook
-            // and move it to another function or thread
-            let item_handle = app.tray_handle().get_item(&id);
+            // let item_handle = app.tray_handle().get_item(&id);
             match id.as_str() {
-                "hide" => {
-                    let window = app.get_window("main").unwrap();
-                    window.hide().unwrap();
-                    // you can also `set_selected`, `set_enabled` and `set_native_image` (macOS only).
-                    item_handle.set_title("Show").unwrap();
+                "quit" => {
+                    app.exit(0);
                 },
                 _ => {}
             }
