@@ -45,6 +45,7 @@ jobs:
     needs: deploy
     steps:
       - uses: actions/checkout@v2
+        if: startsWith(github.ref, 'refs/tags/')
 
       - name: Download macos-intel
         uses: actions/download-artifact@v3
