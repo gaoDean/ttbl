@@ -15,10 +15,11 @@ build:
 setup:
 	@echo "Installing Rust"
 	@curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
-	@echo "Installing Node.js dependencies"
-	@npm install
 	@echo "Adding MacOS build targets"
 	@rustup target add aarch64-apple-darwin
 	@rustup target add x86_64-apple-darwin
+	@echo "Installing Node.js dependencies"
+	@npm install --save-dev @tauri-apps/cli
+	@npm install
 	@echo "Testing cargo"
 	@cd src-tauri && cargo test
