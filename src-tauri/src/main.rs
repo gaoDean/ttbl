@@ -18,32 +18,36 @@ fn get_tray(opts: &[&str], desc: &[&str]) -> SystemTray {
     return SystemTray::new().with_menu(menu);
 }
 
+fn handle_tray_event(app: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
+    match evt {
+        SystemTrayEvent::MenuItemClick { id, .. } => {
+            // get a handle to the clicked menu item
+            // note that `tray_handle` can be called anywhere,
+            // just get a `AppHandle` instance with `app.handle()` on the setup hook
+            // and move it to another function or thread
+            let item_handle = app.tray_handle().get_item(&id);
+            match id.as_str() {
+                "hide" => {
+                    let window = app.get_window("main").unwrap();
+                    window.hide().unwrap();
+                    // you can also `set_selected`, `set_enabled` and `set_native_image` (macOS only).
+                    item_handle.set_title("Show").unwrap();
+                }
+                _ => {}
+            }
+        }
+        _ => {}
+    }
+}
+
 fn main() {
-    const tray_opts: [&str; 3] = ["more", "sync", "quit"];
-    const tray_opts_desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
-    const tray = get_tray(&tray_opts, &tray_opts_desc);
+    let tray_opts: [&str; 3] = ["more", "sync", "quit"];
+    let tray_opts_desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
+    let tray = get_tray(&tray_opts, &tray_opts_desc);
 
     tauri::Builder::default()
         .system_tray(tray)
-        .on_system_tray_event(|app, event| match event { // this is the sample snippet they give you on the docs: try to move this into a neat function without it giving you a "unknown size" error
-            SystemTrayEvent::MenuItemClick { id, .. } => {
-                // get a handle to the clicked menu item
-                // note that `tray_handle` can be called anywhere,
-                // just get a `AppHandle` instance with `app.handle()` on the setup hook
-                // and move it to another function or thread
-                let item_handle = app.tray_handle().get_item(&id);
-                match id.as_str() {
-                    "hide" => {
-                        let window = app.get_window("main").unwrap();
-                        window.hide().unwrap();
-                        // you can also `set_selected`, `set_enabled` and `set_native_image` (macOS only).
-                        item_handle.set_title("Show").unwrap();
-                    }
-                    _ => {}
-                }
-            }
-            _ => {}
-        })
+        .on_system_tray_event(|app, event| handle_tray_event(app, event))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
