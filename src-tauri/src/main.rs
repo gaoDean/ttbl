@@ -7,7 +7,7 @@ use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayMenuItem, Syst
 use tauri::Manager;
 
 
-fn get_tray(opts: [&str; 3], desc: [&str; 3]) -> SystemTray {
+fn get_tray(opts: &[&str], desc: &[&str]) -> SystemTray {
     let mut menu = SystemTrayMenu::new()
         .add_native_item(SystemTrayMenuItem::Separator);
 
@@ -19,9 +19,9 @@ fn get_tray(opts: [&str; 3], desc: [&str; 3]) -> SystemTray {
 }
 
 fn main() {
-    let tray_opts: [&str; 3] = ["more", "sync", "quit"];
-    let tray_opts_desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
-    let tray = get_tray(tray_opts, tray_opts_desc);
+    const tray_opts: [&str; 3] = ["more", "sync", "quit"];
+    const tray_opts_desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
+    const tray = get_tray(&tray_opts, &tray_opts_desc);
 
     tauri::Builder::default()
         .system_tray(tray)
