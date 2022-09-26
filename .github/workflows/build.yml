@@ -24,12 +24,8 @@ jobs:
         run: |
           npm install
           cd src-tauri && cargo test
-
-      - name: build macos-intel
-        run: npx tauri build --target x86_64-apple-darwin
-
-      - name: build macos-m1
-        run: npx tauri build --target aarch64-apple-darwin
+          npx tauri build --target x86_64-apple-darwin
+          npx tauri build --target aarch64-apple-darwin
 
       - name: Upload macos-intel
         uses: actions/upload-artifact@v3
