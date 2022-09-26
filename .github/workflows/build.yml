@@ -42,3 +42,36 @@ jobs:
         with:
           name: ttbl-mac_m1
           path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg
+
+  release:
+    name: Check and upload to release
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download macos-intel
+        uses: actions/download-artifact@v3
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: ttbl-mac_intel
+
+      - name: Download macos-m1
+        uses: actions/download-artifact@v3
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: ttbl-mac_m1
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body: |
+            \# Added
+            \
+            \# Changed
+            \
+            \# Fixed
+            \
+            Download the asset that matches your operating system below.
+          files: |
+            ttbl-mac_intel
+            ttbl-mac_m1
