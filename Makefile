@@ -13,6 +13,8 @@ build:
 	@cargo-tauri build --target aarch64-apple-darwin
 
 setup:
+	@echo "Installing Rust"
+	@curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 	@echo "Installing Node.js dependencies"
 	@npm install
 	@echo "Adding MacOS build targets"

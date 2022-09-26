@@ -13,12 +13,6 @@ jobs:
         with:
           node-version: 16.x
 
-      # install the latest Rust stable
-      - name: Rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-
       - name: Setup Environment
         run: make setup
 
