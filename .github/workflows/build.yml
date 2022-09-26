@@ -20,20 +20,16 @@ jobs:
           toolchain: stable
           target: aarch64-apple-darwin # additional target: github MacOS is x86_64
 
-      - name: install app dependencies
-        run: npm install
+      - name: install app dependencies and test
+        run: |
+          npm install
+          cd tauri-src && cargo test
 
       - name: build macos-intel
-        run: npx tauri build
-      - uses: tauri-apps/tauri-action@v0
-        with:
-          args: --target x86_64-apple-darwin
+        run: npx tauri build --target x86_64-apple-darwin
 
       - name: build macos-m1
-        run: npx tauri build
-      - uses: tauri-apps/tauri-action@v0
-        with:
-          args: --target aarch64-apple-darwin
+        run: npx tauri build --target aarch64-apple-darwin
 
       - name: Upload macos-intel
         uses: actions/upload-artifact@v3
