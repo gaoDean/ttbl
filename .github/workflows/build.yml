@@ -24,7 +24,6 @@ jobs:
       - name: install app dependencies and test
         run: |
           npm install
-          cd src-tauri && cargo test
 
       - name: build macos-intel
         run: npx tauri build --target x86_64-apple-darwin
