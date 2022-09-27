@@ -64,11 +64,12 @@
 		},
 		"windows": [
 			{
-				"visible": true,
+				"visible": false,
 				"skipTaskbar": true,
 				"fullscreen": false,
-				"height": 600,
+				"resizable": true,
 				"title": "ttbl",
+				"height": 600,
 				"width": 800
 			}
 		]
