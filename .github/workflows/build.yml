@@ -35,13 +35,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ttbl-mac_intel
-          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
+          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg
 
       - name: Upload macos-m1
         uses: actions/upload-artifact@v3
         with:
           name: ttbl-mac_m1
-          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg
+          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
 
   release:
     name: Check and upload to release
