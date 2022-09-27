@@ -1,5 +1,6 @@
 all: run
 
+# dont use this, `alias tauri="npx tauri"`
 run:
 	@npm run tauri dev
 
