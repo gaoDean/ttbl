@@ -6,11 +6,10 @@
 mod tray;
 
 fn main() {
-    let tray_opts: [&str; 3] = ["more", "sync", "quit"];
-    let tray_opts_desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
-    let tray = tray::init_tray(&tray_opts, &tray_opts_desc);
+    let tray = tray::init_tray();
 
     tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![tray::add_timetable_to_tray])
         .system_tray(tray)
         .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
         .run(tauri::generate_context!())
