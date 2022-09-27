@@ -60,7 +60,7 @@
     "windows": [
       {
 		"visible": true,
-		"skipTaskbar": false,
+		"skipTaskbar": true,
         "fullscreen": false,
         "height": 600,
         "title": "ttbl",
