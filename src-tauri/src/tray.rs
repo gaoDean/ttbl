@@ -32,36 +32,41 @@ pub fn add_timetable_to_tray(
     extra_msg: String,
     app_handle: tauri::AppHandle,
 ) -> Result<(), tauri::Error> {
-    let timetable: Vec<Class> = serde_json::from_str(timetable_json.as_str()).unwrap();
+    let timetable: Vec<Class> = serde_json::from_str(&timetable_json)?;
 
-    let menu = init_tray().menu;
-    let mut tray_menu: SystemTrayMenu;
-    match menu {
-        None => return Ok(()),
-        Some(x) => tray_menu = x
-    }
+    let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
-    tray_menu = tray_add_item(tray_menu, "date", &msg);
+    menu = tray_add_item(menu, "date", &msg);
     if !extra_msg.is_empty() {
-        tray_menu = tray_add_item(tray_menu, "extra", &extra_msg);
+        menu = tray_add_item(menu, "extra", &extra_msg);
+    }
+    if timetable.len() != 0 {
+        menu = menu.add_native_item(SystemTrayMenuItem::Separator);
+
+        let padding: &str = "       ";
+        for class in timetable {
+            let room_padding: &str = &padding[..class.room.len()];
+            let text: &str = &(class.period_name.as_str().to_owned() + "\t" + &class.room + room_padding + &class.description);
+
+            menu = tray_add_item(menu, &class.period_name, &text);
+        }
     }
 
-    let padding: &str = "       ";
-    for class in timetable {
-        let room_padding: &str = &padding[..class.room.len()];
-        let text: &str = &(class.period_name.as_str().to_owned() + "\t" + &class.room + room_padding + &class.description);
-
-        tray_menu = tray_add_item(tray_menu, &class.period_name, &text);
+    menu = menu.add_native_item(SystemTrayMenuItem::Separator);
+    let opts: [&str; 3] = ["more", "sync", "quit"];
+    let desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
+    for i in 0..opts.len() {
+        menu = tray_add_item(menu, opts[i], desc[i]);
     }
 
-    return app_handle.tray_handle().set_menu(tray_menu);
+    return app_handle.tray_handle().set_menu(menu);
 }
 
 pub fn tray_add_item(menu: SystemTrayMenu, id: &str, desc: &str) -> SystemTrayMenu {
     return menu.add_item(CustomMenuItem::new(id.to_string(), desc));
 }
 
-pub fn init_tray() -> SystemTray {
+pub fn default_tray() -> SystemTray {
     let opts: [&str; 3] = ["more", "sync", "quit"];
     let desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
     let mut menu = SystemTrayMenu::new().add_native_item(SystemTrayMenuItem::Separator);

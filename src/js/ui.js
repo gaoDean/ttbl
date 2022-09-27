@@ -3,6 +3,8 @@
 import { getTimetable, fetchTimetable } from "./helper/impure.js";
 import { inThePast, getMessage } from "./helper/time.js";
 
+const invoke = window.__TAURI__.invoke;
+
 let date = dayjs();
 let centered = true;
 
@@ -35,14 +37,15 @@ async function updateUI()
 	let ymd = date.format("YYYYMMDD");
 
 	let timetable = await getTimetable();
-	if (!timetable) {
-		return;
-	}
 	let message = getMessage(timetable, ymd);
 	timetable = timetable[ymd];
+	if (!timetable) {
+		invoke("add_timetable_to_tray", { timetableJson: "[]", msg: message["msg"], extraMsg: message["extra"] });
+		return;
+	}
 
-	setClassesToGui(timetable, message['msg'], message['extra']);
-	setClassesToTray(timetable, message['msg'], message['extra']);
+	invoke("add_timetable_to_tray", { timetableJson: JSON.stringify(timetable), msg: message["msg"], extraMsg: message["extra"] });
+	setClassesToGui(timetable, message["msg"], message["extra"]);
 }
 
 async function setClassesToGui(timetable, msg, extra) {
@@ -66,89 +69,20 @@ async function setClassesToGui(timetable, msg, extra) {
 	}
 }
 
-async function setClassesToTray(timetable, msg, extra) {
-	let tray = {
-		icon: "/app/img/trayIcon.png",
-		menuItems: []
-	};
-
-	tray.menuItems.push({
-		id: "date",
-		text: msg
-	});
-
-	if (extra) {
-		tray.menuItems.push({
-			id: "extra",
-			text: extra
-		});
-	}
-
-	tray.menuItems.push({
-		text: "-"
-	});
-
-	let padding = "       ";
-	// add all the other classes
-	for (const i in timetable) {
-		let ptr_class = timetable[i];
-		let rpad = padding.substring(ptr_class["room"].length);
-		let shownText = `${ptr_class["periodName"]}\t` // join
-			+ `${ptr_class["room"]}${rpad}\t`
-			+ `${ptr_class["description"]}`;
-		// this adds the class to the tray menu
-		tray.menuItems.push({
-				id: ptr_class["periodName"],
-				text: shownText,
-				isDisabled: inThePast(ptr_class["endTime"])
-		});
-	}
-	// the preferences and quit options
-	tray.menuItems.push({
-		text: "-"
-	}, {
-		id: "more",
-		text: "More..."
-	}, {
-		id: "sync",
-		text: "Sync Timetable"
-	}, {
-		id: "quit",
-		text: "Quit Timetable"
-	});
-	await Neutralino.os.setTray(tray);
-}
-
-// handle the preferences and quit events
-await Neutralino.events.on("trayMenuItemClicked", async () => {
-	let id = event.detail.id;
-	switch (id) {
-		case "quit":
-			Neutralino.app.exit();
-			break;
-		case "sync":
-			fetchTimetable().then(updateUI());
-			break;
-		case "more":
-			await Neutralino.window.show(); // show the window
-			break;
-	}
-});
-
 function addListeners() {
-	window.addEventListener("scroll", () => {
-		let x = window.pageXOffset;
-		let threshold = 1;
-		if (centered) {
-			if (x < -(threshold)) {
-				changeDate(-1);
-			}	else if (x > threshold) {
-				changeDate(1);
-			}
-		}	else if (x > -(threshold) && x < threshold) {
-			centered = true;
-		}
-	});
+	// window.addEventListener("scroll", () => {
+	// 	let x = window.pageXOffset;
+	// 	let threshold = 1;
+	// 	if (centered) {
+	// 		if (x < -(threshold)) {
+	// 			changeDate(-1);
+	// 		}	else if (x > threshold) {
+	// 			changeDate(1);
+	// 		}
+	// 	}	else if (x > -(threshold) && x < threshold) {
+	// 		centered = true;
+	// 	}
+	// });
 	document.getElementById("date-past").addEventListener("click", () => changeDate(-1));
 	document.getElementById("date-future").addEventListener("click", () => changeDate(1));
 }

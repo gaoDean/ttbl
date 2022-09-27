@@ -1,7 +1,7 @@
 //	== impure functions, contact with the outside world ==
 
 const { appWindow } = window.__TAURI__.window
-const { writeTextFile, readTextFile, BaseDirectory } = fs.__TAURI__.fs
+const { writeTextFile, readTextFile, createDir, BaseDirectory } = window.__TAURI__.fs
 
 let host="https://caulfieldsync.vercel.app/api";
 
@@ -19,7 +19,7 @@ async function getData(key)
 {
 	let data;
 	try {
-		data = readTextFile(".storage." + key, { dir: BaseDirectory.Data });
+		data = await readTextFile("ttbl/.storage." + key, { dir: BaseDirectory.Data });
 	}	catch(err) {
 		console.log(err);
 		return undefined;
@@ -30,7 +30,8 @@ async function getData(key)
 async function setData(key, value)
 {
 	try {
-		writeTextFile(".storage." + key, value, { dir: BaseDirectory.Data });
+		await createDir("ttbl", { dir: BaseDirectory.Data, recursive: true });
+		await writeTextFile("ttbl/.storage." + key, value, { dir: BaseDirectory.Data });
 	}	catch(err) {
 		console.log(err);
 		throw new Error(err);
@@ -40,7 +41,7 @@ async function setData(key, value)
 // get from cache
 export async function getTimetable()
 {
-	let timetable = getData("timetable");
+	let timetable = await getData("timetable");
 	if (!timetable) {
 		console.log("msg: Timetable not found");
 		goLogin();

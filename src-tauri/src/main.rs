@@ -6,7 +6,7 @@
 mod tray;
 
 fn main() {
-    let tray = tray::init_tray();
+    let tray = tray::default_tray();
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![tray::add_timetable_to_tray])

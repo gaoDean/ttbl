@@ -16,7 +16,7 @@ export function getMessage(timetable, ymd)
 	}
 	let date = dayjs(ymd);
 	let msg = `It's ${date.format("dddd")}, ${date.format("D")} ${date.format("MMMM")}.`;
-	let extra = null;
+	let extra = "";
 
 	// If there are no classes today
 	if (timetable[ymd] === undefined || timetable[ymd].length === 0) {
