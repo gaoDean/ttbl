@@ -1,30 +1,7 @@
-use serde::{Deserialize, Serialize};
-use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri::Manager;
+use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Class {
-    id: String,
-	title: String,
-	description: String,
-    #[serde(rename = "startTime")]
-	start_time: String,
-    #[serde(rename = "endTime")]
-	end_time: String,
-    #[serde(rename = "dayOrder")]
-	day_order: i32,
-    #[serde(rename = "periodOrder")]
-	period_order: i32,
-    #[serde(rename = "periodName")]
-	period_name: String,
-	colour: String,
-	room: String,
-    #[serde(rename = "teacherName")]
-	teacher_name: String,
-	__typename: String,
-    #[serde(rename = "detailedName")]
-	detailed_name: String,
-}
+use crate::impure;
 
 #[tauri::command]
 pub fn add_timetable_to_tray(
@@ -33,7 +10,7 @@ pub fn add_timetable_to_tray(
     extra_msg: String,
     app_handle: tauri::AppHandle,
 ) -> Result<(), tauri::Error> {
-    let timetable: Vec<Class> = serde_json::from_str(&timetable_json)?;
+    let timetable: Vec<impure::Class> = impure::get_timetable_as_vec(timetable_json);
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
@@ -47,7 +24,11 @@ pub fn add_timetable_to_tray(
         let padding: &str = "       ";
         for class in timetable {
             let room_padding: &str = &padding[..class.room.len()];
-            let text: &str = &(class.period_name.as_str().to_owned() + "\t" + &class.room + room_padding + &class.description);
+            let text: &str = &(class.period_name.as_str().to_owned()
+                + "\t"
+                + &class.room
+                + room_padding
+                + &class.description);
 
             menu = tray_add_item(menu, &class.period_name, &text);
         }
@@ -86,7 +67,7 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
             match id.as_str() {
                 "quit" => {
                     app_handle.exit(0);
-                },
+                }
                 "more" => {
                     let window = (*app_handle).get_window("main").unwrap();
                     window.show().unwrap();

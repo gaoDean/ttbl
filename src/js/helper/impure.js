@@ -1,7 +1,8 @@
 //	== impure functions, contact with the outside world ==
 
-const { appWindow } = window.__TAURI__.window
-const { writeTextFile, readTextFile, createDir, BaseDirectory } = window.__TAURI__.fs
+const { appWindow } = window.__TAURI__.window;
+const { writeTextFile, readTextFile, createDir, BaseDirectory } = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 
 let host="https://caulfieldsync.vercel.app/api";
 
@@ -53,28 +54,7 @@ export async function getTimetable()
 // fetch from endpoint
 export async function fetchToken(student_id, password)
 {
-	console.log("msg: Fetching token");
-	const url = `${host}/token?username=${student_id}&password=${password}`;
-	const res = await fetch(url);
-
-	if (res.status == 401) {
-		console.log("401")
-		return 1;
-	}	else if (res.status != 200) {
-		throw new Error(`${res.status}: Could not fetch token due to an unknown reason`);
-	}
-
-	const token = (await res.json())["token"];
-	if (!token) {
-		console.log("msg: Token empty");
-		return 1;
-	}
-	try {
-		setData("token", token);
-	}	catch {
-		throw new Error("Could not store token");
-	}
-	console.log("msg: Token fetched");
+	invoke("fetch_token", { studentId: student_id, password: password }).then((msg) => console.log(msg));
 	return 0;
 }
 

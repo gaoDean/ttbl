@@ -3,13 +3,17 @@
     windows_subsystem = "windows"
 )]
 
+mod impure;
 mod tray;
 
 fn main() {
     let tray = tray::default_tray();
 
     let mut app = tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![tray::add_timetable_to_tray])
+        .invoke_handler(tauri::generate_handler![
+                        tray::add_timetable_to_tray,
+                        impure::fetch_token,
+        ])
         .system_tray(tray)
         .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
         .build(tauri::generate_context!())
