@@ -8,10 +8,14 @@ mod tray;
 fn main() {
     let tray = tray::default_tray();
 
-    tauri::Builder::default()
+    let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![tray::add_timetable_to_tray])
         .system_tray(tray)
         .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
-        .run(tauri::generate_context!())
+        .build(tauri::generate_context!())
         .expect("error while running tauri application");
+
+    #[cfg(target_os = "macos")]
+    app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+    app.run(|_app_handle, _event| {});
 }

@@ -38,14 +38,19 @@ async function updateUI()
 
 	let timetable = await getTimetable();
 	let message = getMessage(timetable, ymd);
-	timetable = timetable[ymd];
-	if (!timetable) {
-		invoke("add_timetable_to_tray", { timetableJson: "[]", msg: message["msg"], extraMsg: message["extra"] });
-		return;
-	}
+	timetable = timetable[ymd] ? timetable[ymd] : [];
 
-	invoke("add_timetable_to_tray", { timetableJson: JSON.stringify(timetable), msg: message["msg"], extraMsg: message["extra"] });
-	setClassesToGui(timetable, message["msg"], message["extra"]);
+	invoke("add_timetable_to_tray", {
+		timetableJson: JSON.stringify(timetable),
+		msg: message["msg"],
+		extraMsg: message["extra"]
+	});
+
+	setClassesToGui(timetable,
+		message["msg"],
+		message["extra"]
+	);
+
 }
 
 async function setClassesToGui(timetable, msg, extra) {

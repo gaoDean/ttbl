@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::Manager;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Class {
@@ -78,13 +79,18 @@ pub fn default_tray() -> SystemTray {
     return SystemTray::new().with_menu(menu);
 }
 
-pub fn handle_tray_event(app: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
+pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
     match evt {
         SystemTrayEvent::MenuItemClick { id, .. } => {
-            // let item_handle = app.tray_handle().get_item(&id);
+            // let item_handle = app_handle.tray_handle().get_item(&id);
             match id.as_str() {
                 "quit" => {
-                    app.exit(0);
+                    app_handle.exit(0);
+                },
+                "more" => {
+                    let window = (*app_handle).get_window("main").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
                 }
                 _ => {}
             }
