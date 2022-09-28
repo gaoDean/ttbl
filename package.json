@@ -1,0 +1,12 @@
+{
+  "name": "ttbl",
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.1.1",
+    "dead-server": "^1.0.6"
+  }
+}

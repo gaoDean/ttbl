@@ -1,66 +1,80 @@
 name: Create Executables
 
-on:
-  push:
-    branches: [ main ]
+on: [push]
 
 jobs:
   deploy:
     name: Compile Application
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 16
+          cache: 'npm'
+      - run: npm ci
 
-      - name: Build App
+      - name: install Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-apple-darwin # additional target: github MacOS is x86_64
+
+      - name: install app dependencies and test
         run: |
-          make test
-          make setup
-          make update
-          make
-          make dmg
+          npm install
 
-      - name: Upload MacOS
+      - name: build macos-intel
+        run: npx tauri build --target x86_64-apple-darwin
+
+      - name: build macos-m1
+        run: npx tauri build --target aarch64-apple-darwin
+
+      - name: Upload macos-intel
         uses: actions/upload-artifact@v3
         with:
-          name: ttbl-mac_x64
-          path: dist/macos/ttbl\ installer.dmg
+          name: ttbl-mac_intel
+          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg
 
-      - name: Upload Windows
+      - name: Upload macos-m1
         uses: actions/upload-artifact@v3
         with:
-          name: ttbl-win_x64
-          path: dist/ttbl/ttbl-win_x64.exe
+          name: ttbl-mac_m1
+          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
 
-      - name: Upload WebView2Loader.ddl
-        uses: actions/upload-artifact@v3
-        with:
-          name: WebView2Loader.ddl
-          path: dist/ttbl/WebView2Loader.dll
+  release:
+    name: Check and upload to release
+    runs-on: macos-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v3
+        if: startsWith(github.ref, 'refs/tags/')
 
-      - name: Upload ttbl-linux_arm64
-        uses: actions/upload-artifact@v3
+      - name: Download macos-intel
+        uses: actions/download-artifact@v3
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: ttbl-linux_arm64
-          path: dist/ttbl/ttbl-linux_arm64
+          name: ttbl-mac_intel
 
-      - name: Upload ttbl-linux_armhf
-        uses: actions/upload-artifact@v3
+      - name: Download macos-m1
+        uses: actions/download-artifact@v3
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: ttbl-linux_armhf
-          path: dist/ttbl/ttbl-linux_armhf
+          name: ttbl-mac_m1
 
-      - name: Upload ttbl-linux_x64
-        uses: actions/upload-artifact@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: ttbl-linux_x64
-          path: dist/ttbl/ttbl-linux_x64
-
-      - name: Upload resources.neu
-        uses: actions/upload-artifact@v3
-        with:
-          name: resources.neu
-          path: dist/ttbl/resources.neu
+          body: |
+            \# Added
+            \
+            \# Changed
+            \
+            \# Fixed
+            \
+            Download the asset that matches your operating system below.
+          files: |
+            ttbl-mac_intel
+            ttbl-mac_m1

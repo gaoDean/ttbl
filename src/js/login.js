@@ -1,8 +1,7 @@
-/* requires { Neutralino }
-
-	== login and tokens == */
+// == login and tokens ==
 
 import { fetchToken, fetchTimetable } from "./helper/impure.js";
+const { appWindow } = window.__TAURI__.window
 
 // gui: the msg under the login
 function loginMsg(msg) {
@@ -83,8 +82,8 @@ function addListeners() {
 
 	// on the "login" button clicked, try to fetch token
 	document.getElementById("submit").addEventListener("click", () => (login()));
-	document.getElementById("link").addEventListener("click", () => (Neutralino.os.open("https://github.com/gaoDean/ttbl")));
+	// document.getElementById("link").addEventListener("click", () => (Neutralino.os.open("https://github.com/gaoDean/ttbl")));
 }
 
 addListeners();
-Neutralino.window.show();
+appWindow.show();
