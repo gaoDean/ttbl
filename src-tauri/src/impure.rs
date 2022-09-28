@@ -56,6 +56,12 @@ fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {
     return file.write_all(data.as_bytes());
 }
 
+// get the <data> in the file in datadir, its name being ".storage.${key}"
+fn get_data(key: &str) -> tauri::api::Result<String> {
+    let filepath_buf = datadir().join(".storage.".to_owned() + key);
+    return tauri::api::file::read_string(filepath_buf.as_path());
+}
+
 // generic fetch
 async fn fetch(url: &str) -> tauri::api::Result<Response> {
     // http client
