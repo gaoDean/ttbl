@@ -11,8 +11,8 @@ fn main() {
 
     let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-                        tray::add_timetable_to_tray,
-                        impure::fetch_token,
+            tray::add_timetable_to_tray,
+            impure::fetch_token,
         ])
         .system_tray(tray)
         .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
