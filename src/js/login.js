@@ -59,7 +59,7 @@ async function login() {
 		}
 	}	catch(err) {
 		if (err == "TypeError: Load failed") {
-			loginMsg("Something went wrong on the server, please try again."); // garv...
+			loginMsg("Something went wrong on the server, please try again.");
 		}	else {
 			loginMsg("Oh no, something went wrong.");
 		}
