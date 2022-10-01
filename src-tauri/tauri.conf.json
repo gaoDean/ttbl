@@ -68,6 +68,7 @@
 				"skipTaskbar": true,
 				"fullscreen": false,
 				"resizable": true,
+				"focus": false,
 				"title": "ttbl",
 				"height": 600,
 				"width": 800

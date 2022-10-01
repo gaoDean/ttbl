@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
-use std::{fs::File, io::Write};
-use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType};
+use std::{clone::Clone, collections::HashMap, fs::File, io::Write};
+use tauri::api::http::{
+    Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType,
+};
 
 const HOST: &str = "https://caulfieldsync.vercel.app/api";
 
@@ -11,7 +12,7 @@ fn datadir() -> std::path::PathBuf {
     return dir.join("ttbl/");
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Class {
     pub id: String,
     pub title: String,
@@ -68,13 +69,15 @@ async fn fetch(url: &str) -> Result<ResponseData, String> {
                 .unwrap()
                 .response_type(ResponseType::Json),
         )
-        .await.unwrap();
+        .await
+        .unwrap();
 
     if res.status() != 200 {
         return Err(res.status().to_string());
     }
 
     let read: ResponseData = res.read().await.unwrap();
+    println!("{}", read.url.as_str().to_string());
     return Ok(read);
 }
 
@@ -94,46 +97,62 @@ pub async fn fetch_token(student_id: &str, password: &str) -> Result<String, ()>
     if token_data.is_empty() {
         return Ok("Something went wrong".to_owned());
     }
-    set_data("token", token_data);
-    return Ok("".to_owned());
+    match set_data("token", token_data) {
+        Err(_) => return Ok("Couldn't write to storage".to_owned()),
+        _ => return Ok("".to_owned()),
+    };
 }
 
-// #[tauri::command]
-// pub async fn fetch_timetable() -> Result<Ok> {
-//     let token: String = match get_data("token") {
-//         Ok(s) => s,
-//         Err(e) => return Err(e),
-//     };
-//     // if token.is_empty() {
-//     //     // TODO: go to login
-//     // }
-//     let url: String = format!(
-//         "{}/timetable/{}?daysMinus={}&daysPlus={}&shorten=true",
-//         HOST, "15", "15"
-//     );
-//     let res: ResponseData = match fetch(&url).await {
-//         Ok(s) => s,
-//         Err(e) => return Err(e),
-//     };
-//     let timetable_data: Vec<Class> =
-//         serde_json::from_str(res.data["data"]["classes"].as_str().unwrap()).unwrap();
-//
-//     let mut cached_timetable: Map<String, Value> =
-//         serde_json::from_str(get_data("timetable").unwrap().as_str()).unwrap();
-//     let mut new_timetable: Map<String, Value> = Map::new();
-//
-//     for i in 0..timetable_data.len() {
-//         let val: Class = timetable_data[i];
-//         let date: &str = get_class_date(val);
-//         // insert key=date value=classes_on_that_day to new_timetable
-//         if !new_timetable.contains_key(date) {
-//             new_timetable.insert(date, Vec::new());
-//         }
-//         new_timetable.get_mut(date).unwrap().push(val);
-//
-//         // put the date to cached timetable, only the finished day will be inserted
-//         // because all recurring inserts will be removed.
-//         cached_timetable.insert(date, new_timetable.get(date));
-//     }
-//     return Ok(());
-// }
+#[tauri::command]
+pub async fn fetch_timetable() -> Result<String, ()> {
+    let token: String = match get_data("token") {
+        Ok(s) => s,
+        Err(_) => return Ok("No token".to_owned()),
+    };
+    // if token.is_empty() {
+    //     // TODO: go to login
+    // }
+    let url: String = format!(
+        "{}/timetable/{}?dayMinus={}&dayPlus={}&shorten=true",
+        HOST, token, "15", "15"
+    );
+    let res: ResponseData = match fetch(&url).await {
+        Ok(s) => s,
+        Err(e) => return Ok(format!("{}: {}", e, "Couldn't fetch timetable".to_owned())),
+    };
+    let timetable: Vec<Class> =
+        serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
+
+    let mut cached_timetable: HashMap<String, Vec<Class>> = match serde_json::from_str(
+        match get_data("timetable") {
+            Ok(s) => s,
+            Err(_) => String::new(),
+        }
+        .as_str(),
+    ) {
+        Ok(s) => s,
+        Err(e) => HashMap::new(),
+    };
+    let mut new_timetable: HashMap<String, Vec<Class>> = HashMap::new();
+
+    for i in 0..timetable.len() {
+        let val: &Class = &timetable[i];
+        let date: &String = &get_class_date(val.clone());
+        // insert key=date value=classes_on_that_day to new_timetable
+        if !new_timetable.contains_key(date) {
+            new_timetable.insert(date.clone(), Vec::new());
+        }
+        new_timetable.get_mut(date).unwrap().push(val.clone());
+
+        // put the date to cached timetable, only the finished day will be inserted
+        // because all recurring inserts will be removed.
+        cached_timetable.insert(date.clone(), new_timetable.get(date).unwrap().clone());
+    }
+    match set_data(
+        "timetable",
+        &serde_json::ser::to_string(&cached_timetable).unwrap(),
+    ) {
+        Err(_) => return Ok("Couldn't write to storage".to_owned()),
+        _ => return Ok("".to_owned()),
+    };
+}

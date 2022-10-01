@@ -45,7 +45,7 @@ export async function getTimetable()
 	let timetable = await getData("timetable");
 	if (!timetable) {
 		console.log("msg: Timetable not found");
-		goLogin();
+		// goLogin();
 		return;
 	}
 	return JSON.parse(timetable);
@@ -59,53 +59,8 @@ export async function fetchToken(student_id, password)
 }
 
 // fetch from endpoint
-export async function fetchTimetable(pastDays = 15, futureDays = 15)
+export async function fetchTimetable()
 {
-	console.log("msg: Fetching timetable");
-
-	// function to extract date from class object
-	let getDate = (subject) => (subject["id"].substring(7));
-
-	const token = await getData("token");
-	if (token == undefined) {
-		goLogin();
-		return;
-	}
-	const url = `${host}/timetable/${token}?dayMinus=${pastDays}&dayPlus=${futureDays}&shorten=true`;
-	const res = await fetch(url);
-	if (res.status == 403) {
-		return 1;
-	}	else if (res.status != 200) {
-		throw new Error(`${res.status}: Could not fetch the timetable due to an unknown reason`);
-	}
-
-	// the info is stored in .data.classes
-	const fetched_timetable = (await res.json())["data"]["classes"]; // if status 200
-
-	// get cached timetable data or if that's null an empty object
-	let new_timetable = getData("timetable")
-		.then((ret) => (JSON.parse(ret)), () => ({}));
-
-	// it leaves unchanged new_timetable values untouched, updates new ones
-	for (let i in fetched_timetable) {
-		let val = fetched_timetable[i];
-		let date = getDate(val);
-
-		// if empty, init with <val> otherwise add val to array
-		if (!new_timetable[date]) { // if null
-			new_timetable[date] = [];
-		}
-		// key is date, value is array of classes for that day
-		new_timetable[date].push(val)
-	}
-
-	try {
-		setData("timetable", JSON.stringify(new_timetable));
-	}	catch {
-		throw new Error("Could not store timetable");
-	}
-
-	console.log("msg: Timetable fetched");
-
+	invoke("fetch_timetable").then((msg) => console.log(msg));
 	return 0;
 }

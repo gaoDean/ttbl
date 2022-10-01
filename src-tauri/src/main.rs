@@ -13,6 +13,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             tray::add_timetable_to_tray,
             impure::fetch_token,
+            impure::fetch_timetable,
         ])
         .system_tray(tray)
         .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
