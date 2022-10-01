@@ -14,7 +14,6 @@ fn main() {
             tray::add_timetable_to_tray,
             impure::fetch_token,
             impure::fetch_timetable,
-            impure::get_timetable,
         ])
         .system_tray(tray)
         .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
