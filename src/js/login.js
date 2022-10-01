@@ -1,7 +1,15 @@
 // == login and tokens ==
 
-import { fetchToken, fetchTimetable } from "./helper/impure.js";
 const { appWindow } = window.__TAURI__.window
+const invoke = window.__TAURI__.invoke;
+
+function goLogin()
+{
+	if (window.location != "login.html") {
+		window.location = "login.html";
+		appWindow.show();
+	}
+}
 
 // gui: the msg under the login
 function loginMsg(msg) {
@@ -17,7 +25,7 @@ function isNumeric(str) {
 	return Number(str) == str;
 }
 
-function checkValid(node, validFunc) {
+function checkValidity(node, validFunc) {
 	if (node.value != "" && validFunc(node.value)) {
 		node.setAttribute("aria-invalid", "false");
 		return true; // is valid
@@ -32,7 +40,7 @@ async function login() {
 	let password = document.getElementById("password");
 
 	// check validity of entries
-	if (!checkValid(student_id, isNumeric) + !checkValid(password, () => (true))) {
+	if (!checkValidity(student_id, isNumeric) + !checkValidity(password, () => (true))) {
 		// if they're both valid, the above will equate to 0
 		// I didn't use a logical or because it short circuits and only one of them turns red
 		loginMsg("Looks like you missed something.");
@@ -44,26 +52,22 @@ async function login() {
 	loginMsg("Trying to fetch token");
 
 	try {
-		if (await fetchToken(student_id.value, password.value) > 0) {
-			busy(false);
-			loginMsg("Authorisation failed. Make sure you have typed in your username and password correctly.");
-			return;
-		}
-
-		loginMsg("Token fetched successfully, fetching timetable");
-
-		if (await fetchTimetable() > 0) {
-			busy(false);
-			loginMsg("Something went wrong. Please try again.");
-			return;
-		}
+		await invoke("fetch_token", { studentId: student_id, password: password });
 	}	catch(err) {
-		if (err == "TypeError: Load failed") {
-			loginMsg("Something went wrong on the server, please try again.");
-		}	else {
-			loginMsg("Oh no, something went wrong.");
-		}
+		console.log(err)
+		busy(false);
+		loginMsg("Authorisation failed. Make sure you have typed in your username and password correctly.");
+		return;
+	}
+
+	loginMsg("Token fetched successfully, fetching timetable");
+
+	try {
+		await invoke("fetch_timetable");
+	}	catch(err) {
 		console.log(err);
+		busy(false);
+		loginMsg("Something went wrong. Please try again.");
 		return;
 	}
 
@@ -77,8 +81,8 @@ function addListeners() {
 	let password = document.getElementById("password");
 
 	// adds input listener to check if input is valid (gui)
-	student_id.addEventListener("input", () => (checkValid(student_id, isNumeric)));
-	password.addEventListener("input", () => (checkValid(password, () => (true))));
+	student_id.addEventListener("input", () => (checkValidity(student_id, isNumeric)));
+	password.addEventListener("input", () => (checkValidity(password, () => (true))));
 
 	// on the "login" button clicked, try to fetch token
 	document.getElementById("submit").addEventListener("click", () => (login()));

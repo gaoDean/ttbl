@@ -8,7 +8,7 @@ pub fn add_timetable_to_tray(
     msg: String,
     extra_msg: String,
     app_handle: tauri::AppHandle,
-) -> Result<(), tauri::Error> {
+) -> Result<Vec<impure::Class>, tauri::Error> {
     let timetable: Vec<impure::Class> = impure::get_timetable();
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
@@ -21,7 +21,7 @@ pub fn add_timetable_to_tray(
         menu = menu.add_native_item(SystemTrayMenuItem::Separator);
 
         let padding: &str = "       ";
-        for class in timetable {
+        for class in timetable.clone() {
             let room_padding: &str = &padding[..class.room.len()];
             let text: &str = &(class.period_name.clone()
                 + "\t"
@@ -41,7 +41,7 @@ pub fn add_timetable_to_tray(
     }
 
     return match app_handle.tray_handle().set_menu(menu) {
-        Ok(_) => Ok(()),
+        Ok(_) => Ok(timetable),
         Err(e) => Err(e),
     };
 }

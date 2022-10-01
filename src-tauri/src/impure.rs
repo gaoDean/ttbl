@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
+use tauri::http::status::StatusCode;
 use std::{clone::Clone, collections::HashMap, fs::File, io::Write};
 use tauri::api::http::{
     Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType,
 };
 
 const HOST: &str = "https://caulfieldsync.vercel.app/api";
-
 // get the data dir cus it doesn't allow it to be const
 fn datadir() -> std::path::PathBuf {
     let dir = tauri::api::path::data_dir().unwrap();
@@ -71,7 +71,7 @@ pub fn get_timetable() -> Vec<Class> {
 }
 
 // generic fetch
-async fn fetch(url: &str) -> Result<ResponseData, String> {
+async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
     // http client
     let client: Client = ClientBuilder::new().build().unwrap();
     // get the response
@@ -84,8 +84,8 @@ async fn fetch(url: &str) -> Result<ResponseData, String> {
         .await
         .unwrap();
 
-    if res.status() != 200 {
-        return Err(res.status().to_string());
+    if res.status().as_u16() != 200 {
+        return Err(res.status());
     }
 
     let read: ResponseData = res.read().await.unwrap();
@@ -94,7 +94,7 @@ async fn fetch(url: &str) -> Result<ResponseData, String> {
 }
 
 #[tauri::command]
-pub async fn fetch_token(student_id: &str, password: &str) -> Result<String, ()> {
+pub async fn fetch_token(student_id: &str, password: &str) -> Result<(), String> {
     let url: String = format!(
         "{}/token?username={}&password={}",
         HOST, student_id, password
@@ -102,24 +102,24 @@ pub async fn fetch_token(student_id: &str, password: &str) -> Result<String, ()>
 
     let res: ResponseData = match fetch(&url).await {
         Ok(s) => s,
-        Err(e) => return Ok(e),
+        Err(e) => return Err(e.as_u16().to_string()),
     };
     // get the token from the response
     let token_data: &str = res.data["token"].as_str().unwrap();
     if token_data.is_empty() {
-        return Ok("Something went wrong".to_owned());
+        return Err("Something went wrong".to_owned());
     }
     match set_data("token", token_data) {
-        Err(_) => return Ok("Couldn't write to storage".to_owned()),
-        _ => return Ok("".to_owned()),
+        Err(_) => return Err("Couldn't write to storage".to_owned()),
+        _ => return Ok(()),
     };
 }
 
 #[tauri::command]
-pub async fn fetch_timetable() -> Result<String, ()> {
+pub async fn fetch_timetable() -> Result<(), String> {
     let token: String = get_data("token");
     if token.is_empty() {
-        return Ok("No token stored".to_owned());
+        return Err("No token stored".to_owned());
     }
     // if token.is_empty() {
     //     // TODO: go to login
@@ -130,7 +130,7 @@ pub async fn fetch_timetable() -> Result<String, ()> {
     );
     let res: ResponseData = match fetch(&url).await {
         Ok(s) => s,
-        Err(e) => return Ok(format!("{}: {}", e, "Couldn't fetch timetable".to_owned())),
+        Err(e) => return Err(format!("{}: {}", e, "Couldn't fetch timetable".to_owned())),
     };
     let timetable: Vec<Class> =
         serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
@@ -160,7 +160,7 @@ pub async fn fetch_timetable() -> Result<String, ()> {
         "timetable",
         &serde_json::ser::to_string(&cached_timetable).unwrap(),
     ) {
-        Err(_) => return Ok("Couldn't write to storage".to_owned()),
-        _ => return Ok("".to_owned()),
+        Err(_) => return Err("Couldn't write to storage".to_owned()),
+        _ => return Ok(()),
     };
 }
