@@ -53,9 +53,12 @@ fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {
 }
 
 // get the <data> in the file in datadir, its name being ".storage.${key}"
-fn get_data(key: &str) -> tauri::api::Result<String> {
+fn get_data(key: &str) -> String {
     let filepath_buf = datadir().join(".storage.".to_owned() + key);
-    return tauri::api::file::read_string(filepath_buf.as_path());
+    return match tauri::api::file::read_string(filepath_buf.as_path()) {
+        Ok(s) => s,
+        Err(_) => String::new(),
+    };
 }
 
 // generic fetch
@@ -105,10 +108,10 @@ pub async fn fetch_token(student_id: &str, password: &str) -> Result<String, ()>
 
 #[tauri::command]
 pub async fn fetch_timetable() -> Result<String, ()> {
-    let token: String = match get_data("token") {
-        Ok(s) => s,
-        Err(_) => return Ok("No token".to_owned()),
-    };
+    let token: String = get_data("token");
+    if token.is_empty() {
+        return Ok("No token stored".to_owned());
+    }
     // if token.is_empty() {
     //     // TODO: go to login
     // }
@@ -123,16 +126,12 @@ pub async fn fetch_timetable() -> Result<String, ()> {
     let timetable: Vec<Class> =
         serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
 
-    let mut cached_timetable: HashMap<String, Vec<Class>> = match serde_json::from_str(
-        match get_data("timetable") {
+    let mut cached_timetable: HashMap<String, Vec<Class>> =
+        match serde_json::from_str(get_data("timetable").as_str()) {
             Ok(s) => s,
-            Err(_) => String::new(),
-        }
-        .as_str(),
-    ) {
-        Ok(s) => s,
-        Err(e) => HashMap::new(),
-    };
+            Err(_) => HashMap::new(),
+        };
+
     let mut new_timetable: HashMap<String, Vec<Class>> = HashMap::new();
 
     for i in 0..timetable.len() {
