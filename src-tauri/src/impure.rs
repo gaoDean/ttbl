@@ -37,6 +37,7 @@ pub struct Class {
 }
 
 // converts stringify json timetable to vectored form
+// UNUSED
 pub fn get_timetable_as_vec(timetable_json: String) -> Vec<Class> {
     return serde_json::from_str(&timetable_json).unwrap();
 }
@@ -58,6 +59,14 @@ fn get_data(key: &str) -> String {
     return match tauri::api::file::read_string(filepath_buf.as_path()) {
         Ok(s) => s,
         Err(_) => String::new(),
+    };
+}
+
+#[tauri::command]
+pub fn get_timetable() -> Vec<Class> {
+    return match serde_json::from_str(get_data("timetable").as_str()) {
+        Ok(s) => s,
+        Err(_) => Vec::new()
     };
 }
 

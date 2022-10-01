@@ -5,12 +5,11 @@ use crate::impure;
 
 #[tauri::command]
 pub fn add_timetable_to_tray(
-    timetable_json: String,
     msg: String,
     extra_msg: String,
     app_handle: tauri::AppHandle,
 ) -> Result<(), tauri::Error> {
-    let timetable: Vec<impure::Class> = impure::get_timetable_as_vec(timetable_json);
+    let timetable: Vec<impure::Class> = impure::get_timetable();
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
@@ -24,7 +23,7 @@ pub fn add_timetable_to_tray(
         let padding: &str = "       ";
         for class in timetable {
             let room_padding: &str = &padding[..class.room.len()];
-            let text: &str = &(class.period_name.as_str().to_owned()
+            let text: &str = &(class.period_name.clone()
                 + "\t"
                 + &class.room
                 + room_padding
@@ -41,7 +40,10 @@ pub fn add_timetable_to_tray(
         menu = tray_add_item(menu, opts[i], desc[i]);
     }
 
-    return app_handle.tray_handle().set_menu(menu);
+    return match app_handle.tray_handle().set_menu(menu) {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e),
+    };
 }
 
 pub fn tray_add_item(menu: SystemTrayMenu, id: &str, desc: &str) -> SystemTrayMenu {
