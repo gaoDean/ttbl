@@ -5,6 +5,7 @@
 
 mod impure;
 mod tray;
+mod time;
 
 fn main() {
     let tray = tray::default_tray();

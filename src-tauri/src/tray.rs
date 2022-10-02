@@ -2,24 +2,30 @@ use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 
 use crate::impure;
+use crate::time;
 
 #[tauri::command]
 pub fn add_timetable_to_tray(
-    msg: String,
-    extra_msg: String,
+    date: i32,
     app_handle: tauri::AppHandle,
-) -> Result<Vec<impure::Class>, tauri::Error> {
+) -> Result<(Vec<impure::Class>, (String, String)), tauri::Error> {
+    // tuple: msg, extra msg
     let timetable: Vec<impure::Class> = impure::get_timetable();
+    let msg: (String, String) = time::get_msg(date.to_string(), timetable.is_empty());
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
-    menu = tray_add_item(menu, "date", &msg);
-    if !extra_msg.is_empty() {
-        menu = tray_add_item(menu, "extra", &extra_msg);
+    // add date messages
+    menu = tray_add_item(menu, "date", &msg.0);
+    if !msg.1.is_empty() {
+        menu = tray_add_item(menu, "extra", &msg.1);
     }
+
+    // if timetable exists on that day
     if timetable.len() != 0 {
         menu = menu.add_native_item(SystemTrayMenuItem::Separator);
 
+        // padding is to make align the classes in one column
         let padding: &str = "       ";
         for class in timetable.clone() {
             let room_padding: &str = &padding[..class.room.len()];
@@ -29,19 +35,23 @@ pub fn add_timetable_to_tray(
                 + room_padding
                 + &class.description);
 
+            // add the tray item to <menu>, with <text> as the inner
             menu = tray_add_item(menu, &class.period_name, &text);
         }
     }
 
     menu = menu.add_native_item(SystemTrayMenuItem::Separator);
+
+    // add the remaining opts
     let opts: [&str; 3] = ["more", "sync", "quit"];
     let desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
     for i in 0..opts.len() {
         menu = tray_add_item(menu, opts[i], desc[i]);
     }
 
+    // if ok, return the timetable and all of the messages, will be passed to set_gui in the front
     return match app_handle.tray_handle().set_menu(menu) {
-        Ok(_) => Ok(timetable),
+        Ok(_) => Ok((timetable, msg)),
         Err(e) => Err(e),
     };
 }
@@ -69,12 +79,12 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
             match id.as_str() {
                 "quit" => {
                     app_handle.exit(0);
-                }
+                },
                 "more" => {
                     let window = (*app_handle).get_window("main").unwrap();
                     window.show().unwrap();
                     window.set_focus().unwrap();
-                }
+                },
                 _ => {}
             }
         }

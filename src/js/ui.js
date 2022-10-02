@@ -1,15 +1,19 @@
 //	== the user interface ==
 
-import { getTimetable, fetchTimetable } from "./helper/impure.js";
 import { inThePast, getMessage } from "./helper/time.js";
 
 const invoke = window.__TAURI__.invoke;
+const dlib = new Date();
 
-let date = dayjs();
+// YYYYMMDD in integer form
+let ymd = dlib.getFullYear() * 10000
+	+ dlib.getMonth() * 100
+	+ dlib.getDate();
+
 let centered = true;
 
 function changeDate(offset) {
-	date = date.add(offset, "day");
+	date += offset;
 	updateUI();
 	centered = false;
 }
@@ -34,17 +38,11 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 
 async function updateUI()
 {
-	let ymd = date.format("YYYYMMDD");
-
 	let timetable = await getTimetable();
 	let message = getMessage(timetable, ymd);
 	timetable = timetable[ymd] ? timetable[ymd] : [];
 
-	invoke("add_timetable_to_tray", {
-		timetableJson: JSON.stringify(timetable),
-		msg: message["msg"],
-		extraMsg: message["extra"]
-	});
+	invoke("add_timetable_to_tray", { date: ymd });
 
 	setClassesToGui(timetable,
 		message["msg"],
@@ -96,5 +94,5 @@ updateUI();
 addListeners();
 
 // i have nowhere else to put this
-import { scheduleSync } from "./helper/time.js";
-scheduleSync("08", "00", "00"); // run in background
+// import { scheduleSync } from "./helper/time.js";
+// scheduleSync("08", "00", "00"); // run in background

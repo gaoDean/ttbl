@@ -36,12 +36,6 @@ pub struct Class {
     pub detailed_name: String,
 }
 
-// converts stringify json timetable to vectored form
-// UNUSED
-pub fn get_timetable_as_vec(timetable_json: String) -> Vec<Class> {
-    return serde_json::from_str(&timetable_json).unwrap();
-}
-
 // get the date of the class from the id
 fn get_class_date(class: Class) -> String {
     return (&class.id[..7]).to_owned();

@@ -56,7 +56,11 @@ async function login() {
 	}	catch(err) {
 		console.log(err)
 		busy(false);
-		loginMsg("Authorisation failed. Make sure you have typed in your username and password correctly.");
+		if (err == 403) {
+			loginMsg("Authorisation failed. Make sure you have typed in your username and password correctly.");
+		}	else {
+			loginMsg(err);
+		}
 		return;
 	}
 
@@ -67,7 +71,11 @@ async function login() {
 	}	catch(err) {
 		console.log(err);
 		busy(false);
-		loginMsg("Something went wrong. Please try again.");
+		if (err == 403) {
+			loginMsg("Authorisation failed. Make sure you have typed in your username and password correctly.");
+		}	else {
+			loginMsg(err);
+		}
 		return;
 	}
 

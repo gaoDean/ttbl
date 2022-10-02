@@ -1,6 +1,6 @@
 const invoke = window.__TAURI__.invoke;
 
 async function test() {
-	invoke("fetch_timetable").then((msg) => console.log(msg));
+	invoke("add_timetable_to_tray", { date: 20221302 }).then((msg) => console.log(msg));
 }
 test();

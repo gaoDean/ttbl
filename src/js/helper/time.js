@@ -1,6 +1,6 @@
 // == sets up background syncing of timetable ==
 
-import { fetchTimetable } from "./impure.js";
+// import { fetchTimetable } from "./impure.js";
 
 // if <time> is in the past, return true
 export function inThePast(time)
