@@ -79,12 +79,24 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
             match id.as_str() {
                 "quit" => {
                     app_handle.exit(0);
-                },
+                }
+                #[allow(unused)] // async not used, but needs await
+                "sync" => {
+                    async {
+                        match impure::fetch_timetable().await {
+                            Ok(_) => impure::create_notif(
+                                "Timetable fetched".to_owned(),
+                                app_handle.clone(),
+                            ),
+                            _ => {}
+                        }
+                    };
+                }
                 "more" => {
                     let window = (*app_handle).get_window("main").unwrap();
                     window.show().unwrap();
                     window.set_focus().unwrap();
-                },
+                }
                 _ => {}
             }
         }
