@@ -1,9 +1,11 @@
+use chrono::Local; // time
 use serde::{Deserialize, Serialize};
-use tauri::http::status::StatusCode;
-use std::{clone::Clone, collections::HashMap, fs::File, io::Write};
+use std::{collections::HashMap, fs::File, io::Write};
 use tauri::api::http::{
     Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType,
 };
+use tauri::api::notification::Notification;
+use tauri::http::status::StatusCode;
 
 const HOST: &str = "https://caulfieldsync.vercel.app/api";
 // get the data dir cus it doesn't allow it to be const
@@ -38,7 +40,7 @@ pub struct Class {
 
 // get the date of the class from the id
 fn get_class_date(class: Class) -> String {
-    return (&class.id[..7]).to_owned();
+    return (&class.id[7..]).to_owned();
 }
 
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
@@ -60,8 +62,25 @@ fn get_data(key: &str) -> String {
 pub fn get_timetable() -> Vec<Class> {
     return match serde_json::from_str(get_data("timetable").as_str()) {
         Ok(s) => s,
-        Err(_) => Vec::new()
+        Err(_) => Vec::new(),
     };
+}
+
+pub fn log(msg: String) {
+    let buf: String = get_data("log");
+    set_data(
+        "log",
+        format!("{}{}: {}\n", buf, Local::now(), msg).as_str(),
+    )
+    .unwrap();
+}
+
+pub fn create_notif(msg: String, app_handle: tauri::AppHandle) {
+    Notification::new(app_handle.config().tauri.bundle.identifier.clone())
+        .title("ttbl")
+        .body(msg.as_str())
+        .show()
+        .unwrap();
 }
 
 // generic fetch
