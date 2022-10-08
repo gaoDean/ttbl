@@ -4,13 +4,17 @@ use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemT
 use crate::impure;
 use crate::time;
 
+// takes the date, gets the timetable for date and adds classes in timetable to tray
 #[tauri::command]
 pub fn add_timetable_to_tray(
     date: i32,
     app_handle: tauri::AppHandle,
 ) -> Result<(Vec<impure::Class>, (String, String)), tauri::Error> {
     // tuple: msg, extra msg
-    let timetable: Vec<impure::Class> = impure::get_timetable();
+    let timetable: Vec<impure::Class> = match impure::get_timetable().get(&date.to_string()) {
+        Some(s) => s.clone(),
+        _ => return Ok((Vec::new(), (String::new(), String::new()))),
+    };
     let msg: (String, String) = time::get_msg(date.to_string(), timetable.is_empty());
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
@@ -27,6 +31,7 @@ pub fn add_timetable_to_tray(
 
         // padding is to make align the classes in one column
         let padding: &str = "       ";
+        // add the class to the tray
         for class in timetable.clone() {
             let room_padding: &str = &padding[..class.room.len()];
             let text: &str = &(class.period_name.clone()
@@ -60,6 +65,7 @@ pub fn tray_add_item(menu: SystemTrayMenu, id: &str, desc: &str) -> SystemTrayMe
     return menu.add_item(CustomMenuItem::new(id.to_string(), desc));
 }
 
+// the tray without the classes
 pub fn default_tray() -> SystemTray {
     let opts: [&str; 3] = ["more", "sync", "quit"];
     let desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];

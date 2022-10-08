@@ -38,6 +38,8 @@ pub struct Class {
     pub detailed_name: String,
 }
 
+pub type Timetable = HashMap<String, Vec<Class>>;
+
 // get the date of the class from the id
 fn get_class_date(class: Class) -> String {
     return (&class.id[7..]).to_owned();
@@ -59,11 +61,13 @@ fn get_data(key: &str) -> String {
 }
 
 #[tauri::command]
-pub fn get_timetable() -> Vec<Class> {
-    return match serde_json::from_str(get_data("timetable").as_str()) {
+pub fn get_timetable() -> Timetable {
+    let ret: Timetable;
+    ret = match serde_json::from_str(get_data("timetable").as_str()) {
         Ok(s) => s,
-        Err(_) => Vec::new(),
+        Err(_) => HashMap::new(),
     };
+    return ret;
 }
 
 pub fn log(msg: String) {
@@ -148,13 +152,13 @@ pub async fn fetch_timetable() -> Result<(), String> {
     let timetable: Vec<Class> =
         serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
 
-    let mut cached_timetable: HashMap<String, Vec<Class>> =
+    let mut cached_timetable: Timetable =
         match serde_json::from_str(get_data("timetable").as_str()) {
             Ok(s) => s,
             Err(_) => HashMap::new(),
         };
 
-    let mut new_timetable: HashMap<String, Vec<Class>> = HashMap::new();
+    let mut new_timetable: Timetable = HashMap::new();
 
     for i in 0..timetable.len() {
         let val: &Class = &timetable[i];
