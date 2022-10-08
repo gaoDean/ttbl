@@ -1,7 +1,5 @@
 //	== the user interface ==
 
-import { inThePast, getMessage } from "./helper/time.js";
-
 const invoke = window.__TAURI__.invoke;
 const dlib = new Date();
 
@@ -38,11 +36,12 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 
 async function updateUI()
 {
-	let timetable = await getTimetable();
-	let message = getMessage(timetable, ymd);
-	timetable = timetable[ymd] ? timetable[ymd] : [];
-
-	invoke("add_timetable_to_tray", { date: ymd });
+	let ret = await invoke("add_timetable_to_tray", { date: ymd });
+	console.log(ret);
+	if (ret[0].length === 0) {
+		window.location.href = "login.html";
+		return;
+	}
 
 	setClassesToGui(timetable,
 		message["msg"],

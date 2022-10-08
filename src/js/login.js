@@ -52,7 +52,7 @@ async function login() {
 	loginMsg("Trying to fetch token");
 
 	try {
-		await invoke("fetch_token", { studentId: student_id, password: password });
+		await invoke("fetch_token", { studentId: student_id.value, password: password.value });
 	}	catch(err) {
 		console.log(err)
 		busy(false);
@@ -99,3 +99,4 @@ function addListeners() {
 
 addListeners();
 appWindow.show();
+appWindow.setFocus();
