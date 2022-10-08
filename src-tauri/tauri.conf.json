@@ -12,12 +12,21 @@
 	},
 	"tauri": {
 		"allowlist": {
-			"path": { "all": true },
-			"all": true,
 			"fs": {
 				"all": true,
 				"scope": ["$DATA/**"]
-			}
+			},
+			"http": {
+				"all": true,
+				"request": true
+			},
+			"notification": { "all": true },
+			"path": { "all": true },
+			"window": {
+        "show": true,
+        "hide": true,
+        "setFocus": true
+      }
 		},
 		"bundle": {
 			"active": true,
