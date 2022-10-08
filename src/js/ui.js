@@ -36,16 +36,18 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 
 async function updateUI()
 {
-	let ret = await invoke("add_timetable_to_tray", { date: 20221007 });
+	let ret = await invoke( "add_timetable_to_tray", { date: ymd });
+
 	console.log(ret);
 	if (ret[0].length === 0) {
-		// window.location.href = "login.html";
+		window.location.href = "login.html";
 		return;
 	}
 
-	setClassesToGui(timetable,
-		message["msg"],
-		message["extra"]
+	setClassesToGui(
+		ret[0],
+		ret[1][0],
+		ret[1][1]
 	);
 
 }

@@ -13,7 +13,7 @@ pub fn add_timetable_to_tray(
     // tuple: msg, extra msg
     let timetable: Vec<impure::Class> = match impure::get_timetable().get(&date.to_string()) {
         Some(s) => s.clone(),
-        _ => return Ok((Vec::new(), (String::new(), String::new()))),
+        _ => Vec::new(),
     };
     let msg: (String, String) = time::get_msg(date.to_string(), timetable.is_empty());
 
@@ -26,7 +26,7 @@ pub fn add_timetable_to_tray(
     }
 
     // if timetable exists on that day
-    if timetable.len() != 0 {
+    if timetable.len() > 0 {
         menu = menu.add_native_item(SystemTrayMenuItem::Separator);
 
         // padding is to make align the classes in one column

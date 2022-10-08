@@ -8,7 +8,6 @@ pub fn get_msg(ymd: String, no_classes: bool) -> (String, String) {
         (&ymd[4..6]).parse().unwrap(),
         (&ymd[6..8]).parse().unwrap(),
     );
-    println!("{:#?}", ymd_sep);
     let date: Date<Local> = Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2);
     let fmt: String = date.format("%A, %e %B").to_string();
     let weekday: i32 = date.format("%u").to_string().parse().unwrap();
