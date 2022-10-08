@@ -111,7 +111,7 @@ async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
 }
 
 #[tauri::command]
-pub async fn fetch_token(student_id: &str, password: &str) -> Result<(), String> {
+pub async fn fetch_token(student_id: String, password: String) -> Result<(), String> {
     let url: String = format!(
         "{}/token?username={}&password={}",
         HOST, student_id, password
