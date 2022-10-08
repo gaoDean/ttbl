@@ -5,7 +5,7 @@ const dlib = new Date();
 
 // YYYYMMDD in integer form
 let ymd = dlib.getFullYear() * 10000
-	+ dlib.getMonth() * 100
+	+ (dlib.getMonth() + 1) * 100 // its 0-11 for some reason
 	+ dlib.getDate();
 
 let centered = true;
@@ -36,10 +36,10 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 
 async function updateUI()
 {
-	let ret = await invoke("add_timetable_to_tray", { date: ymd });
+	let ret = await invoke("add_timetable_to_tray", { date: 20221007 });
 	console.log(ret);
 	if (ret[0].length === 0) {
-		window.location.href = "login.html";
+		// window.location.href = "login.html";
 		return;
 	}
 
