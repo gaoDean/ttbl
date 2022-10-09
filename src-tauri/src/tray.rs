@@ -9,12 +9,16 @@ use crate::time;
 pub fn add_timetable_to_tray(
     date: i32,
     app_handle: tauri::AppHandle,
-) -> Result<(Vec<impure::Class>, (String, String)), tauri::Error> {
-    // tuple: msg, extra msg
-    let timetable: Vec<impure::Class> = match impure::get_timetable().get(&date.to_string()) {
-        Some(s) => s.clone(),
-        _ => Vec::new(),
+) -> Result<(impure::ClassesForDay, (String, String)), String> {
+    // get the timetable from storage
+    let timetable: impure::ClassesForDay = match impure::get_timetable() {
+        Some(r) => match r.get(&date.to_string()) {
+            Some(s) => s.clone(),
+            _ => Vec::new(),
+        },
+        None => return Err("Timetable not found".to_owned()),
     };
+    // tuple: msg, extra msg
     let msg: (String, String) = time::get_msg(date.to_string(), timetable.is_empty());
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
@@ -57,7 +61,7 @@ pub fn add_timetable_to_tray(
     // if ok, return the timetable and all of the messages, will be passed to set_gui in the front
     return match app_handle.tray_handle().set_menu(menu) {
         Ok(_) => Ok((timetable, msg)),
-        Err(e) => Err(e),
+        Err(_) => Err("Failed to set tray menu".to_owned()),
     };
 }
 

@@ -38,7 +38,8 @@ pub struct Class {
     pub detailed_name: String,
 }
 
-pub type Timetable = HashMap<String, Vec<Class>>;
+pub type ClassesForDay = Vec<Class>;
+pub type Timetable = HashMap<String, ClassesForDay>;
 
 // get the date of the class from the id
 fn get_class_date(class: Class) -> String {
@@ -61,13 +62,11 @@ fn get_data(key: &str) -> String {
 }
 
 #[tauri::command]
-pub fn get_timetable() -> Timetable {
-    let ret: Timetable;
-    ret = match serde_json::from_str(get_data("timetable").as_str()) {
-        Ok(s) => s,
-        Err(_) => HashMap::new(),
+pub fn get_timetable() -> Option<Timetable> {
+    return match serde_json::from_str(get_data("timetable").as_str()) {
+        Ok(s) => Some(s),
+        Err(_) => None,
     };
-    return ret;
 }
 
 pub fn log(msg: String) {

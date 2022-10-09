@@ -34,22 +34,32 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 	return addElement(element, tag2, inner, attributes);
 }
 
-async function updateUI()
+async function updateUI(counter = 0)
 {
-	let ret = await invoke( "add_timetable_to_tray", { date: ymd });
-
-	console.log(ret);
-	if (ret[0].length === 0) {
-		window.location.href = "login.html";
-		return;
+	let ret;
+	try {
+		ret = await invoke("add_timetable_to_tray", { date: ymd });
+	}	catch(err) {
+		// theres probably no token but try to fetch the timetable anyway
+		console.log(err);
+		try {
+			document.getElementById("message").innerText = "Give us a sec, something went wrong...";
+			await invoke("fetch_timetable");
+			ret = await invoke("add_timetable_to_tray", { date: ymd });
+		}	catch(err2) {
+			// couldn't fetch the timetable probs cus theres no token, go to the login screen
+			console.log(err2);
+			window.location.href = "login.html";
+			return;
+		}
 	}
-
 	setClassesToGui(
 		ret[0],
 		ret[1][0],
 		ret[1][1]
 	);
 
+	console.log(ret);
 }
 
 async function setClassesToGui(timetable, msg, extra) {
