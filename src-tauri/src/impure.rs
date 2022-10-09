@@ -151,11 +151,11 @@ pub async fn fetch_timetable() -> Result<(), String> {
     let timetable: Vec<Class> =
         serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
 
-    let mut cached_timetable: Timetable =
-        match serde_json::from_str(get_data("timetable").as_str()) {
-            Ok(s) => s,
-            Err(_) => HashMap::new(),
-        };
+    let mut cached_timetable: Timetable = match serde_json::from_str(get_data("timetable").as_str())
+    {
+        Ok(s) => s,
+        Err(_) => HashMap::new(),
+    };
 
     let mut new_timetable: Timetable = HashMap::new();
 

@@ -1,17 +1,14 @@
 //	== the user interface ==
 
 const invoke = window.__TAURI__.invoke;
-const dlib = new Date();
 
 // YYYYMMDD in integer form
-let ymd = dlib.getFullYear() * 10000
-	+ (dlib.getMonth() + 1) * 100 // its 0-11 for some reason
-	+ dlib.getDate();
+let ymd = await invoke("get_ymd");
 
 let centered = true;
 
-function changeDate(offset) {
-	date += offset;
+async function changeDate(offset) {
+	ymd = await invoke("ymd_add", { ymd: ymd, durInDays: offset });
 	updateUI();
 	centered = false;
 }
@@ -34,10 +31,11 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 	return addElement(element, tag2, inner, attributes);
 }
 
-async function updateUI(counter = 0)
+async function updateUI()
 {
 	let ret;
 	try {
+		console.log(ymd);
 		ret = await invoke("add_timetable_to_tray", { date: ymd });
 	}	catch(err) {
 		// theres probably no token but try to fetch the timetable anyway

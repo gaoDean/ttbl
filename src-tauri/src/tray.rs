@@ -7,19 +7,19 @@ use crate::time;
 // takes the date, gets the timetable for date and adds classes in timetable to tray
 #[tauri::command]
 pub fn add_timetable_to_tray(
-    date: i32,
+    date: String,
     app_handle: tauri::AppHandle,
 ) -> Result<(impure::ClassesForDay, (String, String)), String> {
     // get the timetable from storage
     let timetable: impure::ClassesForDay = match impure::get_timetable() {
-        Some(r) => match r.get(&date.to_string()) {
+        Some(r) => match r.get(&date) {
             Some(s) => s.clone(),
             _ => Vec::new(),
         },
         None => return Err("Timetable not found".to_owned()),
     };
     // tuple: msg, extra msg
-    let msg: (String, String) = time::get_msg(date.to_string(), timetable.is_empty());
+    let msg: (String, String) = time::get_msg(date, timetable.is_empty());
 
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 

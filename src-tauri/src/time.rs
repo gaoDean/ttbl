@@ -1,14 +1,19 @@
-use crate::impure;
-use chrono::prelude::*;
-use std::thread;
+use chrono::{Date, Duration, Local, TimeZone};
+use std::{ops::Add, thread};
 
-pub fn get_msg(ymd: String, no_classes: bool) -> (String, String) {
+use crate::impure;
+
+fn parse_ymd(ymd: String) -> Date<Local> {
     let ymd_sep: (i32, u32, u32) = (
         (&ymd[0..4]).parse().unwrap(),
         (&ymd[4..6]).parse().unwrap(),
         (&ymd[6..8]).parse().unwrap(),
     );
-    let date: Date<Local> = Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2);
+    return Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2);
+}
+
+pub fn get_msg(ymd: String, no_classes: bool) -> (String, String) {
+    let date: Date<Local> = parse_ymd(ymd);
     let fmt: String = date.format("%A, %e %B").to_string();
     let weekday: i32 = date.format("%u").to_string().parse().unwrap();
 
@@ -25,6 +30,18 @@ pub fn get_msg(ymd: String, no_classes: bool) -> (String, String) {
     }
 
     return msg;
+}
+
+#[tauri::command]
+pub fn ymd_add(ymd: String, dur_in_days: i64) -> String {
+    let date: Date<Local> = parse_ymd(ymd);
+    let duration: Duration = Duration::days(dur_in_days);
+    return date.add(duration).format("%Y%m%d").to_string();
+}
+
+#[tauri::command]
+pub fn get_ymd() -> String {
+    return Local::now().format("%Y%m%d").to_string();
 }
 
 #[tauri::command]
