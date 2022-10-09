@@ -1,0 +1,45 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/Users/deangao/repos/rea/ttbl/src-tauri/src/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/934f60ec/
+Class	impure.rs	/^pub struct Class {$/;"	s
+HOST	impure.rs	/^const HOST: &str = "https:\/\/caulfieldsync.vercel.app\/api";$/;"	C
+__typename	impure.rs	/^    pub __typename: String,$/;"	m	struct:Class
+add_timetable_to_tray	tray.rs	/^pub fn add_timetable_to_tray($/;"	f
+colour	impure.rs	/^    pub colour: String,$/;"	m	struct:Class
+datadir	impure.rs	/^fn datadir() -> std::path::PathBuf {$/;"	f
+day_order	impure.rs	/^    pub day_order: i32,$/;"	m	struct:Class
+default_tray	tray.rs	/^pub fn default_tray() -> SystemTray {$/;"	f
+description	impure.rs	/^    pub description: String,$/;"	m	struct:Class
+detailed_name	impure.rs	/^    pub detailed_name: String,$/;"	m	struct:Class
+end_time	impure.rs	/^    pub end_time: String,$/;"	m	struct:Class
+fetch	impure.rs	/^async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {$/;"	f
+fetch_timetable	impure.rs	/^pub async fn fetch_timetable() -> Result<(), String> {$/;"	f
+fetch_token	impure.rs	/^pub async fn fetch_token(student_id: &str, password: &str) -> Result<(), String> {$/;"	f
+get_class_date	impure.rs	/^fn get_class_date(class: Class) -> String {$/;"	f
+get_data	impure.rs	/^fn get_data(key: &str) -> String {$/;"	f
+get_msg	time.rs	/^pub fn get_msg(ymd: String, no_classes: bool) -> (String, String) {$/;"	f
+get_timetable	impure.rs	/^pub fn get_timetable() -> Vec<Class> {$/;"	f
+handle_tray_event	tray.rs	/^pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {$/;"	f
+id	impure.rs	/^    pub id: String,$/;"	m	struct:Class
+impure	main.rs	/^mod impure;$/;"	n
+log	impure.rs	/^fn log(msg: String) -> Result<(), std::io::Error> {$/;"	f
+main	main.rs	/^fn main() {$/;"	f
+period_name	impure.rs	/^    pub period_name: String,$/;"	m	struct:Class
+period_order	impure.rs	/^    pub period_order: i32,$/;"	m	struct:Class
+room	impure.rs	/^    pub room: String,$/;"	m	struct:Class
+set_data	impure.rs	/^fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {$/;"	f
+spawn_sync_thread	time.rs	/^pub fn spawn_sync_thread(sep: i32) {$/;"	f
+start_time	impure.rs	/^    pub start_time: String,$/;"	m	struct:Class
+teacher_name	impure.rs	/^    pub teacher_name: String,$/;"	m	struct:Class
+time	main.rs	/^mod time;$/;"	n
+title	impure.rs	/^    pub title: String,$/;"	m	struct:Class
+tray	main.rs	/^mod tray;$/;"	n
+tray_add_item	tray.rs	/^pub fn tray_add_item(menu: SystemTrayMenu, id: &str, desc: &str) -> SystemTrayMenu {$/;"	f
