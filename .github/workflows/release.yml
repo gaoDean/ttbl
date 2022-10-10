@@ -34,17 +34,20 @@ jobs:
       - name: build macos-m1
         run: npx tauri build --target aarch64-apple-darwin
 
-      - name: Upload macos-intel
-        uses: actions/upload-artifact@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: ttbl-mac_intel
-          path: src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg
+          body: "
+            # Added
 
-      - name: Upload macos-m1
-        uses: actions/upload-artifact@v3
-        with:
-          name: ttbl-mac_m1
-          path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
+            # Changed
+
+            # Fixed
+
+            Download the asset that matches your operating system below."
+          files: |
+            src-tauri/target/x86_64-apple-darwin/release/bundle/dmg/**.dmg
+            src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
 
   release:
     name: Check and upload to release
@@ -62,18 +65,3 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ttbl-mac_m1
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body: |
-            \# Added
-            \
-            \# Changed
-            \
-            \# Fixed
-            \
-            Download the asset that matches your operating system below.
-          files: |
-            ttbl-mac_intel
-            ttbl-mac_m1
