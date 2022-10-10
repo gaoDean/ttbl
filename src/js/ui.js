@@ -47,7 +47,7 @@ async function updateUI()
 		}	catch(err2) {
 			// couldn't fetch the timetable probs cus theres no token, go to the login screen
 			console.log(err2);
-			// window.location.href = "login.html";
+			window.location.href = "login.html";
 			return;
 		}
 	}

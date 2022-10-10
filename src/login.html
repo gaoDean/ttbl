@@ -9,20 +9,18 @@
   </head>
   <body>
 		<main class="container">
-			<div id="neutralinoapp">
-				<hgroup style="padding-bottom: 30px">
-					<h1>Welcome to <a href="#">ttbl</a>!</h1>
-					<h3>By Dean Gao</h3>
-				</hgroup>
-				<div class="grid">
-					<input type="text" id="login" placeholder="Student Number">
-					<input type="password" id="password" placeholder="Password">
-					<button type="submit" id="submit" class="outline" aria-busy="false" onclick="event.preventDefault()">
-						Login
-					</button>
-				</div>
-				<small id="login_msg">The login will take around 15 seconds, but you'll only need to do this once.</small>
+			<hgroup style="padding-bottom: 30px">
+				<h1>Welcome to <a href="#">ttbl</a>!</h1>
+				<h3>By Dean Gao</h3>
+			</hgroup>
+			<div class="grid">
+				<input type="text" id="login" placeholder="Student Number">
+				<input type="password" id="password" placeholder="Password">
+				<button type="submit" id="submit" class="outline" aria-busy="false" onclick="event.preventDefault()">
+					Login
+				</button>
 			</div>
+			<small id="login_msg">The login will take around 15 seconds, but you'll only need to do this once. This will save your login details on your computer, so when your token is changed by the school, we can re-fetch it in the background.</small>
 		</main>
     <script type="module" src="js/login.js"></script>
   </body>

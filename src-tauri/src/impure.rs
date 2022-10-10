@@ -148,7 +148,7 @@ pub async fn fetch_timetable() -> Result<(), String> {
         Ok(s) => s,
         Err(e) => return Err(format!("{}: {}", e, "Couldn't fetch timetable".to_owned())),
     };
-    let timetable: Vec<Class> =
+    let mut fetched_timetable: Vec<Class> =
         serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
 
     let mut cached_timetable: Timetable = match serde_json::from_str(get_data("timetable").as_str())
@@ -159,8 +159,12 @@ pub async fn fetch_timetable() -> Result<(), String> {
 
     let mut new_timetable: Timetable = HashMap::new();
 
-    for i in 0..timetable.len() {
-        let val: &Class = &timetable[i];
+    for i in 0..fetched_timetable.len() {
+        let val: &mut Class = &mut fetched_timetable[i];
+        if val.room.is_empty() {
+            val.room = "N/A".to_owned();
+        }
+
         let date: &String = &get_class_date(val.clone());
         // insert key=date value=classes_on_that_day to new_timetable
         if !new_timetable.contains_key(date) {
