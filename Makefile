@@ -4,6 +4,9 @@ all: run
 run:
 	@npm run tauri dev
 
+tags:
+	@cd src-tauri/src && ctags *
+
 build:
 	@cd src-tauri && cargo test
 	@npm run tauri build

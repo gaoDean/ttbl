@@ -1,15 +1,14 @@
 //	== the user interface ==
 
-import { getTimetable, fetchTimetable } from "./helper/impure.js";
-import { inThePast, getMessage } from "./helper/time.js";
-
 const invoke = window.__TAURI__.invoke;
 
-let date = dayjs();
+// YYYYMMDD in integer form
+let ymd = await invoke("get_ymd");
+
 let centered = true;
 
-function changeDate(offset) {
-	date = date.add(offset, "day");
+async function changeDate(offset) {
+	ymd = await invoke("ymd_add", { ymd: ymd, durInDays: offset });
 	updateUI();
 	centered = false;
 }
@@ -34,23 +33,31 @@ function addNestedElement(parent_element, tag1, tag2, inner, attributes)
 
 async function updateUI()
 {
-	let ymd = date.format("YYYYMMDD");
-
-	let timetable = await getTimetable();
-	let message = getMessage(timetable, ymd);
-	timetable = timetable[ymd] ? timetable[ymd] : [];
-
-	invoke("add_timetable_to_tray", {
-		timetableJson: JSON.stringify(timetable),
-		msg: message["msg"],
-		extraMsg: message["extra"]
-	});
-
-	setClassesToGui(timetable,
-		message["msg"],
-		message["extra"]
+	let ret;
+	try {
+		console.log(ymd);
+		ret = await invoke("add_timetable_to_tray", { date: ymd });
+	}	catch(err) {
+		// theres probably no token but try to fetch the timetable anyway
+		console.log(err);
+		try {
+			document.getElementById("message").innerText = "Give us a sec, something went wrong...";
+			await invoke("fetch_timetable");
+			ret = await invoke("add_timetable_to_tray", { date: ymd });
+		}	catch(err2) {
+			// couldn't fetch the timetable probs cus theres no token, go to the login screen
+			console.log(err2);
+			window.location.href = "login.html";
+			return;
+		}
+	}
+	setClassesToGui(
+		ret[0],
+		ret[1][0],
+		ret[1][1]
 	);
 
+	console.log(ret);
 }
 
 async function setClassesToGui(timetable, msg, extra) {
@@ -96,5 +103,5 @@ updateUI();
 addListeners();
 
 // i have nowhere else to put this
-import { scheduleSync } from "./helper/time.js";
-scheduleSync("08", "00", "00"); // run in background
+// import { scheduleSync } from "./helper/time.js";
+// scheduleSync("08", "00", "00"); // run in background
