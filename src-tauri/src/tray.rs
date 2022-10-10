@@ -78,6 +78,9 @@ pub fn default_tray() -> SystemTray {
     let desc: [&str; 3] = ["More...", "Sync Timetable", "Quit Timetable"];
     let mut menu = SystemTrayMenu::new().add_native_item(SystemTrayMenuItem::Separator);
 
+    menu = tray_add_item(menu, "info", "There's nothing here.");
+    menu = menu.add_native_item(SystemTrayMenuItem::Separator);
+
     for i in 0..opts.len() {
         menu = tray_add_item(menu, opts[i], desc[i]);
     }
