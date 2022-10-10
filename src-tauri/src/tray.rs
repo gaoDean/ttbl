@@ -34,15 +34,18 @@ pub fn add_timetable_to_tray(
         menu = menu.add_native_item(SystemTrayMenuItem::Separator);
 
         // padding is to make align the classes in one column
-        let padding: &str = "       ";
+        let padding: &str = "        ";
         // add the class to the tray
         for class in timetable.clone() {
-            let room_padding: &str = &padding[..class.room.len()];
-            let text: &str = &(class.period_name.clone()
-                + "\t"
-                + &class.room
-                + room_padding
-                + &class.description);
+            let room_padding: &str =
+                &padding[..(padding.len() - class.room.len())];
+            let text: String = format!(
+                "{}\t{}{}\t{}",
+                &class.period_name.clone(),
+                &class.room,
+                room_padding,
+                &class.description
+            );
 
             // add the tray item to <menu>, with <text> as the inner
             menu = tray_add_item(menu, &class.period_name, &text);
