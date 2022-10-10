@@ -6,9 +6,11 @@
 </p>
 <p align="center">
 	<a href="https://github.com/gaoDean/ttbl">
-		<img alt="Release Size" src="https://img.shields.io/github/languages/code-size/gaoDean/ttbl?style=for-the-badge&logo=semanticrelease&color=F5E0DC&logoColor=D9E0EE&labelColor=302D41"></a>
+			<img alt="Release size" src="https://img.shields.io/github/downloads/gaoDean/ttbl/latest??style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41"></a>
 	<a href="https://github.com/gaoDean/ttbl">
-		<img alt="Repo Size" src="https://img.shields.io/github/languages/code-size/gaoDean/ttbl?color=%23DDB6F2&logo=hackthebox&style=for-the-badge&logoColor=D9E0EE&labelColor=302D41"/></a>
+			<img alt="Build status" src="https://img.shields.io/github/workflow/status/gaoDean/ttbl/build?style=for-the-badge&logo=semanticrelease&color=F5E0DC&logoColor=D9E0EE&labelColor=302D41"></a>
+	<a href="https://github.com/gaoDean/ttbl">
+		<img alt="Repo size" src="https://img.shields.io/github/languages/code-size/gaoDean/ttbl?color=%23DDB6F2&logo=hackthebox&style=for-the-badge&logoColor=D9E0EE&labelColor=302D41"/></a>
 </p>
 
 Note: still in development
