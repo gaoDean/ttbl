@@ -1,6 +1,9 @@
-name: Create Executables
+name: Release
 
-on: [push]
+on:
+  push:
+    tags:
+      - v**
 
 jobs:
   deploy:
@@ -42,3 +45,35 @@ jobs:
         with:
           name: ttbl-mac_m1
           path: src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/**.dmg
+
+  release:
+    name: Check and upload to release
+    runs-on: macos-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download macos-intel
+        uses: actions/download-artifact@v3
+        with:
+          name: ttbl-mac_intel
+
+      - name: Download macos-m1
+        uses: actions/download-artifact@v3
+        with:
+          name: ttbl-mac_m1
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: |
+            \# Added
+            \
+            \# Changed
+            \
+            \# Fixed
+            \
+            Download the asset that matches your operating system below.
+          files: |
+            ttbl-mac_intel
+            ttbl-mac_m1
