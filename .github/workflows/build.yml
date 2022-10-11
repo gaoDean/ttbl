@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   build-binaries:
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.config.os }}
     timeout-minutes: 40
     strategy:
       fail-fast: false
