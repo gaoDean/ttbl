@@ -7,9 +7,10 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.1.1",
-    "dead-server": "^1.0.6"
-  },
-  "dependencies": {
+    "dead-server": "^1.0.6",
     "eslint": "^8.25.0"
-  }
+  },
+	"scripts": {
+			"lint": "eslint .  --ext .js"
+	}
 }
