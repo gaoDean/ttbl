@@ -2,13 +2,9 @@ name: Lint Rust
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'src-tauri/**'
   pull_request:
-    branches:
-      - main
     paths:
       - 'src-tauri/**'
 
@@ -40,17 +36,13 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
-      - name: Mock Files
-        run: |
-          mkdir build
-
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
+          args: --manifest-path=src-tauri/Cargo.toml --all-targets --all-features -- -D warnings
           name: clippy
 
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --manifest-path=Cargo.toml --all -- --check
+          args: --manifest-path=src-tauri/Cargo.toml --all -- --check
