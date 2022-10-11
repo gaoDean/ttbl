@@ -25,6 +25,8 @@
 			"window": {
         "show": true,
         "hide": true,
+				"startDragging": true,
+				"close": true,
         "setFocus": true
       }
 		},
@@ -78,6 +80,7 @@
 				"fullscreen": false,
 				"resizable": true,
 				"focus": false,
+				"decorations": false,
 				"title": "ttbl",
 				"height": 600,
 				"width": 800

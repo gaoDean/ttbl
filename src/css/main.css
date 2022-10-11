@@ -1,3 +1,6 @@
+body {
+	scrollbar-width: none;
+}
 
 article {
 	padding-top: calc(var(--spacing)) !important;
@@ -8,4 +11,31 @@ article {
 
 hgroup {
 	margin: 0px !important;
+}
+
+.titlebar {
+  height: 30px;
+  user-select: none;
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.titlebar:hover {
+  background: #18232c70;
+}
+
+.titlebar-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  opacity: 0.6;
+}
+.titlebar-button:hover {
+	opacity: 1;
 }

@@ -2,6 +2,7 @@
 
 const invoke = window.__TAURI__.invoke;
 
+
 // YYYYMMDD in integer form
 let ymd = await invoke("get_ymd");
 
