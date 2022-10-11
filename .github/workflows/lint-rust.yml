@@ -39,10 +39,10 @@ jobs:
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --manifest-path=src-tauri/Cargo.toml --all-targets --all-features -- -D warnings
+          args: --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
           name: clippy
 
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --manifest-path=src-tauri/Cargo.toml --all -- --check
+          args: --manifest-path=Cargo.toml --all -- --check
