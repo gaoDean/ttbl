@@ -72,7 +72,7 @@ jobs:
           name: artifacts-${{ matrix.config.arch }}
           path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
 
-publish-to-github:
+  publish-to-github:
     needs: [get-version, build-binaries]
     runs-on: ubuntu-latest
     steps:
