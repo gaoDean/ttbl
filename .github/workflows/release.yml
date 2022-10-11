@@ -1,0 +1,117 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v**
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-binaries:
+    runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: macos-latest
+            arch: x86_64
+            rust_target: x86_64-apple-darwin
+          - os: macos-latest
+            arch: aarch64
+            rust_target: aarch64-apple-darwin
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 'Setup Rust'
+        uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          override: true
+          profile: minimal
+          toolchain: stable
+          target: ${{ matrix.config.rust_target }}
+
+      - uses: Swatinem/rust-cache@v1
+        with:
+          key: ${{ matrix.config.rust_target }}
+
+      - name: setup node and install dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - run: yarn install
+
+      - uses: JonasKruckenberg/tauri-build@v1
+        id: tauri_build
+        with:
+          target: ${{ matrix.config.rust_target }}
+          args: --verbose
+
+      # The `artifacts` output can now be used by a different action to upload the artifacts
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifacts-${{ matrix.config.arch }}
+          path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
+
+publish-to-github:
+    needs: [get-version, build-binaries]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download x86_64 artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: artifacts-x86_64
+          path: artifacts/x86_64
+
+      - name: Download aarch64 artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: artifacts-aarch64
+          path: artifacts/aarch64
+
+      - name: Rename .app artifacts
+        run: |
+          mv "./artifacts/x86_64/dmg/**.dmg" "./artifacts/ttbl-intel.dmg"
+          mv "./artifacts/aarch64/dmg/**.dmg" "./artifacts/ttbl-m1.dmg"
+          mv "./artifacts/x86_64/macos/**.tar.gz" "./artifacts/ttbl-intel_tarball.tar.gz"
+          mv "./artifacts/aarch64/macos/**.tar.gz" "./artifacts/ttbl-m1_tarball.tar.gz"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        with:
+          generate_release_notes: true
+          draft: true
+          files: |
+            ./artifacts/**.dmg
+            ./artifacts/**.tar.gz
+          body: "
+            ### Added
+
+            ### Changed
+
+            ### Fixed
+
+            Download the asset that matches your operating system below."
