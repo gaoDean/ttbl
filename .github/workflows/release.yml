@@ -92,10 +92,10 @@ jobs:
 
       - name: Rename .app artifacts
         run: |
-          mv "./artifacts/x86_64/dmg/**.dmg" "./artifacts/ttbl-intel.dmg"
-          mv "./artifacts/aarch64/dmg/**.dmg" "./artifacts/ttbl-m1.dmg"
-          mv "./artifacts/x86_64/macos/**.tar.gz" "./artifacts/ttbl-intel_tarball.tar.gz"
-          mv "./artifacts/aarch64/macos/**.tar.gz" "./artifacts/ttbl-m1_tarball.tar.gz"
+          mv ./artifacts/x86_64/dmg/**.dmg ./artifacts/ttbl-intel.dmg
+          mv ./artifacts/aarch64/dmg/**.dmg ./artifacts/ttbl-m1.dmg
+          mv ./artifacts/x86_64/macos/**.tar.gz ./artifacts/ttbl-intel_tarball.tar.gz
+          mv ./artifacts/aarch64/macos/**.tar.gz ./artifacts/ttbl-m1_tarball.tar.gz
 
       - name: Release
         uses: softprops/action-gh-release@v1
