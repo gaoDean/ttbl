@@ -10,7 +10,7 @@ mod tray;
 fn main() {
     let tray = tray::default_tray();
 
-    #[allow(unused-mut)]
+    #[allow(unused_mut)]
     let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             time::spawn_thread,
