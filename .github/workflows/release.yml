@@ -108,10 +108,4 @@ jobs:
             ./artifacts/**.dmg
             ./artifacts/**.tar.gz
           body: "
-            ### Added
-
-            ### Changed
-
-            ### Fixed
-
             Download the asset that matches your operating system below."
