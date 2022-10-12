@@ -20,7 +20,7 @@ fn main() {
             impure::fetch_timetable,
         ])
         .system_tray(tray)
-        .on_system_tray_event(tray::handle_tray_event(app, event))
+        .on_system_tray_event(tray::handle_tray_event)
         .build(tauri::generate_context!())
         .expect("error while running tauri application");
 
