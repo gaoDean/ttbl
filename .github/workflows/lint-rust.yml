@@ -28,7 +28,7 @@ jobs:
 
         # uses: actions-rs/toolchain@v1
       - name: Install clippy with stable toolchain
-        uses: caizixian/toolchain@v1
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
