@@ -11,7 +11,7 @@ const HOST: &str = "https://caulfieldsync.vercel.app/api";
 // get the data dir cus it doesn't allow it to be const
 fn datadir() -> std::path::PathBuf {
     let dir = tauri::api::path::data_dir().unwrap();
-    return dir.join("ttbl/");
+    dir.join("ttbl/")
 }
 
 // data of each class
@@ -131,9 +131,9 @@ pub async fn fetch_token(student_id: String, password: String) -> Result<(), Str
     }
     // set the token_data to storage
     match set_data("token", token_data) {
-        Err(_) => return Err("Couldn't write to storage".to_owned()),
-        _ => return Ok(()),
-    };
+        Err(_) => Err("Couldn't write to storage".to_owned()),
+        _ => Ok(()),
+    }
 }
 
 #[tauri::command]
@@ -167,8 +167,7 @@ pub async fn fetch_timetable() -> Result<(), String> {
     let mut new_timetable: Timetable = HashMap::new();
 
     // put fetched into data structure
-    for i in 0..fetched_timetable.len() {
-        let val: &mut Class = &mut fetched_timetable[i];
+    for val in &mut fetched_timetable {
         if val.room.is_empty() {
             val.room = "N/A".to_owned();
         }
