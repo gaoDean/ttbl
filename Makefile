@@ -1,8 +1,8 @@
 all: run
 
-# dont use this, `alias tauri="npx tauri"`
+# dont use this, `alias tauri="yarn tauri"`
 run:
-	@npm run tauri dev
+	@yarn tauri dev
 
 tags:
 	@cd src-tauri/src && ctags *
@@ -17,3 +17,7 @@ setup:
 	@rustup target add x86_64-apple-darwin
 	@echo "Installing Node.js dependencies"
 	@npm install
+
+# full clean data dir
+clean:
+	@rm ~/Library/Application\ Support/ttbl

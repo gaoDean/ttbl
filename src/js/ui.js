@@ -1,6 +1,7 @@
 //  == the user interface ==
 
-const { invoke } = window.__TAURI__.invoke; // eslint-disable-line no-underscore-dangle
+console.log("test");
+const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
 
 // YYYYMMDD in integer form
 let ymd = await invoke('get_ymd');
