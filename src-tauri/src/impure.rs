@@ -11,6 +11,7 @@ const HOST: &str = "https://caulfieldsync.vercel.app/api";
 // get the data dir cus it doesn't allow it to be const
 fn datadir() -> std::path::PathBuf {
     let dir = tauri::api::path::data_dir().unwrap();
+    // add ttbl dir to the data_dir
     dir.join("ttbl/")
 }
 
