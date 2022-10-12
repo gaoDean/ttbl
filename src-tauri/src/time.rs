@@ -56,7 +56,7 @@ pub fn spawn_thread() {
     #[allow(unused)] // async not used, but needs await
     thread::spawn(move || loop {
         async {
-            if let Err(_) = impure::fetch_timetable().await {
+            if impure::fetch_timetable().await.is_err() {
                 impure::log("Couldn't fetch timetable".to_owned())
             };
         };
