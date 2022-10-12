@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.1.1",
-    "dead-server": "^1.0.6",
+    "dead-server": "https://github.com/gaoDean/dead-server.git",
     "eslint": "^8.25.0"
   }
 }

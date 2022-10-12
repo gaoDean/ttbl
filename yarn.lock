@@ -572,9 +572,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dead-server@npm:^1.0.6":
+"dead-server@https://github.com/gaoDean/dead-server.git":
   version: 1.0.6
-  resolution: "dead-server@npm:1.0.6"
+  resolution: "dead-server@https://github.com/gaoDean/dead-server.git#commit=bdfcaa49110298031c6dc812b190a6969e24dd87"
   dependencies:
     chalk: ^4.1.2
     chokidar: ^3.5.2
@@ -590,8 +590,8 @@ __metadata:
     send: 0.17.2
     serve-index: ^1.9.1
   bin:
-    dead-server: dead-server.js
-  checksum: 18165573805c12e04885a941adb3650fd956fa88f93b7ab82f4095299dc5df901a9b8d41ac4f3322c42e293e94118092c2e6c075bd083031300412b211ac2abe
+    dead-server: ./dead-server.js
+  checksum: 8620a35644eee80461e1cde0c0c1d53fae1274a26368f83818423baf4eec627e7ecb9d809bad3910737ddda5b7631a43f3173b0b986c7b4fa511870e11d8c542
   languageName: node
   linkType: hard
 
@@ -2253,7 +2253,7 @@ __metadata:
   resolution: "ttbl@workspace:."
   dependencies:
     "@tauri-apps/cli": ^1.1.1
-    dead-server: ^1.0.6
+    dead-server: "https://github.com/gaoDean/dead-server.git"
     eslint: ^8.25.0
   languageName: unknown
   linkType: soft

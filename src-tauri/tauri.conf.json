@@ -1,7 +1,7 @@
 {
 	"build": {
 		"beforeBuildCommand": "",
-		"beforeDevCommand": "npx dead-server src --port=8080 --no-browser",
+		"beforeDevCommand": "yarn dead-server src --port=8080 --no-browser",
 		"devPath": "http://localhost:8080",
 		"distDir": "../src",
 		"withGlobalTauri": true
