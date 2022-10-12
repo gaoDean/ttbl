@@ -1,6 +1,10 @@
 use chrono::Local; // time
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fs::{File, create_dir_all}, io::Write};
+use std::{
+    collections::HashMap,
+    fs::{create_dir_all, File},
+    io::Write,
+};
 use tauri::api::http::{
     Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType,
 };
