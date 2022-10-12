@@ -163,13 +163,13 @@ pub async fn fetch_timetable() -> Result<(), String> {
             // if newly fetched token didn't change
             if !refresh_token().await {
                 // it's not a problem with outdated token, return error
-                return Err(format!("{}: {}", e, "Couldn't fetch timetable".to_owned()));
+                return Err(format!("{}", e));
             };
             // if no err it was an outdated token and it has been refreshed, continue.
             match fetch(&url).await {
                 Ok(o) => o,
                 Err(f) => {
-                    return Err(format!("{}: {}", f, "Couldn't fetch timetable".to_owned()));
+                    return Err(format!("{}", f));
                 }
             }
         }
