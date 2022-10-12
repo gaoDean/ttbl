@@ -51,7 +51,7 @@ fn get_class_date(class: Class) -> String {
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
 fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {
     let dir = datadir();
-    create_dir_all(dir.clone());
+    create_dir_all(dir.clone())?;
     let mut file = File::create(dir.join(".storage.".to_owned() + key).as_path())?;
     return file.write_all(data.as_bytes());
 }
