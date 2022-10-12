@@ -95,7 +95,6 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
             }
             #[allow(unused)] // async not used, but needs await
             "sync" => {
-                impure::create_notif("Timetable fetched".to_owned(), app_handle.clone());
                 async {
                     if impure::fetch_timetable().await.is_ok() {
                         impure::create_notif(
