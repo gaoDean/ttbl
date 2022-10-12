@@ -20,4 +20,4 @@ setup:
 
 # full clean data dir
 clean:
-	@rm ~/Library/Application\ Support/ttbl
+	@rm -rf ~/Library/Application\ Support/ttbl
