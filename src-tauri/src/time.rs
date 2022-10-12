@@ -6,11 +6,11 @@ use crate::impure;
 // from YYYYMMDD string to Date<Local>
 fn parse_ymd(ymd: String) -> Date<Local> {
     let ymd_sep: (i32, u32, u32) = (
-        (&ymd[0..4]).parse().unwrap(),
+        ymd[0..4].parse().unwrap(),
         (&ymd[4..6]).parse().unwrap(),
         (&ymd[6..8]).parse().unwrap(),
     );
-    return Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2);
+    Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2)
 }
 
 // get the display msg from YYYYMMDD and no_classes
@@ -33,7 +33,7 @@ pub fn get_msg(ymd: String, no_classes: bool) -> (String, String) {
         }
     }
 
-    return msg;
+    msg
 }
 
 // add duration in days (int) to YYYYMMDD
