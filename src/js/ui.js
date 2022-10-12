@@ -1,10 +1,10 @@
 //  == the user interface ==
 
 console.log("test");
-const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
+const invoke = window.__TAURI__.invoke; // eslint-disable-line no-underscore-dangle
 
 // YYYYMMDD in integer form
-let ymd = await invoke('get_ymd');
+let ymd = invoke('get_ymd');
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };
