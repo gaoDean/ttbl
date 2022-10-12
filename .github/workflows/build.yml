@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: 'Setup Rust'
-        uses: gaoDean/toolchain@v1
+        uses: caizixian/toolchain@v1
         with:
           default: true
           override: true
