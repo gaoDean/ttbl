@@ -26,17 +26,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
 
+        # uses: actions-rs/toolchain@v1
       - name: Install clippy with stable toolchain
-        uses: actions-rs/toolchain@v1
+        uses: caizixian/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
           components: clippy, rustfmt
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
 
-      - uses: actions-rs/clippy-check@v1
+      - uses: gaoDean/clippy-check@v1
         env:
           CACHE_ON_FAILURE: true
         with:
@@ -44,7 +45,7 @@ jobs:
           args: --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
           name: clippy
 
-      - uses: actions-rs/cargo@v1
+      - uses: gaoDean/cargo@v1
         with:
           command: fmt
           args: --manifest-path=Cargo.toml --all -- --check

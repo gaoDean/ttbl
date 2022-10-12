@@ -22,7 +22,7 @@ jobs:
             rust_target: aarch64-apple-darwin
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: 'Setup Rust'
         uses: actions-rs/toolchain@v1
@@ -33,7 +33,7 @@ jobs:
           toolchain: stable
           target: ${{ matrix.config.rust_target }}
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.config.rust_target }}
 
