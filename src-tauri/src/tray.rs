@@ -37,8 +37,7 @@ pub fn add_timetable_to_tray(
         let padding: &str = "        ";
         // add the class to the tray
         for class in timetable.clone() {
-            let room_padding: &str =
-                &padding[..(padding.len() - class.room.len())];
+            let room_padding: &str = &padding[..(padding.len() - class.room.len())];
             let text: String = format!(
                 "{}\t{}{}\t{}",
                 &class.period_name.clone(),
@@ -98,10 +97,7 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
                 }
                 #[allow(unused)] // async not used, but needs await
                 "sync" => {
-                    impure::create_notif(
-                        "Timetable fetched".to_owned(),
-                        app_handle.clone(),
-                        );
+                    impure::create_notif("Timetable fetched".to_owned(), app_handle.clone());
                     // async {
                     //     match impure::fetch_timetable().await {
                     //         Ok(_) => impure::create_notif(

@@ -14,6 +14,7 @@ fn datadir() -> std::path::PathBuf {
     return dir.join("ttbl/");
 }
 
+// data of each class
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Class {
     pub id: String,
@@ -61,6 +62,7 @@ fn get_data(key: &str) -> String {
     };
 }
 
+// public func get timetable in Timetable format
 #[tauri::command]
 pub fn get_timetable() -> Option<Timetable> {
     return match serde_json::from_str(get_data("timetable").as_str()) {
@@ -69,6 +71,7 @@ pub fn get_timetable() -> Option<Timetable> {
     };
 }
 
+// log msg to .storage.log
 pub fn log(msg: String) {
     let buf: String = get_data("log");
     set_data(
@@ -78,6 +81,7 @@ pub fn log(msg: String) {
     .unwrap();
 }
 
+// send a toast notif
 pub fn create_notif(msg: String, app_handle: tauri::AppHandle) {
     Notification::new(app_handle.config().tauri.bundle.identifier.clone())
         .title("ttbl")
@@ -125,6 +129,7 @@ pub async fn fetch_token(student_id: String, password: String) -> Result<(), Str
     if token_data.is_empty() {
         return Err("Something went wrong".to_owned());
     }
+    // set the token_data to storage
     match set_data("token", token_data) {
         Err(_) => return Err("Couldn't write to storage".to_owned()),
         _ => return Ok(()),
@@ -133,6 +138,7 @@ pub async fn fetch_token(student_id: String, password: String) -> Result<(), Str
 
 #[tauri::command]
 pub async fn fetch_timetable() -> Result<(), String> {
+    // get the token
     let token: String = get_data("token");
     if token.is_empty() {
         return Err("No token stored".to_owned());
@@ -144,21 +150,23 @@ pub async fn fetch_timetable() -> Result<(), String> {
         "{}/timetable/{}?dayMinus={}&dayPlus={}&shorten=true",
         HOST, token, "15", "15"
     );
+    // fetch the url
     let res: ResponseData = match fetch(&url).await {
         Ok(s) => s,
         Err(e) => return Err(format!("{}: {}", e, "Couldn't fetch timetable".to_owned())),
     };
+
+    // data structures
     let mut fetched_timetable: Vec<Class> =
         serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
-
     let mut cached_timetable: Timetable = match serde_json::from_str(get_data("timetable").as_str())
     {
         Ok(s) => s,
         Err(_) => HashMap::new(),
     };
-
     let mut new_timetable: Timetable = HashMap::new();
 
+    // put fetched into data structure
     for i in 0..fetched_timetable.len() {
         let val: &mut Class = &mut fetched_timetable[i];
         if val.room.is_empty() {
@@ -176,6 +184,7 @@ pub async fn fetch_timetable() -> Result<(), String> {
         // because all recurring inserts will be removed.
         cached_timetable.insert(date.clone(), new_timetable.get(date).unwrap().clone());
     }
+    // set to storage
     match set_data(
         "timetable",
         &serde_json::ser::to_string(&cached_timetable).unwrap(),
