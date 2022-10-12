@@ -19,6 +19,8 @@ fn main() {
             tray::add_timetable_to_tray,
             impure::fetch_token,
             impure::fetch_timetable,
+            impure::set_login_details,
+            impure::get_login_details,
         ])
         .system_tray(tray)
         .on_system_tray_event(tray::handle_tray_event)

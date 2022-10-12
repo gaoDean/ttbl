@@ -79,6 +79,8 @@ async function login() {
 		return;
 	}
 
+	invoke("set_login_details", { id: student_id.value, password: password.value });
+
 	busy(false);
 	loginMsg("Timetable fetched");
 	window.location.href = "index.html";

@@ -63,15 +63,6 @@ fn get_data(key: &str) -> String {
     };
 }
 
-// public func get timetable in Timetable format
-#[tauri::command]
-pub fn get_timetable() -> Option<Timetable> {
-    return match serde_json::from_str(get_data("timetable").as_str()) {
-        Ok(s) => Some(s),
-        Err(_) => None,
-    };
-}
-
 // log msg to .storage.log
 pub fn log(msg: String) {
     let buf: String = get_data("log");
@@ -192,4 +183,28 @@ pub async fn fetch_timetable() -> Result<(), String> {
         Err(_) => Err("Couldn't write to storage".to_owned()),
         _ => Ok(()),
     }
+}
+
+// public func get timetable in Timetable format
+#[tauri::command]
+pub fn get_timetable() -> Option<Timetable> {
+    return match serde_json::from_str(get_data("timetable").as_str()) {
+        Ok(s) => Some(s),
+        Err(_) => None,
+    };
+}
+
+#[tauri::command]
+pub fn set_login_details(id: String, password: String) -> Result<(), String> {
+    if set_data("student_id", id.as_str()).is_err() || set_data("password", password.as_str()).is_err() {
+        return Err("Something went wrong storing values".to_owned());
+    };
+    Ok(())
+}
+
+#[tauri::command]
+pub fn get_login_details() -> (String, String) {
+    let id: String = get_data("student_id");
+    let pass: String = get_data("password");
+    (id, pass)
 }
