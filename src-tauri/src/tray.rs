@@ -97,10 +97,7 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
             "sync" => {
                 async {
                     if impure::fetch_timetable().await.is_ok() {
-                        impure::create_notif(
-                            "Timetable fetched".to_owned(),
-                            app_handle.clone(),
-                        );
+                        impure::create_notif("Timetable fetched".to_owned(), app_handle.clone());
                     }
                 };
             }
