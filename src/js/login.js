@@ -1,7 +1,8 @@
 // == login and tokens ==
 
 const { appWindow } = window.__TAURI__.window; // eslint-disable-line no-underscore-dangle
-const invoke = window.__TAURI__.invoke; // eslint-disable-line no-underscore-dangle
+// object destructuring
+const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
 
 // gui: the msg under the login
 function loginMsg(msg) {
