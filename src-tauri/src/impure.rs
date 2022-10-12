@@ -105,6 +105,21 @@ async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
     Ok(read)
 }
 
+// use stored login details to refetch token
+// returns true if changed, else false if token unchanged
+async fn refresh_token() -> bool {
+    // tuple: (student_id, password)
+    let details: (String, String) = get_login_details();
+    let old_token: String = get_data("token");
+
+    if fetch_token(details.0, details.1).await.is_ok() {
+        let new_token: String = get_data("token");
+        return old_token != new_token;
+    }
+
+    false
+}
+
 #[tauri::command]
 pub async fn fetch_token(student_id: String, password: String) -> Result<(), String> {
     let url: String = format!(
@@ -135,17 +150,29 @@ pub async fn fetch_timetable() -> Result<(), String> {
     if token.is_empty() {
         return Err("No token stored".to_owned());
     }
-    // if token.is_empty() {
-    //     // TODO: go to login
-    // }
     let url: String = format!(
         "{}/timetable/{}?dayMinus={}&dayPlus={}&shorten=true",
         HOST, token, "15", "15"
     );
+
     // fetch the url
+    // if bad res, refresh token and try again
     let res: ResponseData = match fetch(&url).await {
         Ok(s) => s,
-        Err(e) => return Err(format!("{}: {}", e, "Couldn't fetch timetable".to_owned())),
+        Err(e) => {
+            // if newly fetched token didn't change
+            if !refresh_token().await {
+                // it's not a problem with outdated token, return error
+                return Err(format!("{}: {}", e, "Couldn't fetch timetable".to_owned()));
+            };
+            // if no err it was an outdated token and it has been refreshed, continue.
+            match fetch(&url).await {
+                Ok(o) => o,
+                Err(f) => {
+                    return Err(format!("{}: {}", f, "Couldn't fetch timetable".to_owned()));
+                }
+            }
+        }
     };
 
     // data structures
@@ -196,15 +223,14 @@ pub fn get_timetable() -> Option<Timetable> {
 
 #[tauri::command]
 pub fn set_login_details(id: String, password: String) -> Result<(), String> {
-    if set_data("student_id", id.as_str()).is_err() || set_data("password", password.as_str()).is_err() {
+    if set_data("student_id", id.as_str()).is_err()
+        || set_data("password", password.as_str()).is_err()
+    {
         return Err("Something went wrong storing values".to_owned());
     };
     Ok(())
 }
 
-#[tauri::command]
-pub fn get_login_details() -> (String, String) {
-    let id: String = get_data("student_id");
-    let pass: String = get_data("password");
-    (id, pass)
+fn get_login_details() -> (String, String) {
+    (get_data("student_id"), get_data("password"))
 }
