@@ -1,6 +1,5 @@
 //  == the user interface ==
 
-console.log("test");
 const invoke = window.__TAURI__.invoke; // eslint-disable-line no-underscore-dangle
 
 // YYYYMMDD in integer form
