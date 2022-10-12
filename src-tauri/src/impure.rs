@@ -44,7 +44,7 @@ pub type Timetable = HashMap<String, ClassesForDay>;
 
 // get the date of the class from the id
 fn get_class_date(class: Class) -> String {
-    return (&class.id[7..]).to_owned();
+    class.id[7..].to_owned()
 }
 
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
@@ -109,8 +109,8 @@ async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
     }
 
     let read: ResponseData = res.read().await.unwrap();
-    println!("{}", read.url.as_str().to_string());
-    return Ok(read);
+    println!("{}", read.url.as_str());
+    Ok(read)
 }
 
 #[tauri::command]
@@ -188,7 +188,7 @@ pub async fn fetch_timetable() -> Result<(), String> {
         "timetable",
         &serde_json::ser::to_string(&cached_timetable).unwrap(),
     ) {
-        Err(_) => return Err("Couldn't write to storage".to_owned()),
-        _ => return Ok(()),
-    };
+        Err(_) => Err("Couldn't write to storage".to_owned()),
+        _ => Ok(()),
+    }
 }

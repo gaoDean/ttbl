@@ -10,7 +10,7 @@ mod tray;
 fn main() {
     let tray = tray::default_tray();
 
-    let mut app = tauri::Builder::default()
+    let app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             time::spawn_thread,
             time::get_ymd,
@@ -20,7 +20,7 @@ fn main() {
             impure::fetch_timetable,
         ])
         .system_tray(tray)
-        .on_system_tray_event(|app, event| tray::handle_tray_event(app, event))
+        .on_system_tray_event(tray::handle_tray_event(app, event))
         .build(tauri::generate_context!())
         .expect("error while running tauri application");
 

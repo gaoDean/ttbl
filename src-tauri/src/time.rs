@@ -7,8 +7,8 @@ use crate::impure;
 fn parse_ymd(ymd: String) -> Date<Local> {
     let ymd_sep: (i32, u32, u32) = (
         ymd[0..4].parse().unwrap(),
-        (&ymd[4..6]).parse().unwrap(),
-        (&ymd[6..8]).parse().unwrap(),
+        ymd[4..6].parse().unwrap(),
+        ymd[6..8].parse().unwrap(),
     );
     Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2)
 }
@@ -56,9 +56,8 @@ pub fn spawn_thread() {
     #[allow(unused)] // async not used, but needs await
     thread::spawn(move || loop {
         async {
-            match impure::fetch_timetable().await {
-                Err(_) => impure::log("Couldn't fetch timetable".to_owned()),
-                _ => {}
+            if let Err(_) = impure::fetch_timetable().await {
+                impure::log("Couldn't fetch timetable".to_owned())
             };
         };
     });
