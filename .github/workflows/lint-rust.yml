@@ -37,7 +37,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - uses: gaoDean/clippy-check@v1
+      - uses: actions-rs/clippy-check@v1
         env:
           CACHE_ON_FAILURE: true
         with:
@@ -45,7 +45,7 @@ jobs:
           args: --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
           name: clippy
 
-      - uses: gaoDean/cargo@v1
+      - uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --manifest-path=Cargo.toml --all -- --check

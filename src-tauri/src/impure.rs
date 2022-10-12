@@ -15,7 +15,7 @@ fn datadir() -> std::path::PathBuf {
     dir.join("ttbl/")
 }
 
-// data of each class
+// data of each class, serde_json compatible
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Class {
     pub id: String,
