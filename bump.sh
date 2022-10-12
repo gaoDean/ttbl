@@ -8,8 +8,6 @@ major_v=$(echo "$ver" | sed "s/^\(.*\)\..*\..*/\1/")
 minor_v=$(echo "$ver" | sed "s/^.*\.\(.*\)\..*/\1/")
 micro_v=$(echo "$ver" | sed "s/^.*\..*\.\(.*\)/\1/")
 
-echo "$major_v"
-
 case "$1" in
 	'MAJOR' | 'major' | 'a' ) ((major_v+=1)) && minor_v=0 && micro_v=0 ;;
 	'MINOR' | 'minor' | 'i' ) ((minor_v+=1)) && micro_v=0 ;;
