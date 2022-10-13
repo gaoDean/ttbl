@@ -103,7 +103,7 @@ async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
     }
 
     let read: ResponseData = res.read().await.unwrap();
-    println!("{}", read.url.as_str());
+    log(read.url.as_str().to_owned());
     Ok(read)
 }
 
