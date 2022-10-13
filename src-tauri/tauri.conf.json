@@ -64,8 +64,8 @@
 	  }
 		},
 		"systemTray": {
-			"iconPath": "icons/32x32.png",
-			"iconAsTemplate": false
+			"iconPath": "icons/trayIcon.png",
+			"iconAsTemplate": true
 		},
 		"security": {
 			"csp": null
