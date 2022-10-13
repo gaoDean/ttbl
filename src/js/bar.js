@@ -3,10 +3,10 @@ const { appWindow } = window.__TAURI__.window; // eslint-disable-line no-undersc
 const titlebarHTML = `
     <div data-tauri-drag-region class="titlebar secondary">
       <div class="titlebar-button" id="titlebar-hide">
-        <img src="https://api.iconify.design/gg:minimize.svg?color=white" alt="minimize" />
+        <img src="img/minimize.svg" alt="minimize" />
       </div>
       <div class="titlebar-button" class="" id="titlebar-close">
-        <img src="https://api.iconify.design/mdi:close.svg?color=white" alt="close" />
+        <img src="img/close.svg" alt="close" />
       </div>
     </div>`;
 
