@@ -4,7 +4,7 @@
 const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
 
 // YYYYMMDD in integer form
-let ymd = invoke('get_ymd');
+let ymd = await invoke('get_ymd');
 
 // adds <tag> with <inner> to <parent_element>, returns the newly appended node
 // attributes = { { <attr>, <value> }, { <attr>, <value> } };
@@ -12,7 +12,9 @@ function addElement(parentElement, tag, inner, attributes) {
   const element = document.createElement(tag);
   element.textContent = inner;
 
-  Object.values(attributes).forEach((attr) => element.setAttribute(attr[0], attr[1]));
+  if (attributes) {
+    Object.values(attributes).forEach((attr) => element.setAttribute(attr[0], attr[1]));
+  }
 
   return parentElement.appendChild(element);
 }

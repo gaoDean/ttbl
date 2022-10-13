@@ -1,6 +1,6 @@
 use chrono::Local; // time
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fs::File, io::Write};
+use std::{collections::HashMap, fs, io::Write};
 use tauri::api::http::{
     Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType,
 };
@@ -50,7 +50,9 @@ fn get_class_date(class: Class) -> String {
 
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
 fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {
-    let mut file = File::create(datadir().join(".storage.".to_owned() + key).as_path())?;
+    let dir = datadir();
+    fs::create_dir_all(dir.clone())?;
+    let mut file = fs::File::create(dir.join(".storage.".to_owned() + key).as_path())?;
     return file.write_all(data.as_bytes());
 }
 
