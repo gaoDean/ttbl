@@ -49,8 +49,10 @@ async function login() {
   } catch (err) {
     console.log(err);
     busy(false);
-    if (err === '403') {
+    if (err === '401') {
       loginMsg('Authorisation failed. Make sure you have typed in your username and password correctly.');
+    } else if (err === '500') {
+      loginMsg('Something went wrong, please try again.');
     } else {
       loginMsg(err);
     }
