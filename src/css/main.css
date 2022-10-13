@@ -24,10 +24,6 @@ hgroup {
   right: 0;
 }
 
-.titlebar:hover {
-  background: #18232c70;
-}
-
 .titlebar-button {
   display: inline-flex;
   justify-content: center;
