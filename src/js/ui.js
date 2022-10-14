@@ -30,17 +30,19 @@ async function setClassesToGui(timetable, periodsPassed, msg, extra) {
 
   // add all the other classes
   Object.values(timetable).forEach((curClass) => {
-    let greyed = null;
-    if (Number(curClass.periodName) <= periodsPassed) {
-      greyed = [['style', 'opacity: 0.5']];
-    }
-    const classContainer = addElement(main, 'article', '', greyed);
-    const classGroup = addElement(classContainer, 'hgroup', '');
+    const greyed_out = Number(curClass.periodName) <= periodsPassed ? 'opacity: 0.5' : '';
+    const classHTML = `
+      <article style="${greyed_out}">
+        <hgroup>
+          <h4 style="display: inline">${curClass.description}</h4>
+          <small style="display: inline; float: right">Period ${curClass.periodName}</small>
+          <h6>${curClass.room}</h6>
+          <p>${curClass.teacherName}</p>
+        </hgroup>
+      </article>`
 
-    addElement(classGroup, 'h4', curClass.description, [['style', 'display: inline']]);
-    addElement(classGroup, 'small', `Period ${curClass.periodName}`, [['style', 'display: inline; float: right']]);
-    addElement(classGroup, 'h6', curClass.room);
-    addElement(classGroup, 'p', curClass.teacherName);
+    // for optimisation, only append when fully created as opposed to adding each elm to dom
+    main.insertAdjacentHTML("beforeend", classHTML);
   });
 }
 
