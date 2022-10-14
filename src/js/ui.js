@@ -6,19 +6,6 @@ const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
 // YYYYMMDD in integer form
 let ymd = await invoke('get_ymd');
 
-// adds <tag> with <inner> to <parent_element>, returns the newly appended node
-// attributes = { { <attr>, <value> }, { <attr>, <value> } };
-function addElement(parentElement, tag, inner, attributes) {
-  const element = document.createElement(tag);
-  element.textContent = inner;
-
-  if (attributes) {
-    Object.values(attributes).forEach((attr) => element.setAttribute(attr[0], attr[1]));
-  }
-
-  return parentElement.appendChild(element);
-}
-
 async function setClassesToGui(timetable, periodsPassed, msg, extra) {
   const main = document.getElementById('timetable');
   main.innerHTML = '';
@@ -30,17 +17,19 @@ async function setClassesToGui(timetable, periodsPassed, msg, extra) {
 
   // add all the other classes
   Object.values(timetable).forEach((curClass) => {
-    let greyed = null;
-    if (Number(curClass.periodName) <= periodsPassed) {
-      greyed = [['style', 'opacity: 0.5']];
-    }
-    const classContainer = addElement(main, 'article', '', greyed);
-    const classGroup = addElement(classContainer, 'hgroup', '');
+    const greyedOut = Number(curClass.periodName) <= periodsPassed ? 'opacity: 0.5' : '';
+    const classHTML = `
+      <article style="${greyedOut}">
+        <hgroup>
+          <h4 style="display: inline">${curClass.description}</h4>
+          <small style="display: inline; float: right">Period ${curClass.periodName}</small>
+          <h6>${curClass.room}</h6>
+          <p>${curClass.teacherName}</p>
+        </hgroup>
+      </article>`;
 
-    addElement(classGroup, 'h4', curClass.description, [['style', 'display: inline']]);
-    addElement(classGroup, 'small', `Period ${curClass.periodName}`, [['style', 'display: inline; float: right']]);
-    addElement(classGroup, 'h6', curClass.room);
-    addElement(classGroup, 'p', curClass.teacherName);
+    // for optimisation, only append when fully created as opposed to adding each elm to dom
+    main.insertAdjacentHTML('beforeend', classHTML);
   });
 }
 
