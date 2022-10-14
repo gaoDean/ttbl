@@ -1,7 +1,17 @@
-use chrono::{Date, Duration, Local, TimeZone};
+use chrono::{Date, DateTime, Duration, Local, TimeZone};
 use std::{ops::Add, thread};
 
 use crate::impure;
+
+pub fn later(iso: String) -> bool {
+    let input_time: DateTime<Local> = iso.parse().unwrap();
+    println!("{:?}", input_time.to_string());
+    let cur_time: DateTime<Local> = Local::now();
+    println!("{:?}", cur_time.to_string());
+
+    // if input time later than current time
+    input_time > cur_time
+}
 
 // from YYYYMMDD string to Date<Local>
 fn parse_ymd(ymd: String) -> Date<Local> {
