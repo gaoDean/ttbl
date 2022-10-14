@@ -19,11 +19,6 @@ function addElement(parentElement, tag, inner, attributes) {
   return parentElement.appendChild(element);
 }
 
-function addNestedElement(parentElement, tag1, tag2, inner, attributes) {
-  const element = addElement(parentElement, tag1);
-  return addElement(element, tag2, inner, attributes);
-}
-
 async function setClassesToGui(timetable, periodsPassed, msg, extra) {
   const main = document.getElementById('timetable');
   main.innerHTML = '';
