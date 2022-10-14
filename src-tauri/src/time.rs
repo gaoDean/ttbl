@@ -5,9 +5,7 @@ use crate::impure;
 
 pub fn later(iso: String) -> bool {
     let input_time: DateTime<Local> = iso.parse().unwrap();
-    println!("{:?}", input_time.to_string());
     let cur_time: DateTime<Local> = Local::now();
-    println!("{:?}", cur_time.to_string());
 
     // if input time later than current time
     input_time > cur_time
@@ -58,6 +56,12 @@ pub fn ymd_add(ymd: String, dur_in_days: i64) -> String {
 #[tauri::command]
 pub fn get_ymd() -> String {
     return Local::now().format("%Y%m%d").to_string();
+}
+
+// get the current hour
+#[tauri::command]
+pub fn get_hour() -> i32 {
+    return Local::now().format("%H").to_string().parse().unwrap(); // 00-23
 }
 
 // spawn the fetch timetable thread

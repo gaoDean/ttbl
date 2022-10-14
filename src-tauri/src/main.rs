@@ -14,6 +14,7 @@ fn main() {
     let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             time::spawn_thread,
+            time::get_hour,
             time::get_ymd,
             time::ymd_add,
             tray::add_timetable_to_tray,

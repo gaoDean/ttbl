@@ -5,6 +5,10 @@ const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
 
 // YYYYMMDD in integer form
 let ymd = await invoke('get_ymd');
+if (await invoke('get_hour') > 17) {
+  ymd = await invoke('ymd_add', { ymd, durInDays: 1 });
+}
+
 
 async function setClassesToGui(timetable, periodsPassed, msg, extra) {
   const main = document.getElementById('timetable');
