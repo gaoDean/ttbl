@@ -9,7 +9,6 @@ if (await invoke('get_hour') > 17) {
   ymd = await invoke('ymd_add', { ymd, durInDays: 1 });
 }
 
-
 async function setClassesToGui(timetable, periodsPassed, msg, extra) {
   const main = document.getElementById('timetable');
   main.innerHTML = '';
