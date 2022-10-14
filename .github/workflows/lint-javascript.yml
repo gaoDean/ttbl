@@ -26,11 +26,12 @@ jobs:
           node-version: 16
           cache: yarn
 
-      - name: Get yarn cache directory path
+      - name: get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v3
+      - name: get yarn cache
+        uses: actions/cache@v3
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -38,8 +39,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: install dependenies
+      - name: install uncached dependencies
         run: yarn install
 
-      - name: eslint
+      - name: run eslint
         run: yarn lint
