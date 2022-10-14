@@ -19,12 +19,7 @@ function addElement(parentElement, tag, inner, attributes) {
   return parentElement.appendChild(element);
 }
 
-function addNestedElement(parentElement, tag1, tag2, inner, attributes) {
-  const element = addElement(parentElement, tag1);
-  return addElement(element, tag2, inner, attributes);
-}
-
-async function setClassesToGui(timetable, msg, extra) {
+async function setClassesToGui(timetable, periodsPassed, msg, extra) {
   const main = document.getElementById('timetable');
   main.innerHTML = '';
   document.getElementById('message').innerText = msg;
@@ -35,7 +30,12 @@ async function setClassesToGui(timetable, msg, extra) {
 
   // add all the other classes
   Object.values(timetable).forEach((curClass) => {
-    const classGroup = addNestedElement(main, 'article', 'hgroup', '');
+    let greyed = null;
+    if (Number(curClass.periodName) <= periodsPassed) {
+      greyed = [['style', 'opacity: 0.5']];
+    }
+    const classContainer = addElement(main, 'article', '', greyed);
+    const classGroup = addElement(classContainer, 'hgroup', '');
 
     addElement(classGroup, 'h4', curClass.description, [['style', 'display: inline']]);
     addElement(classGroup, 'small', `Period ${curClass.periodName}`, [['style', 'display: inline; float: right']]);
@@ -64,9 +64,10 @@ async function updateUI() {
     }
   }
   setClassesToGui(
-    ret[0],
-    ret[1][0],
-    ret[1][1],
+    ret[0], // timetable
+    ret[1], // passed periods
+    ret[2][0], // msg
+    ret[2][1], // msg extra
   );
 
   console.log(ret);

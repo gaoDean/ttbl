@@ -9,7 +9,7 @@ use crate::time;
 pub fn add_timetable_to_tray(
     date: String,
     app_handle: tauri::AppHandle,
-) -> Result<(impure::ClassesForDay, (String, String)), String> {
+) -> Result<(impure::ClassesForDay, i32, (String, String)), String> {
     // get the timetable from storage
     let timetable: impure::ClassesForDay = match impure::get_timetable() {
         Some(r) => match r.get(&date) {
@@ -20,7 +20,7 @@ pub fn add_timetable_to_tray(
     };
     // tuple: msg, extra msg
     let msg: (String, String) = time::get_msg(date, timetable.is_empty());
-
+    let mut periods_passed: i32 = -1;
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
     // add date messages
@@ -46,8 +46,15 @@ pub fn add_timetable_to_tray(
                 &class.description
             );
 
-            // add the tray item to <menu>, with <text> as the inner
-            menu = tray_add_item(menu, &class.period_name, &text);
+            // if not later; if already passed
+            if !time::later(class.end_time) {
+                // at the end will be the last passed period
+                periods_passed = class.period_name.parse().unwrap();
+                menu = menu.add_item(CustomMenuItem::new(&class.period_name, &text).disabled())
+            } else {
+                // add the tray item to <menu>, with <text> as the inner
+                menu = tray_add_item(menu, &class.period_name, &text);
+            }
         }
     }
 
@@ -62,7 +69,7 @@ pub fn add_timetable_to_tray(
 
     // if ok, return the timetable and all of the messages, will be passed to set_gui in the front
     match app_handle.tray_handle().set_menu(menu) {
-        Ok(_) => Ok((timetable, msg)),
+        Ok(_) => Ok((timetable, periods_passed, msg)),
         Err(_) => Err("Failed to set tray menu".to_owned()),
     }
 }
