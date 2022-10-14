@@ -78,4 +78,4 @@ function addListeners() {
 updateUI();
 addListeners();
 
-invoke("spawn_sync_thread");
+invoke('spawn_sync_thread');
