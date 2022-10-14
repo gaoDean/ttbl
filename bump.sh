@@ -4,20 +4,32 @@
 set -e
 
 ver=$(jq -r '.version' < package.json)
+msg=""
 major_v=$(echo "$ver" | sed "s/^\(.*\)\..*\..*/\1/")
 minor_v=$(echo "$ver" | sed "s/^.*\.\(.*\)\..*/\1/")
 micro_v=$(echo "$ver" | sed "s/^.*\..*\.\(.*\)/\1/")
 
 case "$1" in
-	'MAJOR' | 'major' | 'a' ) ((major_v+=1)) && minor_v=0 && micro_v=0 ;;
-	'MINOR' | 'minor' | 'i' ) ((minor_v+=1)) && micro_v=0 ;;
-	'MICRO' | 'micro' | 'c' ) ((micro_v+=1)) ;;
+	'MAJOR' | 'major' | 'a' ) ((major_v+=1)) && msg="major" && minor_v=0 && micro_v=0 ;;
+	'MINOR' | 'minor' | 'i' ) ((minor_v+=1)) && msg="minor" && micro_v=0 ;;
+	'MICRO' | 'micro' | 'c' ) ((micro_v+=1)) && msg="micro" ;;
 	*) echo "unrecognised option: '$1'" && exit 0 ;;
 esac
 
+oldver="$ver"
 # new version
 ver="$major_v.$minor_v.$micro_v"
-echo "$ver"
+
+# call with a prompt string or use a default
+read -r -p "Continue with a ${msg} bump from ${oldver} to ${ver}? [y/N]} " response
+case "$response" in
+	[yY][eE][sS]|[yY])
+		true
+		;;
+	*)
+		exit 0
+		;;
+esac
 
 sed -i "s/  \"version\".*/  \"version\": \"$ver\",/" package.json
 sed -i "s/^version.*/version = \"$ver\"/" src-tauri/Cargo.toml
