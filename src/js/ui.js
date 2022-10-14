@@ -78,6 +78,4 @@ function addListeners() {
 updateUI();
 addListeners();
 
-// i have nowhere else to put this
-// import { scheduleSync } from "./helper/time.js";
-// scheduleSync("08", "00", "00"); // run in background
+invoke("spawn_sync_thread");

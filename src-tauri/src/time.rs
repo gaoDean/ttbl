@@ -66,9 +66,10 @@ pub fn get_hour() -> i32 {
 
 // spawn the fetch timetable thread
 #[tauri::command]
-pub fn spawn_thread() {
+pub fn spawn_sync_thread() {
     #[allow(unused)] // async not used, but needs await
     thread::spawn(move || loop {
+        thread::sleep(Duration::hours(3).to_std().unwrap());
         async {
             if impure::fetch_timetable().await.is_err() {
                 impure::log("Couldn't fetch timetable".to_owned())
