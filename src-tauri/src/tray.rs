@@ -19,10 +19,10 @@ pub fn add_timetable_to_tray(
         },
         None => return Err("Timetable not found".to_owned()),
     };
-    // tuple: msg, extra msg
-    let msg: (String, String) = time::get_msg(date, timetable.is_empty());
+    // tuple: msg, extra msg. dry_run is if the date is not the original date.
+    let msg: (String, String) = time::get_msg(date, timetable.is_empty(), dry_run);
     let mut next_end_time: String = String::new();
-    let mut periods_passed: i32 = -1;
+    let mut periods_passed: i32 = -1; // to calculate the greyed out periods
     let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
     if !dry_run {
@@ -76,8 +76,11 @@ pub fn add_timetable_to_tray(
 
     // if dry run, return the data, else match the result of setting the tray
     // if matched ok, return the data, will be passed to set_gui in the front
-    println!("{:?}", dry_run);
-    match if dry_run { Result::Ok(()) } else { app_handle.tray_handle().set_menu(menu) } {
+    match if dry_run {
+        Result::Ok(())
+    } else {
+        app_handle.tray_handle().set_menu(menu)
+    } {
         Ok(_) => Ok((timetable, periods_passed, msg)),
         Err(_) => Err("Failed to set tray menu".to_owned()),
     }
