@@ -9,6 +9,15 @@ if (await invoke('get_hour') > 17) {
   ymd = await invoke('ymd_add', { ymd, durInDays: 1 });
 }
 
+async function is_cur_date() {
+  let cur_ymd = await invoke('get_ymd');
+  if (await invoke('get_hour') > 17) {
+    cur_ymd = await invoke('ymd_add', { ymd, durInDays: 1 });
+  }
+  console.log(cur_ymd, ymd);
+  return ymd === cur_ymd;
+}
+
 async function setClassesToGui(timetable, periodsPassed, msg, extra) {
   const main = document.getElementById('timetable');
   main.innerHTML = '';
@@ -40,7 +49,11 @@ async function updateUI() {
   let ret;
   try {
     console.log(ymd);
-    ret = await invoke('add_timetable_to_tray', { date: ymd });
+    ret = await invoke('add_timetable_to_tray', {
+      date: ymd,
+      dryRun: !(await is_cur_date())
+    });
+
   } catch (err) {
     // theres probably no token but try to fetch the timetable anyway
     console.log(err);
@@ -75,7 +88,10 @@ function addListeners() {
   document.getElementById('date-future').addEventListener('click', () => changeDate(1));
 }
 
+var time = new Date(),
+    secondsRemaining = (60 - time.getSeconds()) * 1000;
+
 updateUI();
 addListeners();
-
+setInterval(updateUI, 5 * 60 * 1000); // every five mins
 invoke('spawn_sync_thread');
