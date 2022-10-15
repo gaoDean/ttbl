@@ -39,7 +39,8 @@ pub fn get_msg(ymd: String, no_classes: bool, is_cur_date: bool) -> (String, Str
     // tuple, 0 is date, 1 is extra msg
     let mut msg: (String, String) = (fmt, String::new());
 
-    if !is_cur_date { // date not current date, add notice msg
+    if !is_cur_date {
+        // date not current date, add notice msg
         msg.0 = format!("Here's {}", msg.0);
     }
 

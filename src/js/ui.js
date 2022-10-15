@@ -6,9 +6,9 @@ const { invoke } = window.__TAURI__; // eslint-disable-line no-underscore-dangle
 // YYYYMMDD in integer form
 let ymd = await invoke('get_ymd');
 
-async function is_cur_date() {
-  let cur_ymd = await invoke('get_ymd');
-  return ymd === cur_ymd;
+async function isCurrentDate() {
+  const curYmd = await invoke('get_ymd');
+  return ymd === curYmd;
 }
 
 async function setClassesToGui(timetable, periodsPassed, msg, extra) {
@@ -44,9 +44,8 @@ async function updateUI() {
     console.log(ymd);
     ret = await invoke('add_timetable_to_tray', {
       date: ymd,
-      dryRun: !(await is_cur_date())
+      dryRun: !(await isCurrentDate()),
     });
-
   } catch (err) {
     // theres probably no token but try to fetch the timetable anyway
     console.log(err);
@@ -81,10 +80,10 @@ function addListeners() {
   document.getElementById('date-future').addEventListener('click', () => changeDate(1));
 }
 
-var time = new Date(),
-    secondsRemaining = (60 - time.getSeconds()) * 1000;
+// const time = new Date();
+// const secondsRemaining = (60 - time.getSeconds()) * 1000;
 
 updateUI();
 addListeners();
-setInterval(updateUI, 5 * 60 * 1000); // every five mins
+// setInterval(updateUI, 5 * 60 * 1000); // every five mins
 invoke('spawn_sync_thread');

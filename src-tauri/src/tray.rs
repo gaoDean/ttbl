@@ -76,7 +76,11 @@ pub fn add_timetable_to_tray(
 
     // if dry run, return the data, else match the result of setting the tray
     // if matched ok, return the data, will be passed to set_gui in the front
-    match if dry_run { Result::Ok(()) } else { app_handle.tray_handle().set_menu(menu) } {
+    match if dry_run {
+        Result::Ok(())
+    } else {
+        app_handle.tray_handle().set_menu(menu)
+    } {
         Ok(_) => Ok((timetable, periods_passed, msg)),
         Err(_) => Err("Failed to set tray menu".to_owned()),
     }
