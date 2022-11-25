@@ -1,15 +1,23 @@
 {
-  "name": "ttbl",
-  "version": "1.8.0",
-  "type": "module",
-  "scripts": {
-    "lint": "eslint src --ext .js"
-  },
-  "devDependencies": {
-    "@tauri-apps/cli": "^1.1.1",
-    "dead-server": "https://github.com/gaoDean/dead-server.git",
-    "eslint": "^7.32.0 || ^8.2.0",
-    "eslint-config-airbnb-base": "latest",
-    "eslint-plugin-import": "^2.25.2"
-  }
+	"name": "ttbl",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"lint": "prettier --plugin-search-dir . --check .",
+		"format": "prettier --plugin-search-dir . --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-static": "^1.0.0-next.48",
+		"@sveltejs/kit": "next",
+		"@tauri-apps/cli": "^1.2.1",
+		"prettier": "^2.6.2",
+		"prettier-plugin-svelte": "^2.7.0",
+		"svelte": "^3.44.0",
+		"svelte-preprocess": "^4.10.7",
+		"vite": "^3.1.0"
+	},
+	"type": "module"
 }

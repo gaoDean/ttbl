@@ -1,9 +1,9 @@
 {
 	"build": {
-		"beforeBuildCommand": "",
-		"beforeDevCommand": "yarn dead-server src --port=8080 --no-browser",
-		"devPath": "http://localhost:8080",
-		"distDir": "../src",
+		"beforeBuildCommand": "yarn build",
+		"beforeDevCommand": "yarn dev",
+		"devPath": "http://localhost:5173",
+		"distDir": "../build",
 		"withGlobalTauri": true
 	},
 	"package": {
