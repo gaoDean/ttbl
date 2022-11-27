@@ -5,7 +5,7 @@ const config = {
 	server: {
     strictPort: true,
   },
-	envPrefix: ['VITE_', 'TAURI_'],
+	// envPrefix: ['VITE_', 'TAURI_'],
 	build: {
     target: ['es2021', 'chrome100', 'safari13'],
     minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,

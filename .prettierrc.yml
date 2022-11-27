@@ -1,5 +1,4 @@
 useTabs: true
-arrowParens: "avoid"
 semi: true
 singleQuote: true
 printWidth: 80

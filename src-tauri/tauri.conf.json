@@ -3,8 +3,7 @@
 		"beforeBuildCommand": "yarn build",
 		"beforeDevCommand": "yarn dev",
 		"devPath": "http://localhost:5173",
-		"distDir": "../build",
-		"withGlobalTauri": true
+		"distDir": "../build"
 	},
 	"package": {
 		"productName": "ttbl",

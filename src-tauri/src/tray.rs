@@ -10,7 +10,7 @@ pub fn add_timetable_to_tray(
     date: String,
     dry_run: bool,
     app_handle: tauri::AppHandle,
-) -> Result<(impure::ClassesForDay, i32, (String, String)), String> {
+) -> Result<(impure::ClassesForDay, String, String, i32), String> {
     // get the timetable from storage
     let timetable: impure::ClassesForDay = match impure::get_timetable() {
         Some(r) => match r.get(&date) {
@@ -81,7 +81,7 @@ pub fn add_timetable_to_tray(
     } else {
         app_handle.tray_handle().set_menu(menu)
     } {
-        Ok(_) => Ok((timetable, periods_passed, msg)),
+        Ok(_) => Ok((timetable, msg.0, msg.1, periods_passed)),
         Err(_) => Err("Failed to set tray menu".to_owned()),
     }
 }

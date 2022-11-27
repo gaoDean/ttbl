@@ -7,7 +7,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"lint": "prettier --plugin-search-dir . --check .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --write --plugin-search-dir=. ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^1.0.0-next.48",
@@ -19,5 +19,9 @@
 		"svelte-preprocess": "^4.10.7",
 		"vite": "^3.1.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@tauri-apps/api": "^1.2.0",
+		"sass": "^1.56.1"
+	}
 }
