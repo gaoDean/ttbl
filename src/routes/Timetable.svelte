@@ -58,42 +58,38 @@ invoke('spawn_sync_thread');
 // const secondsRemaining = (60 - time.getSeconds()) * 1000;
 </script>
 
-<main class="container">
-	<div class="grid" style="min-width: 160px; display: inline !important;">
-		<h3 style="display: inline; line-height: 56px">{title}</h3>
-		<div style="min-width: 120px; display: inline; float: right;">
-			<button
-				class="secondary"
-				style="display: inline-block; max-width: 56px;"
-				on:click={changeDate(-1)}>&larr;</button
-			>
-			<button
-				class="secondary"
-				style="display: inline-block; max-width: 56px;"
-				on:click={changeDate(1)}>&rarr;</button
-			>
-		</div>
+<div class="grid" style="min-width: 160px; display: inline !important;">
+	<h3 style="display: inline; line-height: 56px">{title}</h3>
+	<div style="min-width: 120px; display: inline; float: right;">
+		<button
+			class="secondary"
+			style="display: inline-block; max-width: 56px;"
+			on:click={changeDate(-1)}>&larr;</button
+		>
+		<button
+			class="secondary"
+			style="display: inline-block; max-width: 56px;"
+			on:click={changeDate(1)}>&rarr;</button
+		>
 	</div>
-	<div style="padding-top: 20px">
-		{#each timetable as item}
-			<article
-				class={Number(item.periodName) <= periodsPassed ? 'disabled' : ''}
-			>
-				<hgroup>
-					<h4 style="display: inline">{item.description}</h4>
-					<small style="display: inline; float: right"
-						>Period {item.periodName}</small
-					>
-					<h6>{item.room}</h6>
-					<p>{item.teacherName}</p>
-				</hgroup>
-			</article>
-		{/each}
-	</div>
-	<p class="message">
-		{message}
-	</p>
-</main>
+</div>
+<div style="padding-top: 20px">
+	{#each timetable as item}
+		<article class={Number(item.periodName) <= periodsPassed ? 'disabled' : ''}>
+			<hgroup>
+				<h4 style="display: inline">{item.description}</h4>
+				<small style="display: inline; float: right"
+					>Period {item.periodName}</small
+				>
+				<h6>{item.room}</h6>
+				<p>{item.teacherName}</p>
+			</hgroup>
+		</article>
+	{/each}
+</div>
+<p class="message">
+	{message}
+</p>
 
 <style>
 article {

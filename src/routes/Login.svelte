@@ -60,39 +60,32 @@ appWindow.show();
 appWindow.setFocus();
 </script>
 
-<main class="container">
-	<hgroup style="padding-bottom: 30px">
-		<h1>Welcome to <a href="#">ttbl</a>!</h1>
-		<h3>By Dean Gao</h3>
-	</hgroup>
-	<div class="grid">
-		<form on:submit|preventDefault={login()}>
-			<label for="student-id">
-				<input
-					type="number"
-					value={studentId}
-					placeholder="Student Number"
-					required
-				/>
-			</label>
-			<label for="password">
-				<input
-					type="password"
-					value={password}
-					placeholder="Password"
-					required
-				/>
-			</label>
-			<button
-				type="submit"
-				id="submit"
-				class="outline"
-				aria-busy={loading}
-				onclick="event.preventDefault()"
-			>
-				Login
-			</button>
-		</form>
-	</div>
-	<small id="login_msg" />
-</main>
+<hgroup style="padding-bottom: 30px">
+	<h1>Welcome to <a href="#">ttbl</a>!</h1>
+	<h3>By Dean Gao</h3>
+</hgroup>
+<div class="grid">
+	<form on:submit|preventDefault={login()}>
+		<label for="student-id">
+			<input
+				type="number"
+				value={studentId}
+				placeholder="Student Number"
+				required
+			/>
+		</label>
+		<label for="password">
+			<input type="password" value={password} placeholder="Password" required />
+		</label>
+		<button
+			type="submit"
+			id="submit"
+			class="outline"
+			aria-busy={loading}
+			onclick="event.preventDefault()"
+		>
+			Login
+		</button>
+	</form>
+</div>
+<small id="login_msg" />
