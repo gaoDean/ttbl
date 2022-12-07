@@ -17,7 +17,7 @@ pub fn add_timetable_to_tray(
             Some(s) => s.clone(),
             _ => Vec::new(),
         },
-        None => return Err("Timetable not found".to_owned()),
+        None => return Err(String::from("Timetable not found")),
     };
     // tuple: msg, extra msg. dry_run is if the date is not the original date.
     let msg: (String, String) = time::get_msg(date, timetable.is_empty(), dry_run);
@@ -82,7 +82,7 @@ pub fn add_timetable_to_tray(
         app_handle.tray_handle().set_menu(menu)
     } {
         Ok(_) => Ok((timetable, msg.0, msg.1, periods_passed)),
-        Err(_) => Err("Failed to set tray menu".to_owned()),
+        Err(_) => Err(String::from("Failed to set tray menu")),
     }
 }
 
@@ -116,7 +116,7 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEv
             "sync" => {
                 async {
                     if impure::fetch_timetable().await.is_ok() {
-                        impure::create_notif("Timetable fetched".to_owned(), app_handle.clone());
+                        impure::create_notif(String::from("Timetable fetched"), app_handle.clone());
                     }
                 };
             }
