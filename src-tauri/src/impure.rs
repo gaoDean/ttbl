@@ -40,8 +40,7 @@ pub struct Class {
     pub detailed_name: String,
 }
 
-pub type ClassesForDay = Vec<Class>;
-pub type Timetable = HashMap<String, ClassesForDay>;
+pub type Timetable = HashMap<String, Vec<Class>>;
 
 // get the date of the class from the id
 fn get_class_date(class: Class) -> String {

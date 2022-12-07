@@ -10,9 +10,9 @@ pub fn add_timetable_to_tray(
     date: String,
     dry_run: bool,
     app_handle: tauri::AppHandle,
-) -> Result<(impure::ClassesForDay, String, String, i32), String> {
+) -> Result<(Vec<impure::Class>, String, String, i32), String> {
     // get the timetable from storage
-    let timetable: impure::ClassesForDay = match impure::get_timetable() {
+    let timetable: Vec<impure::Class> = match impure::get_timetable() {
         Some(r) => match r.get(&date) {
             Some(s) => s.clone(),
             _ => Vec::new(),
