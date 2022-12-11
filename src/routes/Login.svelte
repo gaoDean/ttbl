@@ -18,7 +18,8 @@ const login = async () => {
 	try {
 		await invoke('fetch_token', { studentId: studentId, password: password });
 	} catch (err) {
-		console.log(err); loading = false;
+		console.log(err);
+		loading = false;
 		if (err === '401') {
 			loginMessage =
 				'Authorisation failed. Make sure you have typed in your username and password correctly.';
@@ -72,14 +73,13 @@ appWindow.setFocus();
 			placeholder="Student ID"
 			required
 		/>
-		<input type="password" bind:value={password} placeholder="Password" required />
-		<button
-			type="submit"
-			class="outline"
-			aria-busy={loading}
-		>
-			Login
-		</button>
+		<input
+			type="password"
+			bind:value={password}
+			placeholder="Password"
+			required
+		/>
+		<button type="submit" class="outline" aria-busy={loading}> Login </button>
 	</form>
 </div>
 <small>{loginMessage}</small>
