@@ -110,7 +110,7 @@ async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
 // returns true if changed, else false if token unchanged
 async fn refresh_token() -> bool {
     // tuple: (student_id, password)
-    let details: (String, String) = get_login_details();
+    let details: (i32, String) = get_login_details();
     let old_token: String = get_data("token");
 
     if fetch_token(details.0, details.1).await.is_ok() {
@@ -122,11 +122,12 @@ async fn refresh_token() -> bool {
 }
 
 #[tauri::command]
-pub async fn fetch_token(student_id: String, password: String) -> Result<(), String> {
+pub async fn fetch_token(student_id: i32, password: String) -> Result<(), String> {
     let url: String = format!(
         "{}/token?username={}&password={}",
         HOST, student_id, password
     );
+    println!("{}", url);
 
     let res: ResponseData = match fetch(&url).await {
         Ok(s) => s,
@@ -232,6 +233,6 @@ pub fn set_login_details(id: String, password: String) -> Result<(), String> {
     Ok(())
 }
 
-fn get_login_details() -> (String, String) {
-    (get_data("student_id"), get_data("password"))
+fn get_login_details() -> (i32, String) {
+    (get_data("student_id").parse().unwrap(), get_data("password"))
 }

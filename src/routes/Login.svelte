@@ -4,7 +4,7 @@ import { appWindow } from '@tauri-apps/api/window';
 
 export let needsLogin;
 
-let studentId;
+let studentId = undefined;
 let password = '';
 let loading = false;
 let loginMessage =
@@ -14,6 +14,7 @@ const login = async () => {
 	loading = true;
 	loginMessage = 'Trying to fetch token';
 
+	console.log(studentId, password);
 	try {
 		await invoke('fetch_token', { studentId: studentId, password: password });
 	} catch (err) {
@@ -36,7 +37,7 @@ const login = async () => {
 	} catch (err) {
 		console.log(err);
 		loading = false;
-		if (err === '403') {
+		if (err === 403) {
 			loginMessage =
 				'Authorisation failed. Make sure you have typed in your username and password correctly.';
 		} else {
@@ -64,17 +65,16 @@ appWindow.setFocus();
 	<h3>By Dean Gao</h3>
 </hgroup>
 <div class="grid">
-	<form method="" on:submit|preventDefault{login()}>
+	<form method="" on:submit|preventDefault={login}>
 		<input
 			type="number"
-			value={studentId}
+			bind:value={studentId}
 			placeholder="Student ID"
 			required
 		/>
-		<input type="password" value={password} placeholder="Password" required />
+		<input type="password" bind:value={password} placeholder="Password" required />
 		<button
 			type="submit"
-			id="submit"
 			class="outline"
 			aria-busy={loading}
 		>
