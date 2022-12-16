@@ -6,7 +6,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"lint": "prettier --plugin-search-dir . --check .",
+		"lint": "prettier --plugin-search-dir . --check ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}",
 		"format": "prettier --write --plugin-search-dir=. ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}"
 	},
 	"devDependencies": {
