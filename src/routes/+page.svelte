@@ -2,7 +2,7 @@
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
 
-let needsLogin = true;
+let needsLogin = false;
 </script>
 
 <main class="container">

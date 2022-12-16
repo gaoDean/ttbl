@@ -14,9 +14,11 @@ let ymd;
 const isCurrentDate = async () => ymd === (await invoke('get_ymd'));
 
 const updateUI = async () => {
+	if (!ymd) {
+		ymd = await invoke('get_ymd');
+	}
 	let ret;
 	try {
-		console.log(ymd);
 		ret = await invoke('add_timetable_to_tray', {
 			date: ymd,
 			dryRun: !(await isCurrentDate()),
@@ -35,7 +37,7 @@ const updateUI = async () => {
 			return;
 		}
 	}
-	timetable = ret[0];
+	timetable = Object.values(ret[0]);
 	title = ret[1];
 	message = ret[2];
 	periodsPassed = ret[3];
@@ -43,7 +45,7 @@ const updateUI = async () => {
 };
 
 const changeDate = async (offset) => {
-	ymd = await invoke('ymd_add', { ymd, durInDays: offset });
+	ymd = await invoke('ymd_add', { ymd: ymd, durInDays: offset });
 	updateUI();
 };
 
@@ -61,31 +63,37 @@ invoke('spawn_sync_thread');
 <div class="grid" style="min-width: 160px; display: inline !important;">
 	<h3 style="display: inline; line-height: 56px">{title}</h3>
 	<div style="min-width: 120px; display: inline; float: right;">
-		<button
-			class="secondary"
-			style="display: inline-block; max-width: 56px;"
-			on:click={changeDate(-1)}>&larr;</button
-		>
-		<button
-			class="secondary"
-			style="display: inline-block; max-width: 56px;"
-			on:click={changeDate(1)}>&rarr;</button
-		>
+		{#if ymd}
+			<button
+				class="secondary"
+				style="display: inline-block; max-width: 56px;"
+				on:click={() => changeDate(-1)}>&larr;</button
+			>
+			<button
+				class="secondary"
+				style="display: inline-block; max-width: 56px;"
+				on:click={() => changeDate(1)}>&rarr;</button
+			>
+		{/if}
 	</div>
 </div>
 <div style="padding-top: 20px">
-	{#each timetable as item}
-		<article class={Number(item.periodName) <= periodsPassed ? 'disabled' : ''}>
-			<hgroup>
-				<h4 style="display: inline">{item.description}</h4>
-				<small style="display: inline; float: right"
-					>Period {item.periodName}</small
-				>
-				<h6>{item.room}</h6>
-				<p>{item.teacherName}</p>
-			</hgroup>
-		</article>
-	{/each}
+	{#if timetable}
+		{#each timetable as item}
+			<article
+				class={Number(item.periodName) <= periodsPassed ? 'disabled' : ''}
+			>
+				<hgroup>
+					<h4 style="display: inline">{item.description}</h4>
+					<small style="display: inline; float: right"
+						>Period {item.periodName}</small
+					>
+					<h6>{item.room}</h6>
+					<p>{item.teacherName}</p>
+				</hgroup>
+			</article>
+		{/each}
+	{/if}
 </div>
 <p class="message">
 	{message}

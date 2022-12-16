@@ -224,8 +224,8 @@ pub fn get_timetable() -> Option<Timetable> {
 }
 
 #[tauri::command]
-pub fn set_login_details(id: String, password: String) -> Result<(), String> {
-    if set_data("student_id", id.as_str()).is_err()
+pub fn set_login_details(id: i32, password: String) -> Result<(), String> {
+    if set_data("student_id", &id.to_string()).is_err()
         || set_data("password", password.as_str()).is_err()
     {
         return Err(String::from("Something went wrong storing values"));
@@ -234,5 +234,8 @@ pub fn set_login_details(id: String, password: String) -> Result<(), String> {
 }
 
 fn get_login_details() -> (i32, String) {
-    (get_data("student_id").parse().unwrap(), get_data("password"))
+    (
+        get_data("student_id").parse().unwrap(),
+        get_data("password"),
+    )
 }

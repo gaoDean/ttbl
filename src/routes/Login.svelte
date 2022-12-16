@@ -48,13 +48,13 @@ const login = async () => {
 	}
 
 	invoke('set_login_details', {
-		id: studentId.value,
-		password: password.value,
+		id: studentId,
+		password: password,
 	});
 
 	loading = false;
 	loginMessage = 'Timetable fetched';
-	/* needsLogin = false; */
+	needsLogin = false;
 };
 
 appWindow.show();
