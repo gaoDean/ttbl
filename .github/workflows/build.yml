@@ -58,7 +58,10 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: install uncached dependencies
-        run: yarn install
+        run: |
+          yarn install
+          cd src/lib/css/pico
+          git pull
 
       - name: build app
         uses: JonasKruckenberg/tauri-build@v1
