@@ -1,38 +1,25 @@
-# create-svelte
+<p align="center">
+  <h2 align="center">ttbl</h2>
+</p>
+<p align="center">
+	A fast gui interface to the CaulfieldLife timetable
+</p>
+<p align="center">
+	<a href="https://github.com/gaoDean/ttbl">
+			<img alt="Version" src="https://img.shields.io/github/package-json/v/gaoDean/ttbl/?style=for-the-badge&logo=starship&color=C9CBFF&logoColor=D9E0EE&labelColor=302D41"></a>
+	<a href="https://github.com/gaoDean/ttbl">
+			<img alt="Build status" src="https://img.shields.io/github/workflow/status/gaoDean/ttbl/Build?style=for-the-badge&logo=semanticrelease&color=F5E0DC&logoColor=D9E0EE&labelColor=302D41"></a>
+	<a href="https://github.com/gaoDean/ttbl">
+		<img alt="Repo size" src="https://img.shields.io/github/languages/code-size/gaoDean/ttbl?color=%23DDB6F2&logo=hackthebox&style=for-the-badge&logoColor=D9E0EE&labelColor=302D41"/></a>
+</p>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Note: still in development
 
-## Creating a project
+<img width="277" alt="Screen Shot 2022-09-19 at 12 15 55 pm" src="https://user-images.githubusercontent.com/97860672/190939924-a9032c0d-ba76-4706-a6f4-77efcf2b912a.png">
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation
+You can grab the stable release [here](https://github.com/gaoDean/ttbl/releases), or latest build [here](https://nightly.link/gaoDean/ttbl/workflows/build/main)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Credit
+* This app was built with [Tauri](https://github.com/tauri-apps/tauri).
+* This app uses [CaulfieldSync](https://caulfieldsync.vercel.app) to access the CaulfieldLife endpoints.
