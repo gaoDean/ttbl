@@ -1,6 +1,7 @@
 <script>
 import { invoke } from '@tauri-apps/api/tauri';
 import { appWindow } from '@tauri-apps/api/window';
+import { fetchToken, fetchTimetable } from '$lib/fetch';
 
 export let needsLogin;
 
@@ -12,45 +13,42 @@ let loginMessage =
 
 const login = async () => {
 	loading = true;
-	loginMessage = 'Trying to fetch token';
+	loginMessage = 'Trying to log you in...';
 
 	console.log(studentId, password);
-	try {
-		await invoke('fetch_token', { studentId: studentId, password: password });
-	} catch (err) {
-		console.log(err);
-		loading = false;
-		if (err === '401') {
+	const tokenRes = await fetchToken(studentId, password);
+	if (Number.isInteger(tokenRes)) {
+		if (tokenRes === 401) {
 			loginMessage =
 				'Authorisation failed. Make sure you have typed in your username and password correctly.';
-		} else if (err === '500') {
+		} else if (tokenRes === 500) {
 			loginMessage = 'Something went wrong, please try again.';
 		} else {
-			loginMessage = err;
+			loginMessage = `Error: ${tokenRes}`;
 		}
+
+		loading = false;
 		return;
 	}
 
-	loginMessage = 'Token fetched successfully, fetching timetable';
+	loginMessage = 'Login successful, fetching timetable...';
 
-	try {
-		await invoke('fetch_timetable');
-	} catch (err) {
-		console.log(err);
+	const timetableRes = await fetchTimetable(tokenRes, []);
+
+	if (Number.isInteger(timetableRes)) {
 		loading = false;
-		if (err === 403) {
+		if (timetableRes === 403) {
 			loginMessage =
 				'Authorisation failed. Make sure you have typed in your username and password correctly.';
 		} else {
-			loginMessage = err;
+			loginMessage = timetableRes;
 		}
+
+		console.log(timetableRes);
+
+		loading = false;
 		return;
 	}
-
-	invoke('set_login_details', {
-		id: studentId,
-		password: password,
-	});
 
 	loading = false;
 	loginMessage = 'Timetable fetched';

@@ -11,6 +11,8 @@ let timetable;
 // YYYYMMDD in integer form
 let ymd;
 
+const filterTimetable = (x) => x;
+
 const isCurrentDate = async () => ymd === (await invoke('get_ymd'));
 
 const updateUI = async () => {
@@ -37,7 +39,7 @@ const updateUI = async () => {
 			return;
 		}
 	}
-	timetable = Object.values(ret[0]);
+	timetable = filterTimetable(ret[0]);
 	title = ret[1];
 	message = ret[2];
 	periodsPassed = ret[3];

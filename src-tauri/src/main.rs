@@ -17,8 +17,7 @@ fn main() {
             time::get_ymd,
             time::ymd_add,
             tray::add_timetable_to_tray,
-            impure::fetch_token,
-            impure::fetch_timetable,
+            impure::set_data,
             impure::set_login_details,
         ])
         .system_tray(tray)
