@@ -23,6 +23,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
@@ -58,9 +60,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: install uncached dependencies
-        run: |
-          yarn install
-          cd src/lib/css/pico && git pull && ls scss
+        run: yarn install
 
       - name: build app
         uses: JonasKruckenberg/tauri-build@v1
