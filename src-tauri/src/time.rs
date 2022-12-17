@@ -47,10 +47,10 @@ pub fn get_msg(ymd: String, no_classes: bool, is_cur_date: bool) -> (String, Str
     if no_classes {
         if weekday >= 5 {
             // if its a weekend
-            msg.1 = "There's no classes today, go do something productive.".to_owned();
+            msg.1 = String::from("There's no classes today, go do something productive.");
         } else {
             // its a weekday and theres no classes
-            msg.1 = "It's a holiday! (or something broke and syncing didn't work)".to_owned();
+            msg.1 = String::from("It's a holiday! (or something broke and syncing didn't work)");
         }
     }
 
@@ -85,7 +85,7 @@ pub fn spawn_sync_thread() {
         thread::sleep(Duration::hours(3).to_std().unwrap());
         async {
             if impure::fetch_timetable().await.is_err() {
-                impure::log("Couldn't fetch timetable".to_owned())
+                impure::log(String::from("Couldn't fetch timetable"))
             };
         };
     });
