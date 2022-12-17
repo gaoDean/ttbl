@@ -16,7 +16,7 @@ fn datadir() -> std::path::PathBuf {
 }
 
 // data of each class, serde_json compatible
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Class {
     pub id: String,
     pub title: String,
@@ -40,12 +40,10 @@ pub struct Class {
     pub detailed_name: String,
 }
 
-pub type Timetable = HashMap<String, Vec<Class>>;
-
-// get the date of the class from the id
-fn get_class_date(class: Class) -> String {
-    class.id[7..].to_owned()
-}
+// // get the date of the class from the id
+// fn get_class_date(class: &Class) -> String {
+//     class.id[7..].to_owned()
+// }
 
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
 fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {
@@ -62,6 +60,14 @@ fn get_data(key: &str) -> String {
         Ok(s) => s,
         Err(_) => String::new(),
     };
+}
+
+fn format_class_values(class: &Class) -> Class {
+    let mut cl = class.clone();
+    if cl.room.is_empty() {
+        cl.room = String::from("N/A");
+    }
+    return cl;
 }
 
 // log msg to .storage.log
@@ -177,37 +183,26 @@ pub async fn fetch_timetable() -> Result<(), String> {
         }
     };
 
-    // data structures
-    let mut fetched_timetable: Vec<Class> =
-        serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
-    let mut cached_timetable: Timetable = match serde_json::from_str(get_data("timetable").as_str())
-    {
-        Ok(s) => s,
-        Err(_) => HashMap::new(),
-    };
-    let mut new_timetable: Timetable = HashMap::new();
+    let mut timetable: Vec<Class> =
+        match serde_json::from_str::<Vec<Class>>(get_data("timetable").as_str()) {
+            Ok(s) => s,
+            Err(_) => Vec::new(),
+        };
 
-    // put fetched into data structure
-    for val in &mut fetched_timetable {
-        if val.room.is_empty() {
-            val.room = String::from("N/A");
-        }
+    timetable.append(
+        &mut serde_json::from_value::<Vec<Class>>(res.data["data"]["classes"].clone())
+            .unwrap()
+            .into_iter()
+            .map(|class| format_class_values(&class))
+            .collect::<Vec<_>>(),
+    );
+    timetable.sort_by(|a, b| a.id.cmp(&b.id));
+    timetable.dedup_by(|a, b| a.id == b.id);
 
-        let date: &String = &get_class_date(val.clone());
-        // insert key=date value=classes_on_that_day to new_timetable
-        if !new_timetable.contains_key(date) {
-            new_timetable.insert(date.clone(), Vec::new());
-        }
-        new_timetable.get_mut(date).unwrap().push(val.clone());
-
-        // put the date to cached timetable, only the finished day will be inserted
-        // because all recurring inserts will be removed.
-        cached_timetable.insert(date.clone(), new_timetable.get(date).unwrap().clone());
-    }
     // set to storage
     match set_data(
         "timetable",
-        &serde_json::ser::to_string(&cached_timetable).unwrap(),
+        &serde_json::ser::to_string(&timetable).unwrap(),
     ) {
         Err(_) => Err(String::from("Couldn't write to storage")),
         _ => Ok(()),
@@ -216,7 +211,7 @@ pub async fn fetch_timetable() -> Result<(), String> {
 
 // public func get timetable in Timetable format
 #[tauri::command]
-pub fn get_timetable() -> Option<Timetable> {
+pub fn get_timetable() -> Option<Vec<Class>> {
     return match serde_json::from_str(get_data("timetable").as_str()) {
         Ok(s) => Some(s),
         Err(_) => None,

@@ -1,7 +1,5 @@
-use chrono::{Date, DateTime, Duration, Local, TimeZone};
-use std::{ops::Add, thread};
-
-use crate::impure;
+use chrono::{DateTime, Duration, Local, TimeZone};
+use std::ops::Add;
 
 const OVERFLOW_HOUR: i32 = 17;
 
@@ -11,13 +9,15 @@ const OVERFLOW_HOUR: i32 = 17;
 // }
 
 // from YYYYMMDD string to Date<Local>
-fn parse_ymd(ymd: String) -> Date<Local> {
+fn parse_ymd(ymd: String) -> DateTime<Local> {
     let ymd_sep: (i32, u32, u32) = (
         ymd[0..4].parse().unwrap(),
         ymd[4..6].parse().unwrap(),
         ymd[6..8].parse().unwrap(),
     );
-    Local.ymd(ymd_sep.0, ymd_sep.1, ymd_sep.2)
+    Local
+        .with_ymd_and_hms(ymd_sep.0, ymd_sep.1, ymd_sep.2, 0, 0, 0)
+        .unwrap()
 }
 
 pub fn later(iso: String) -> bool {
@@ -30,7 +30,7 @@ pub fn later(iso: String) -> bool {
 
 // get the display msg from YYYYMMDD and no_classes
 pub fn get_msg(ymd: String, no_classes: bool, is_cur_date: bool) -> (String, String) {
-    let date: Date<Local> = parse_ymd(ymd);
+    let date: DateTime<Local> = parse_ymd(ymd);
 
     // date human-readable and the weekday (1-7)
     let fmt: String = date.format("%A, %e %B").to_string();
@@ -60,7 +60,7 @@ pub fn get_msg(ymd: String, no_classes: bool, is_cur_date: bool) -> (String, Str
 // add duration in days (int) to YYYYMMDD
 #[tauri::command]
 pub fn ymd_add(ymd: String, dur_in_days: i64) -> String {
-    let date: Date<Local> = parse_ymd(ymd);
+    let date: DateTime<Local> = parse_ymd(ymd);
     let duration: Duration = Duration::days(dur_in_days);
 
     date.add(duration).format("%Y%m%d").to_string()
@@ -75,18 +75,4 @@ pub fn get_ymd() -> String {
     }
 
     date.format("%Y%m%d").to_string()
-}
-
-// spawn the fetch timetable thread
-#[tauri::command]
-pub fn spawn_sync_thread() {
-    #[allow(unused)] // async not used, but needs await
-    thread::spawn(move || loop {
-        thread::sleep(Duration::hours(3).to_std().unwrap());
-        async {
-            if impure::fetch_timetable().await.is_err() {
-                impure::log(String::from("Couldn't fetch timetable"))
-            };
-        };
-    });
 }

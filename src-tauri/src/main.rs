@@ -16,7 +16,6 @@ fn main() {
             // time::get_hour,
             time::get_ymd,
             time::ymd_add,
-            time::spawn_sync_thread,
             tray::add_timetable_to_tray,
             impure::fetch_token,
             impure::fetch_timetable,
