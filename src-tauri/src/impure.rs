@@ -30,6 +30,7 @@ pub struct Class {
     pub period_name: String,
     pub colour: String,
     pub room: String,
+    pub done: Option<bool>,
     #[serde(rename = "teacherName")]
     pub teacher_name: String,
     pub __typename: String,

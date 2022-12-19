@@ -13,7 +13,7 @@ fn main() {
     let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             // time::get_hour,
-            tray::add_timetable_to_tray,
+            tray::add_to_tray,
             impure::get_token,
             impure::set_data,
             impure::set_login_details,

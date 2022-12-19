@@ -1,9 +1,18 @@
 export const chunk = (arr, func) =>
-	Object.values(arr.reduce((acc, val) => {
+	Object.values(
+		arr.reduce((acc, val) => {
 			const key = func(val);
 			acc[key] = [...(acc[key] || []), val];
 			return acc;
-		}, {}));
+		}, {}),
+	);
+
+export const bucket = (arr, func) =>
+	arr.reduce((acc, val) => {
+		const key = func(val);
+		acc[key] = [...(acc[key] || []), val];
+		return acc;
+	}, {});
 
 export const find = (f) => (functor) => functor.find(f);
 export const map = (f) => (functor) => functor.map(f);

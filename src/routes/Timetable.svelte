@@ -1,7 +1,7 @@
 <script>
 import { onMount } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
-import { chunk } from '$lib/functional';
+import { map, bucket } from '$lib/functional';
 import { fetchTimetable } from '$lib/fetch';
 import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
@@ -9,24 +9,30 @@ dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
 
-let timetable;
-let timetableElement;
-let timetableBoundaryCenterPoint;
-let selectedClass;
-$: title = selectedClass ? getDisplayDate(selectedClass) : 'Loading...';
-
-const refreshSelectedClass = () => {
-	console.log('test');
-	selectedClass = timetableElement.getElementFromPoint(
-		timetableBoundarySize.x / 2,
-		timetableBoundarySize.y / 2,
+const getCurrentHoveredDay = (selected, timetable) => {
+	const elementsAtCenter = document.elementsFromPoint(
+		window.innerWidth / 2,
+		window.innerHeight / 2,
 	);
+	if (elementsAtCenter.length > 0) {
+		const dayElement = elementsAtCenter.find((x) =>
+			x.hasAttribute('data-timetablekey'),
+		);
+		const key = dayElement
+			? dayElement.getAttribute('data-timetablekey')
+			: undefined;
+		return key ? timetable[key][0] : selected;
+	}
 };
 
 const getDisplayDate = (selected) => {
-	const selectedDate = dayjs(selected.startTime);
+	const selectedDate = dayjs.isDayjs(selected) ? selected : dayjs(selected.startTime);
 	return selectedDate.format('dddd, MMMM Do');
 };
+
+let timetable;
+let selectedDay;
+$: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 
 onMount(async () => {
 	const res = await invoke('get_timetable');
@@ -34,21 +40,27 @@ onMount(async () => {
 		needsLogin = true;
 		return;
 	}
-	timetable = chunk(res, (subject) =>
-		dayjs(subject.startTime).format('YYYYMMDD'),
-	);
 
-	console.log(timetable);
+	const currentTime = dayjs();
+	timetable = bucket(
+		res.map((subject) => ({
+			...subject,
+			done: currentTime.isAfter(dayjs(subject.startTime)),
+		})),
+		(subject) => dayjs(subject.startTime).format('YYYYMMDD'),
+	); // splits array into 'buckets'
 
-	const boundary = timetableElement.getBoundingClientRect();
-	timetableBoundaryCenterPoint = {
-		x: (boundary.left + boundary.right) / 2,
-		y: (boundary.top + boundary.bottom) / 2,
-	};
-	selectedClass = document.elementFromPoint(
-		timetableBoundaryCenterPoint.x,
-		timetableBoundaryCenterPoint.y,
-	);
+	selectedDay = getCurrentHoveredDay(selectedDay, timetable);
+
+	window.addEventListener('scroll', () => {
+		selectedDay = getCurrentHoveredDay(selectedDay, timetable);
+	});
+
+	const classesToday = timetable[currentTime.format('YYYYMMDD')];
+	invoke('add_to_tray', {
+		items: classesToday || [],
+		date: getDisplayDate(currentTime),
+	});
 });
 
 // setInterval(updateUI, 5 * 60 * 1000); // every five mins
@@ -56,27 +68,26 @@ onMount(async () => {
 // const secondsRemaining = (60 - time.getSeconds()) * 1000;
 </script>
 
-<h3 style="line-height: 56px">{title}</h3>
-<div bind:this={timetableElement} style="padding-top: 20px">
+<h2 class="title">{title}</h2>
+<div class="title-background" />
+<div class="timetable-container" style="padding-top: 20px">
 	{#if timetable}
-		{#each timetable as day}
-			<div class="fullDayContainer">
-				<h4 class="dayText" >{getDisplayDate(day[0])}</h4>
-				<div class="classesContainer">
-				{#each day as item}
-						<article
-							class={Number(item.periodName) <= 0 ? 'disabled' : ''}
-							>
+		{#each Object.entries(timetable) as [key, day] (key)}
+			<div class="full-day" data-timetablekey={key}>
+				<h5 class="day-text">{getDisplayDate(day[0])}</h5>
+				<div class="classes-container">
+					{#each day as subject}
+						<article class={subject.done ? 'disabled' : ''}>
 							<hgroup>
-								<h4 style="display: inline">{item.description}</h4>
+								<h4 style="display: inline">{subject.description}</h4>
 								<small style="display: inline; float: right"
-									>Period {item.periodName}</small
+									>Period {subject.periodName}</small
 								>
-								<h6>{item.room}</h6>
-								<p>{item.teacherName}</p>
+								<h6>{subject.room}</h6>
+								<p>{subject.teacherName}</p>
 							</hgroup>
 						</article>
-				{/each}
+					{/each}
 				</div>
 			</div>
 		{/each}
@@ -95,41 +106,50 @@ hgroup {
 	margin: 0px !important;
 }
 
-.message {
-	text-align: center;
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
 .disabled {
 	opacity: 0.5;
 }
 
-.fullDayContainer {
+.fullDay {
 	display: flex;
 	flex-direction: row;
 
 	margin-bottom: 5rem;
 
-scroll-snap-type: x mandatory;
-scroll-snap-type: mandatory;
--ms-scroll-snap-type: mandatory;
--webkit-scroll-snap-type: mandatory;
--webkit-scroll-snap-destination: 0% 0%;
--webkit-overflow-scrolling: touch;
-
-
+	scroll-snap-type: x mandatory;
+	scroll-snap-type: mandatory;
+	-ms-scroll-snap-type: mandatory;
+	-webkit-scroll-snap-type: mandatory;
+	-webkit-scroll-snap-destination: 0% 0%;
+	-webkit-overflow-scrolling: touch;
 }
 
-.classesContainer {
+.classes-container {
 	width: 100%;
 }
 
-.dayText {
+.day-text {
 	margin-top: 2rem;
 	width: 18rem;
+}
+
+.timetable-container {
+	z-index: -5;
+}
+
+.title-background {
+	position: fixed;
+	width: 60%;
+	height: 70px;
+	z-index: 1;
+	background-color: #000000dd;
+	filter: blur(20px);
+}
+
+.title {
+	line-height: 100px;
+	width: 60%;
+	position: fixed;
+	z-index: 2;
 }
 </style>
