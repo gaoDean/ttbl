@@ -66,6 +66,15 @@ fn get_data(key: &str) -> String {
     };
 }
 
+#[tauri::command]
+pub fn get_token() -> Result<String, ()> {
+    let filepath_buf = datadir().join(String::from(".storage.token"));
+    match tauri::api::file::read_string(filepath_buf.as_path()) {
+        Ok(s) => Ok(s),
+        Err(_) => Err(()),
+    }
+}
+
 // log msg to .storage.log
 pub fn log(msg: String) {
     let buf: String = get_data("log");

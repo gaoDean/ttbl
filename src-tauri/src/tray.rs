@@ -2,7 +2,6 @@ use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 
 use crate::impure;
-use crate::time;
 
 // takes the date, gets the timetable for date and adds classes in timetable to tray
 #[tauri::command]

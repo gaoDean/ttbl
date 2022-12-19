@@ -15,16 +15,17 @@ const login = async () => {
 	loading = true;
 	loginMessage = 'Trying to log you in...';
 
-	console.log(studentId, password);
-	const tokenRes = await fetchToken(studentId, password);
-	if (Number.isInteger(tokenRes)) {
-		if (tokenRes === 401) {
-			loginMessage =
-				'Authorisation failed. Make sure you have typed in your username and password correctly.';
-		} else if (tokenRes === 500) {
-			loginMessage = 'Something went wrong, please try again.';
-		} else {
-			loginMessage = `Error: ${tokenRes}`;
+	let res = await fetchToken(studentId, password);
+	if (!res.ok) {
+		switch (res.status) {
+			case 401:
+				loginMessage =
+					'Authorisation failed. Make sure you have typed in your username and password correctly.';
+				break;
+			case 500:
+				loginMessage = 'Something went wrong, please try again.';
+			default:
+				loginMessage = `Error: ${res.status}`;
 		}
 
 		loading = false;
@@ -33,18 +34,16 @@ const login = async () => {
 
 	loginMessage = 'Login successful, fetching timetable...';
 
-	const timetableRes = await fetchTimetable(tokenRes, []);
+	res = await fetchTimetable(res.data, []);
 
-	if (Number.isInteger(timetableRes)) {
+	if (!res.ok) {
 		loading = false;
-		if (timetableRes === 403) {
-			loginMessage =
-				'Authorisation failed. Make sure you have typed in your username and password correctly.';
-		} else {
-			loginMessage = timetableRes;
+		switch (res.status) {
+			case 403:
+				loginMessage = 'Wrong token';
+			default:
+				loginMessage = `Error: ${res.status}`;
 		}
-
-		console.log(timetableRes);
 
 		loading = false;
 		return;

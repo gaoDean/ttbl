@@ -1,108 +1,90 @@
 <script>
+import { onMount } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
+import { chunk } from '$lib/functional';
+import { fetchTimetable } from '$lib/fetch';
+import dayjs from 'dayjs';
+import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
+dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
 
-let title = '';
-let message = '';
-let periodsPassed = -1;
 let timetable;
+let timetableElement;
+let timetableBoundaryCenterPoint;
+let selectedClass;
+$: title = selectedClass ? getDisplayDate(selectedClass) : 'Loading...';
 
-// YYYYMMDD in integer form
-let ymd;
-
-const filterTimetable = (x) => x;
-
-const isCurrentDate = async () => ymd === (await invoke('get_ymd'));
-
-const updateUI = async () => {
-	if (!ymd) {
-		ymd = await invoke('get_ymd');
-	}
-	let ret;
-	try {
-		ret = await invoke('add_timetable_to_tray', {
-			date: ymd,
-			dryRun: !(await isCurrentDate()),
-		});
-	} catch (err) {
-		// theres probably no token but try to fetch the timetable anyway
-		console.log(err);
-		try {
-			title = 'Give us a sec, something went wrong...';
-			await invoke('fetch_timetable');
-			ret = await invoke('add_timetable_to_tray', { date: ymd });
-		} catch (err2) {
-			// couldn't fetch the timetable probs cus theres no token, go to the login screen
-			console.log(err2);
-			needsLogin = true;
-			return;
-		}
-	}
-	timetable = filterTimetable(ret[0]);
-	title = ret[1];
-	message = ret[2];
-	periodsPassed = ret[3];
-	console.log(ret);
+const refreshSelectedClass = () => {
+	console.log('test');
+	selectedClass = timetableElement.getElementFromPoint(
+		timetableBoundarySize.x / 2,
+		timetableBoundarySize.y / 2,
+	);
 };
 
-const changeDate = async (offset) => {
-	ymd = await invoke('ymd_add', { ymd: ymd, durInDays: offset });
-	updateUI();
+const getDisplayDate = (selected) => {
+	const selectedDate = dayjs(selected.startTime);
+	return selectedDate.format('dddd, MMMM Do');
 };
 
-const setYmd = async () => (ymd = await invoke('get_ymd'));
+onMount(async () => {
+	const res = await invoke('get_timetable');
+	if (!res) {
+		needsLogin = true;
+		return;
+	}
+	timetable = chunk(res, (subject) =>
+		dayjs(subject.startTime).format('YYYYMMDD'),
+	);
 
-setYmd();
-updateUI();
-invoke('spawn_sync_thread');
+	console.log(timetable);
+
+	const boundary = timetableElement.getBoundingClientRect();
+	timetableBoundaryCenterPoint = {
+		x: (boundary.left + boundary.right) / 2,
+		y: (boundary.top + boundary.bottom) / 2,
+	};
+	selectedClass = document.elementFromPoint(
+		timetableBoundaryCenterPoint.x,
+		timetableBoundaryCenterPoint.y,
+	);
+});
 
 // setInterval(updateUI, 5 * 60 * 1000); // every five mins
 // const time = new Date();
 // const secondsRemaining = (60 - time.getSeconds()) * 1000;
 </script>
 
-<div class="grid" style="min-width: 160px; display: inline !important;">
-	<h3 style="display: inline; line-height: 56px">{title}</h3>
-	<div style="min-width: 120px; display: inline; float: right;">
-		{#if ymd}
-			<button
-				class="secondary"
-				style="display: inline-block; max-width: 56px;"
-				on:click={() => changeDate(-1)}>&larr;</button
-			>
-			<button
-				class="secondary"
-				style="display: inline-block; max-width: 56px;"
-				on:click={() => changeDate(1)}>&rarr;</button
-			>
-		{/if}
-	</div>
-</div>
-<div style="padding-top: 20px">
+<h3 style="line-height: 56px">{title}</h3>
+<div bind:this={timetableElement} style="padding-top: 20px">
 	{#if timetable}
-		{#each timetable as item}
-			<article
-				class={Number(item.periodName) <= periodsPassed ? 'disabled' : ''}
-			>
-				<hgroup>
-					<h4 style="display: inline">{item.description}</h4>
-					<small style="display: inline; float: right"
-						>Period {item.periodName}</small
-					>
-					<h6>{item.room}</h6>
-					<p>{item.teacherName}</p>
-				</hgroup>
-			</article>
+		{#each timetable as day}
+			<div class="fullDayContainer">
+			<h4 style="margin-top: 4rem">{getDisplayDate(day[0])}</h4>
+			{#each day as item}
+					<article
+						class={Number(item.periodName) <= 0 ? 'disabled' : ''}
+						>
+						<hgroup>
+							<h4 style="display: inline">{item.description}</h4>
+							<small style="display: inline; float: right"
+								>Period {item.periodName}</small
+							>
+							<h6>{item.room}</h6>
+							<p>{item.teacherName}</p>
+						</hgroup>
+					</article>
+			{/each}
+			</div>
+			<hr />
 		{/each}
 	{/if}
 </div>
-<p class="message">
-	{message}
-</p>
 
 <style>
 article {
+	flex: auto;
 	padding-top: calc(var(--spacing)) !important;
 	padding-bottom: calc(var(--spacing) / 2) !important;
 	margin-top: var(--spacing) !important;
@@ -124,5 +106,19 @@ hgroup {
 }
 .disabled {
 	opacity: 0.5;
+}
+
+.fullDayContainer {
+	display: flex;
+	align-items: stretch;
+width: 100%;
+overflow: auto;
+
+scroll-snap-type: x mandatory;
+scroll-snap-type: mandatory;
+-ms-scroll-snap-type: mandatory;
+-webkit-scroll-snap-type: mandatory;
+-webkit-scroll-snap-destination: 0% 0%;
+-webkit-overflow-scrolling: touch;
 }
 </style>
