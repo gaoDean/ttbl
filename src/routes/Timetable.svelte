@@ -61,34 +61,34 @@ onMount(async () => {
 	{#if timetable}
 		{#each timetable as day}
 			<div class="fullDayContainer">
-			<h4 style="margin-top: 4rem">{getDisplayDate(day[0])}</h4>
-			{#each day as item}
-					<article
-						class={Number(item.periodName) <= 0 ? 'disabled' : ''}
-						>
-						<hgroup>
-							<h4 style="display: inline">{item.description}</h4>
-							<small style="display: inline; float: right"
-								>Period {item.periodName}</small
+				<h4 class="dayText" >{getDisplayDate(day[0])}</h4>
+				<div class="classesContainer">
+				{#each day as item}
+						<article
+							class={Number(item.periodName) <= 0 ? 'disabled' : ''}
 							>
-							<h6>{item.room}</h6>
-							<p>{item.teacherName}</p>
-						</hgroup>
-					</article>
-			{/each}
+							<hgroup>
+								<h4 style="display: inline">{item.description}</h4>
+								<small style="display: inline; float: right"
+									>Period {item.periodName}</small
+								>
+								<h6>{item.room}</h6>
+								<p>{item.teacherName}</p>
+							</hgroup>
+						</article>
+				{/each}
+				</div>
 			</div>
-			<hr />
 		{/each}
 	{/if}
 </div>
 
 <style>
 article {
-	flex: auto;
-	padding-top: calc(var(--spacing)) !important;
-	padding-bottom: calc(var(--spacing) / 2) !important;
-	margin-top: var(--spacing) !important;
-	margin-bottom: var(--spacing) !important;
+	padding-top: calc(var(--spacing));
+	padding-bottom: 1px;
+	margin-top: var(--spacing);
+	margin-bottom: calc(var(--spacing) / 2);
 }
 
 hgroup {
@@ -110,9 +110,9 @@ hgroup {
 
 .fullDayContainer {
 	display: flex;
-	align-items: stretch;
-width: 100%;
-overflow: auto;
+	flex-direction: row;
+
+	margin-bottom: 5rem;
 
 scroll-snap-type: x mandatory;
 scroll-snap-type: mandatory;
@@ -120,5 +120,16 @@ scroll-snap-type: mandatory;
 -webkit-scroll-snap-type: mandatory;
 -webkit-scroll-snap-destination: 0% 0%;
 -webkit-overflow-scrolling: touch;
+
+
+}
+
+.classesContainer {
+	width: 100%;
+}
+
+.dayText {
+	margin-top: 2rem;
+	width: 18rem;
 }
 </style>
