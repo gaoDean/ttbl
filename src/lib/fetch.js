@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import { dedup, sort, filter, map, concat, pipe } from './functional';
 import dayjs from 'dayjs';
+import { dedup, sort, map, concat, pipe } from './functional';
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
 const serverError = {
@@ -19,7 +19,7 @@ export const fetchToken = async (studentId, password) => {
 	const res = await fetch(url);
 	if (!res.ok) return res;
 
-	const token = (await res.json())['token'];
+	const {token} = await res.json();
 	if (!token) return serverError;
 
 	invoke('set_data', {
@@ -28,14 +28,14 @@ export const fetchToken = async (studentId, password) => {
 	});
 	invoke('set_login_details', {
 		id: studentId,
-		password: password,
+		password,
 	});
 
 	return { ok: true, status: 200, data: token };
 };
 
 export const fetchTimetable = async (token, oldTimetable) => {
-	if (!token || !isNaN(token)) return serverError;
+	if (!token || Number.isInteger(token)) return serverError;
 
 	const bias = -30; // TODO: remove this after the holidays
 	const backward = 15 + bias;
@@ -43,24 +43,22 @@ export const fetchTimetable = async (token, oldTimetable) => {
 
 	const url = `${hostUrl}/timetable/${token}?dayMinus=${backward}&dayPlus=${forward}&shorten=true`;
 
-	console.log(url);
-
 	const res = await fetch(url);
 
 	if (!res.ok) {
 		if (oldTimetable === undefined) {
 			return res; // first time logging in
-		} else {
-			return fetchTimetable(fetchToken(invoke('get_login_details')), undefined);
 		}
+			return fetchTimetable(fetchToken(invoke('get_login_details')), undefined);
+
 	}
 
-	const timetable = (await res.json())['data']['classes'];
+	const timetable = (await res.json()).data.classes;
 	if (!timetable) return serverError;
 
-	const merged_timetable = pipe(
+	const mergedTimetable = pipe(
 		timetable,
-		map((x) => format_values(x)),
+		map((x) => formatValues(x)),
 		concat(oldTimetable),
 		sort((a, b) => !dayjs(a.startTime).isBefore(dayjs(b.startTime))),
 		dedup((a, b) => a.id !== b.id),
@@ -68,7 +66,7 @@ export const fetchTimetable = async (token, oldTimetable) => {
 
 	invoke('set_data', {
 		key: 'timetable',
-		data: JSON.stringify(merged_timetable),
+		data: JSON.stringify(mergedTimetable),
 	});
 
 	return res;

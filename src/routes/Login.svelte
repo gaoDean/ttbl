@@ -1,11 +1,11 @@
 <script>
-import { invoke } from '@tauri-apps/api/tauri';
+/* import { invoke } from '@tauri-apps/api/tauri'; */
 import { appWindow } from '@tauri-apps/api/window';
 import { fetchToken, fetchTimetable } from '$lib/fetch';
 
 export let needsLogin;
 
-let studentId = undefined;
+let studentId;
 let password = '';
 let loading = false;
 let loginMessage =
@@ -24,6 +24,7 @@ const login = async () => {
 				break;
 			case 500:
 				loginMessage = 'Something went wrong, please try again.';
+				break;
 			default:
 				loginMessage = `Error: ${res.status}`;
 		}
@@ -41,6 +42,7 @@ const login = async () => {
 		switch (res.status) {
 			case 403:
 				loginMessage = 'Wrong token';
+				break;
 			default:
 				loginMessage = `Error: ${res.status}`;
 		}
@@ -59,7 +61,7 @@ appWindow.setFocus();
 </script>
 
 <hgroup style="padding-bottom: 30px">
-	<h1>Welcome to <a href="#">ttbl</a>!</h1>
+	<h1>Welcome to <a href="/">ttbl</a>!</h1>
 	<h3>By Dean Gao</h3>
 </hgroup>
 <div class="grid">
