@@ -15,9 +15,10 @@ fn main() {
             // time::get_hour,
             tray::add_to_tray,
             impure::get_token,
-            impure::set_data,
-            impure::set_login_details,
             impure::get_timetable,
+            impure::get_login_details,
+            impure::set_login_details,
+            impure::set_data,
         ])
         .system_tray(tray)
         .on_system_tray_event(tray::handle_tray_event)

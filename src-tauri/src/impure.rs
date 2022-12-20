@@ -1,10 +1,8 @@
 use chrono::Local; // time
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fs, io::Write};
+use std::{fs, io::Write};
 use tauri::api::notification::Notification;
-use tauri::http::status::StatusCode;
 
-const HOST: &str = "https://caulfieldsync.vercel.app/api";
 // get the data dir cus it doesn't allow it to be const
 fn datadir() -> std::path::PathBuf {
     let dir = tauri::api::path::data_dir().unwrap();
@@ -94,20 +92,6 @@ pub fn create_notif(msg: String, app_handle: tauri::AppHandle) {
         .show()
         .unwrap();
 }
-// // use stored login details to refetch token
-// // returns true if changed, else false if token unchanged
-// async fn refresh_token() -> bool {
-//     // tuple: (student_id, password)
-//     let details: (i32, String) = get_login_details();
-//     let old_token: String = get_data("token");
-//
-//     if fetch_token(details.0, details.1).await.is_ok() {
-//         let new_token: String = get_data("token");
-//         return old_token != new_token;
-//     }
-//
-//     false
-// }
 
 // public func get timetable in Timetable format
 #[tauri::command]
@@ -128,7 +112,8 @@ pub fn set_login_details(id: i32, password: String) -> Result<(), String> {
     Ok(())
 }
 
-fn get_login_details() -> (i32, String) {
+#[tauri::command]
+pub fn get_login_details() -> Result<(i32, String), ()> {
     (
         get_data("student_id").parse().unwrap(),
         get_data("password"),
