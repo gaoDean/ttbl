@@ -8,30 +8,9 @@ import 'sticksy';
 import { bucket } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 
-let parsedTimetable;
-let nextClass;
-let title;
-
 dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
-
-const getCurrentHoveredDay = (selected, timetable) => {
-	const elementsAtCenter = document.elementsFromPoint(
-		window.innerWidth / 2,
-		window.innerHeight / 2,
-	);
-	if (elementsAtCenter.length > 0) {
-		const dayElement = elementsAtCenter.find((x) =>
-			x.hasAttribute('data-timetablekey'),
-		);
-		const key = dayElement
-			? dayElement.getAttribute('data-timetablekey')
-			: undefined;
-		return key ? timetable[key][0] : selected;
-	}
-	return selected;
-};
 
 const getDisplayDate = (selected) => {
 	const selectedDate = dayjs.isDayjs(selected)
@@ -40,10 +19,11 @@ const getDisplayDate = (selected) => {
 	return selectedDate.format('dddd, MMMM Do');
 };
 
+let parsedTimetable;
+let nextClass;
 let timetable;
-let selectedDay;
 let timetableRes;
-/* let currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
+/* const currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
 let currentTime = dayjs();
 
 const reloadData = () => {
@@ -51,7 +31,6 @@ const reloadData = () => {
 	currentTime = dayjs();
 };
 
-$: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 $: parsedTimetable = timetableRes
 	? timetableRes.map((subject) => ({
 			...subject,
@@ -81,11 +60,6 @@ onMount(async () => {
 		needsLogin = true;
 		return;
 	}
-
-	selectedDay = getCurrentHoveredDay(selectedDay, timetable);
-	window.addEventListener('scroll', () => {
-		selectedDay = getCurrentHoveredDay(selectedDay, timetable);
-	});
 
 	window.setTimeout(() => {
 		const closestClassToCurrentTime = parsedTimetable.reduce(
