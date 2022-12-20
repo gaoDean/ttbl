@@ -4,7 +4,8 @@ import { appWindow } from '@tauri-apps/api/window';
 
 <div style="height: 30px">
 	<div data-tauri-drag-region class="titlebar">
-		<div class="titlebar-button" on:click={() => appWindow.hide()}>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div class="titlebar-button" on:click={appWindow.hide}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -20,10 +21,11 @@ import { appWindow } from '@tauri-apps/api/window';
 				/>
 			</svg>
 		</div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			class="titlebar-button"
 			style="margin-right: 8px"
-			on:click={() => appWindow.close()}
+			on:click={appWindow.close}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
