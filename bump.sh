@@ -34,6 +34,7 @@ esac
 sed -E -i "s/(.*)\"version\".*/\1\"version\": \"$ver\",/" package.json
 sed -i "s/^version.*/version = \"$ver\"/" src-tauri/Cargo.toml
 sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"$ver\"/" src-tauri/tauri.conf.json
+perl -i -p0e "s/name = \"app\"\nversion = \".*\"/name = \"app\"\nversion = \"$ver\"/" Cargo.lock
 git add package.json
 git add Cargo.lock
 git add src-tauri/Cargo.toml
