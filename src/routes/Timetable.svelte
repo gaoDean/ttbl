@@ -39,7 +39,9 @@ const getDisplayDate = (selected) => {
 
 let fetchListenerUnsubscribe;
 let timetable;
+let closestClassToCurrentTime;
 let selectedDay;
+
 $: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 
 onMount(async () => {
@@ -50,6 +52,29 @@ onMount(async () => {
 	}
 
 	const currentTime = dayjs();
+
+	closestClassToCurrentTime = res.reduce(
+		(closest, subject) => {
+			const difference = currentTime.diff(subject.startTime);
+			if (currentTime.diff(subject.startTime) < closest.difference) {
+				return {
+					difference,
+					subject,
+				};
+			}
+			return closest;
+		},
+		{ difference: Infinity },
+	).subject;
+
+	window.setTimeout(() => {
+		document
+			.querySelector(
+				`article[data-startTime="${closestClassToCurrentTime.startTime}"]`,
+			)
+			.scrollIntoView();
+	}, 0); // needs small delay for dom to update
+
 	timetable = bucket(
 		res.map((subject) => ({
 			...subject,
@@ -89,10 +114,10 @@ onMount(async () => {
 	});
 });
 
-onDestroy(() => {
-	// with HMR, it resubscribes every time the window loads
-	fetchListenerUnsubscribe();
-});
+/* onDestroy(() => { */
+/* 	// with HMR, it resubscribes every time the window loads */
+/* 	fetchListenerUnsubscribe(); */
+/* }); */
 
 // setInterval(updateUI, 5 * 60 * 1000); // every five mins
 // const time = new Date();
@@ -108,7 +133,10 @@ onDestroy(() => {
 				<h5 class="day-text">{getDisplayDate(day[0])}</h5>
 				<div class="classes-container">
 					{#each day as subject}
-						<article class={subject.done ? 'disabled' : ''}>
+						<article
+							class={subject.done ? 'disabled' : ''}
+							data-starttime={subject.startTime}
+						>
 							<hgroup>
 								<h4 style="display: inline">{subject.description}</h4>
 								<small style="display: inline; float: right"

@@ -19,7 +19,7 @@ export const fetchToken = async (studentId, password) => {
 	const res = await fetch(url);
 	if (!res.ok) return res;
 
-	const {token} = await res.json();
+	const { token } = await res.json();
 	if (!token) return serverError;
 
 	invoke('set_data', {
@@ -49,8 +49,7 @@ export const fetchTimetable = async (token, oldTimetable) => {
 		if (oldTimetable === undefined) {
 			return res; // first time logging in
 		}
-			return fetchTimetable(fetchToken(invoke('get_login_details')), undefined);
-
+		return fetchTimetable(fetchToken(invoke('get_login_details')), undefined);
 	}
 
 	const timetable = (await res.json()).data.classes;
