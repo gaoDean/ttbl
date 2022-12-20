@@ -16,23 +16,6 @@ dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
 
-const getCurrentHoveredDay = (selected, timetable) => {
-	const elementsAtCenter = document.elementsFromPoint(
-		window.innerWidth / 2,
-		window.innerHeight / 2,
-	);
-	if (elementsAtCenter.length > 0) {
-		const dayElement = elementsAtCenter.find((x) =>
-			x.hasAttribute('data-timetablekey'),
-		);
-		const key = dayElement
-			? dayElement.getAttribute('data-timetablekey')
-			: undefined;
-		return key ? timetable[key][0] : selected;
-	}
-	return selected;
-};
-
 const getDisplayDate = (selected) => {
 	const selectedDate = dayjs.isDayjs(selected)
 		? selected
@@ -43,15 +26,14 @@ const getDisplayDate = (selected) => {
 let timetable;
 let selectedDay;
 let timetableRes;
-/* let currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
-let currentTime = dayjs();
+let currentTime = dayjs('2022-09-13T23:35:00.000Z');
+/* let currentTime = dayjs(); */
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
-	currentTime = dayjs();
+	/* currentTime = dayjs(); */
 };
 
-$: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 $: parsedTimetable = timetableRes
 	? timetableRes.map((subject) => ({
 			...subject,
@@ -81,11 +63,6 @@ onMount(async () => {
 		needsLogin = true;
 		return;
 	}
-
-	selectedDay = getCurrentHoveredDay(selectedDay, timetable);
-	window.addEventListener('scroll', () => {
-		selectedDay = getCurrentHoveredDay(selectedDay, timetable);
-	});
 
 	window.setTimeout(() => {
 		const closestClassToCurrentTime = parsedTimetable.reduce(
