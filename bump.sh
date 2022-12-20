@@ -31,7 +31,7 @@ case "$response" in
 		;;
 esac
 
-sed -i "s/  \"version\".*/  \"version\": \"$ver\",/" package.json
+sed -E -i "s/(.*)\"version\".*/\1\"version\": \"$ver\",/" package.json
 sed -i "s/^version.*/version = \"$ver\"/" src-tauri/Cargo.toml
 sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"$ver\"/" src-tauri/tauri.conf.json
 git add package.json
