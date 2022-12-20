@@ -40,11 +40,14 @@ jobs:
       - name: get rust cache
         uses: Swatinem/rust-cache@v2
 
+      - name: setup
+        run: mkdir build # so clippy doesn't complain
+
       - name: run clippy check
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --manifest-path=Cargo.toml --all-targets --all-features
+          args: --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
           name: clippy
 
       - name: run cargo fmt
