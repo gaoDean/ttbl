@@ -4,6 +4,7 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
 import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
+import 'sticksy';
 import { bucket } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 
@@ -42,7 +43,7 @@ const getDisplayDate = (selected) => {
 let timetable;
 let selectedDay;
 let timetableRes;
-let currentTime = dayjs();
+let currentTime = dayjs("2022-09-13T23:35:00.000Z");
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
@@ -54,6 +55,7 @@ $: parsedTimetable = timetableRes
 	? timetableRes.map((subject) => ({
 			...subject,
 			done: currentTime.isAfter(dayjs(subject.startTime)),
+			room: subject.room || 'N/A',
 	  }))
 	: undefined;
 $: timetable = parsedTimetable
@@ -69,8 +71,8 @@ $: invoke('add_to_tray', {
 		(timetable ? timetable[currentTime.format('YYYYMMDD')] : undefined) || [],
 	date: getDisplayDate(currentTime),
 });
-$: if (nextClass)
-	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime)));
+/* $: if (nextClass) */
+/* 	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime))); */
 
 onMount(async () => {
 	timetableRes = await invoke('get_timetable');
@@ -87,8 +89,8 @@ onMount(async () => {
 	window.setTimeout(() => {
 		const closestClassToCurrentTime = parsedTimetable.reduce(
 			(closest, subject) => {
-				const difference = currentTime.diff(subject.startTime);
-				if (currentTime.diff(subject.startTime) < closest.difference) {
+				const difference = Math.abs(currentTime.diff(subject.startTime));
+				if (difference < closest.difference) {
 					return {
 						difference,
 						subject,
@@ -99,12 +101,16 @@ onMount(async () => {
 			{ difference: Infinity },
 		).subject;
 
-		document
+		const elem = document
 			.querySelector(
 				`article[data-startTime="${closestClassToCurrentTime.startTime}"]`,
 			)
-			.scrollIntoView();
+			.getBoundingClientRect();
+
+		window.scroll(elem.left, elem.top - window.innerHeight / 2);
+		Sticksy.initializeAll('.date')
 	}, 0); // needs small delay for dom to update
+
 });
 
 listen('fetch-timetable', async () => {
@@ -125,19 +131,15 @@ listen('fetch-timetable', async () => {
 	}
 	invoke('create_notification', { msg: notif });
 });
-
-// setInterval(updateUI, 5 * 60 * 1000); // every five mins
-// const time = new Date();
-// const secondsRemaining = (60 - time.getSeconds()) * 1000;
 </script>
 
-<h2 class="title">{title}</h2>
-<div class="title-background" />
 <div class="timetable-container" style="padding-top: 20px">
 	{#if timetable}
 		{#each Object.entries(timetable) as [key, day] (key)}
 			<div class="full-day" data-timetablekey={key}>
-				<h5 class="day-text">{getDisplayDate(day[0])}</h5>
+				<div>
+					<h4 class="date">{getDisplayDate(day[0])}</h4>
+				</div>
 				<div class="classes-container">
 					{#each day as subject}
 						<article
@@ -194,28 +196,12 @@ hgroup {
 	width: 100%;
 }
 
-.day-text {
+.date {
 	margin-top: 2rem;
-	width: 18rem;
+	width: 90%;
 }
 
 .timetable-container {
 	z-index: -5;
-}
-
-.title-background {
-	position: fixed;
-	width: 60%;
-	height: 80px;
-	z-index: 1;
-	background-color: #000000ff;
-	filter: blur(40px);
-}
-
-.title {
-	line-height: 100px;
-	width: 60%;
-	position: fixed;
-	z-index: 2;
 }
 </style>

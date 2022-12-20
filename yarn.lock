@@ -2853,6 +2853,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sticksy@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "sticksy@npm:0.2.0"
+  checksum: 556575b25dbf453e6860604674d854f42082a5b3f572477dca9b92ef24f0066580498fc40e223939b29fb64009fcb78b6c9fa7068bb9a8aab0bf7da7b413c9cf
+  languageName: node
+  linkType: hard
+
 "streamsearch@npm:^1.1.0":
   version: 1.1.0
   resolution: "streamsearch@npm:1.1.0"
@@ -3089,6 +3096,7 @@ __metadata:
     prettier: ^2.6.2
     prettier-plugin-svelte: ^2.7.0
     sass: ^1.56.2
+    sticksy: ^0.2.0
     svelte: ^3.44.0
     svelte-preprocess: ^5.0.0
     vite: ^4.0.1
