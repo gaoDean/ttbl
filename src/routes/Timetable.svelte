@@ -37,87 +37,92 @@ const getDisplayDate = (selected) => {
 	return selectedDate.format('dddd, MMMM Do');
 };
 
+const reloadData = () => {
+	// sets off chain reaction of the redefining of reactive statements
+	currentTime = dayjs();
+}
+
 let fetchListenerUnsubscribe;
 let timetable;
-let closestClassToCurrentTime;
 let selectedDay;
+let timetableRes;
+let currentTime = dayjs();
 
 $: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
+$: parsedTimetable = timetableRes
+	? timetableRes.map((subject) => ({
+			...subject,
+			done: currentTime.isAfter(dayjs(subject.startTime)),
+	  }))
+	: undefined;
+$: timetable = parsedTimetable
+	? bucket(parsedTimetable, (subject) => dayjs(subject.startTime).format('YYYYMMDD'))
+	: undefined;
+$: classesToday = timetable
+	? timetable[currentTime.format('YYYYMMDD')]
+	: undefined;
+$: nextClass = parsedTimetable ? parsedTimetable.find((x) => !x.done) : undefined;
+$: if (classesToday)
+	invoke('add_to_tray', {
+		items: classesToday || [],
+		date: getDisplayDate(currentTime),
+	});
+$: if (nextClass)
+	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime)));
 
 onMount(async () => {
-	const res = await invoke('get_timetable');
-	if (!res) {
+	timetableRes = await invoke('get_timetable');
+	if (!timetableRes) {
 		needsLogin = true;
 		return;
 	}
 
-	const currentTime = dayjs();
-
-	closestClassToCurrentTime = res.reduce(
-		(closest, subject) => {
-			const difference = currentTime.diff(subject.startTime);
-			if (currentTime.diff(subject.startTime) < closest.difference) {
-				return {
-					difference,
-					subject,
-				};
-			}
-			return closest;
-		},
-		{ difference: Infinity },
-	).subject;
+	selectedDay = getCurrentHoveredDay(selectedDay, timetable);
+	window.addEventListener('scroll', () => {
+		selectedDay = getCurrentHoveredDay(selectedDay, timetable);
+	});
 
 	window.setTimeout(() => {
+		const closestClassToCurrentTime = parsedTimetable.reduce(
+			(closest, subject) => {
+				const difference = currentTime.diff(subject.startTime);
+				if (currentTime.diff(subject.startTime) < closest.difference) {
+					return {
+						difference,
+						subject,
+					};
+				}
+				return closest;
+			},
+			{ difference: Infinity },
+			).subject;
+
 		document
 			.querySelector(
 				`article[data-startTime="${closestClassToCurrentTime.startTime}"]`,
 			)
 			.scrollIntoView();
 	}, 0); // needs small delay for dom to update
-
-	timetable = bucket(
-		res.map((subject) => ({
-			...subject,
-			done: currentTime.isAfter(dayjs(subject.startTime)),
-		})),
-		(subject) => dayjs(subject.startTime).format('YYYYMMDD'),
-	); // splits array into 'buckets'
-
-	selectedDay = getCurrentHoveredDay(selectedDay, timetable);
-
-	window.addEventListener('scroll', () => {
-		selectedDay = getCurrentHoveredDay(selectedDay, timetable);
-	});
-
-	const classesToday = timetable[currentTime.format('YYYYMMDD')];
-	invoke('add_to_tray', {
-		items: classesToday || [],
-		date: getDisplayDate(currentTime),
-	});
-
-	fetchListenerUnsubscribe = await listen('fetch-timetable', async () => {
-		let notif;
-		try {
-			const status = await fetchTimetable(
-				await invoke('get_token'),
-				await invoke('get_timetable'),
-			);
-			if (status.ok) {
-				notif = 'Sync successful';
-			} else {
-				notif = `Sync unsuccessful, error ${status.status}`;
-			}
-		} catch (err) {
-			notif = `Sync unsuccessful, error ${err}`;
-		}
-		invoke('create_notification', { msg: notif });
-	});
 });
 
-/* onDestroy(() => { */
-/* 	// with HMR, it resubscribes every time the window loads */
-/* 	fetchListenerUnsubscribe(); */
-/* }); */
+listen('fetch-timetable', async () => {
+	let notif;
+	try {
+		const status = await fetchTimetable(
+			await invoke('get_token'),
+			await invoke('get_timetable'),
+		);
+		if (status.ok) {
+			notif = 'Sync successful';
+			window.location.reload(true);
+		} else {
+			notif = `Sync unsuccessful, error ${status.status}`;
+		}
+	} catch (err) {
+		notif = `Sync unsuccessful, error ${err}`;
+	}
+	invoke('create_notification', { msg: notif });
+});
 
 // setInterval(updateUI, 5 * 60 * 1000); // every five mins
 // const time = new Date();
@@ -199,10 +204,10 @@ hgroup {
 .title-background {
 	position: fixed;
 	width: 60%;
-	height: 70px;
+	height: 80px;
 	z-index: 1;
-	background-color: #000000dd;
-	filter: blur(20px);
+	background-color: #000000ff;
+	filter: blur(40px);
 }
 
 .title {
