@@ -9,8 +9,6 @@ import { fetchTimetable } from '$lib/fetch.js';
 
 let parsedTimetable;
 let nextClass;
-let classesToday;
-
 let title;
 
 dayjs.extend(dayjsAdvancedFormat);
@@ -51,7 +49,6 @@ const reloadData = () => {
 	currentTime = dayjs();
 };
 
-
 $: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 $: parsedTimetable = timetableRes
 	? timetableRes.map((subject) => ({
@@ -64,17 +61,14 @@ $: timetable = parsedTimetable
 			dayjs(subject.startTime).format('YYYYMMDD'),
 	  )
 	: undefined;
-$: classesToday = timetable
-	? timetable[currentTime.format('YYYYMMDD')]
-	: undefined;
 $: nextClass = parsedTimetable
 	? parsedTimetable.find((x) => !x.done)
 	: undefined;
-$: if (classesToday)
-	invoke('add_to_tray', {
-		items: classesToday || [],
-		date: getDisplayDate(currentTime),
-	});
+$: invoke('add_to_tray', {
+	items:
+		(timetable ? timetable[currentTime.format('YYYYMMDD')] : undefined) || [],
+	date: getDisplayDate(currentTime),
+});
 $: if (nextClass)
 	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime)));
 
