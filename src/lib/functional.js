@@ -16,9 +16,8 @@ export const bucket = (arr, func) =>
 
 // de deplicate sorted array (`f` returns true if they are different)
 export const dedup = (f) => (arr) =>
-	arr.reduce((acc, val, idx, arr) => {
-		if (idx + 1 == arr.length || f(val, arr[idx + 1])) {
-			console.log(arr[idx]);
+	arr.reduce((acc, val, idx) => {
+		if (idx + 1 === arr.length || f(val, arr[idx + 1])) {
 			acc.push(arr[idx] || {});
 		}
 		return acc;

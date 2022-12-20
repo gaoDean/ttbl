@@ -44,3 +44,6 @@ jobs:
 
       - name: run eslint
         run: yarn lint
+
+      - name: run prettier
+        run: yarn format

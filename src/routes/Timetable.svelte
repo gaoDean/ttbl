@@ -2,10 +2,13 @@
 import { onMount, onDestroy } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
-import { bucket } from '$lib/functional';
-import { fetchTimetable } from '$lib/fetch';
 import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
+import { bucket } from '$lib/functional.js';
+import { fetchTimetable } from '$lib/fetch.js';
+
+let title;
+
 dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
@@ -24,6 +27,7 @@ const getCurrentHoveredDay = (selected, timetable) => {
 			: undefined;
 		return key ? timetable[key][0] : selected;
 	}
+	return selected;
 };
 
 const getDisplayDate = (selected) => {
@@ -66,23 +70,22 @@ onMount(async () => {
 		date: getDisplayDate(currentTime),
 	});
 
-	fetchListenerUnsubscribe = await listen('fetch-timetable', async (event) => {
+	fetchListenerUnsubscribe = await listen('fetch-timetable', async () => {
+		let notif;
 		try {
-			const res = await fetchTimetable(
+			const status = await fetchTimetable(
 				await invoke('get_token'),
 				await invoke('get_timetable'),
 			);
-			if (res.ok) {
-				invoke('create_notification', { msg: 'Sync successful' });
+			if (status.ok) {
+				notif = 'Sync successful';
 			} else {
-				invoke('create_notification', {
-					msg: 'Sync unsuccessful, error ' + res.status,
-				});
+				notif = `Sync unsuccessful, error ${status.status}`;
 			}
 		} catch (err) {
-			console.log(err);
-			invoke('create_notification', { msg: 'Sync unsuccessful, error ' + err });
+			notif = `Sync unsuccessful, error ${err}`;
 		}
+		invoke('create_notification', { msg: notif });
 	});
 });
 
