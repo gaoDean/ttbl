@@ -35,8 +35,8 @@ sed -E -i "s/(.*)\"version\".*/\1\"version\": \"$ver\",/" package.json
 sed -i "s/^version.*/version = \"$ver\"/" src-tauri/Cargo.toml
 sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"$ver\"/" src-tauri/tauri.conf.json
 git add package.json
+git add Cargo.lock
 git add src-tauri/Cargo.toml
 git add src-tauri/tauri.conf.json
-git add Cargo.lock
 git commit -m "chore: version bump to v${ver}"
 git tag -a "v${ver}" -m "v${ver}" HEAD
