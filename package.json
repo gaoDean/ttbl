@@ -28,6 +28,7 @@
 	"dependencies": {
 		"@tauri-apps/api": "^1.2.0",
 		"dayjs": "^1.11.7",
+		"sticksy": "^0.2.0",
 		"svelte": "^3.44.0"
 	}
 }
