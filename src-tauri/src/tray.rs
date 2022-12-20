@@ -1,6 +1,11 @@
 use tauri::Manager;
-use std::collections::HashMap;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+
+// the payload type must implement `Serialize` and `Clone`.
+#[derive(Clone, serde::Serialize)]
+struct EventPayload {
+  message: String,
+}
 
 use crate::impure;
 
@@ -82,20 +87,14 @@ pub fn default_tray() -> SystemTray {
     SystemTray::new().with_menu(menu)
 }
 
-pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: tauri::SystemTrayEvent) {
+pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: SystemTrayEvent) {
     if let SystemTrayEvent::MenuItemClick { id, .. } = evt {
         match id.as_str() {
             "quit" => {
                 app_handle.exit(0);
             }
-            #[allow(unused)] // async not used, but needs await
             "sync" => {
-                app_handle.exit(0);
-                // async {
-                //     if impure::fetch_timetable().await.is_ok() {
-                //         impure::create_notif(String::from("Timetable fetched"), app_handle.clone());
-                //     }
-                // };
+                app_handle.emit_all("fetch-timetable", "").unwrap();
             }
             "more" => {
                 let window = (*app_handle).get_window("main").unwrap();

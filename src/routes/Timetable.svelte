@@ -1,7 +1,8 @@
 <script>
-import { onMount } from 'svelte';
+import { onMount, onDestroy } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
-import { map, bucket } from '$lib/functional';
+import { listen } from '@tauri-apps/api/event';
+import { bucket } from '$lib/functional';
 import { fetchTimetable } from '$lib/fetch';
 import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
@@ -26,10 +27,13 @@ const getCurrentHoveredDay = (selected, timetable) => {
 };
 
 const getDisplayDate = (selected) => {
-	const selectedDate = dayjs.isDayjs(selected) ? selected : dayjs(selected.startTime);
+	const selectedDate = dayjs.isDayjs(selected)
+		? selected
+		: dayjs(selected.startTime);
 	return selectedDate.format('dddd, MMMM Do');
 };
 
+let fetchListenerUnsubscribe;
 let timetable;
 let selectedDay;
 $: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
@@ -61,6 +65,25 @@ onMount(async () => {
 		items: classesToday || [],
 		date: getDisplayDate(currentTime),
 	});
+
+	fetchListenerUnsubscribe = await listen('fetch-timetable', async (event) => {
+		try {
+			const res = await fetchTimetable(await invoke('get_token'), await invoke('get_timetable'));
+			if (res.ok) {
+				invoke('create_notification', { msg: "Sync successful" });
+			} else {
+				invoke('create_notification', { msg: "Sync unsuccessful, error " + res.status });
+			}
+		} catch(err) {
+			console.log(err);
+			invoke('create_notification', { msg: "Sync unsuccessful, error " + err });
+		}
+	});
+});
+
+onDestroy(() => {
+	// with HMR, it resubscribes every time the window loads
+	fetchListenerUnsubscribe();
 });
 
 // setInterval(updateUI, 5 * 60 * 1000); // every five mins
@@ -110,7 +133,7 @@ hgroup {
 	opacity: 0.5;
 }
 
-.fullDay {
+.full-day {
 	display: flex;
 	flex-direction: row;
 

@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import { sort, filter, map, concat, pipe } from './functional';
+import { dedup, sort, filter, map, concat, pipe } from './functional';
+import dayjs from 'dayjs';
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
 const serverError = {
@@ -61,8 +62,8 @@ export const fetchTimetable = async (token, oldTimetable) => {
 		timetable,
 		map((x) => format_values(x)),
 		concat(oldTimetable),
-		filter((x, index) => arr.indexOf(x) === index),
-		sort((a, b) => dayjs(a.startTime).isSameOrAfter(dayjs(b.startTime))),
+		sort((a, b) => !dayjs(a.startTime).isBefore(dayjs(b.startTime))),
+		dedup((a, b) => a.id !== b.id),
 	);
 
 	invoke('set_data', {

@@ -75,6 +75,7 @@ pub fn get_token() -> Result<String, ()> {
 }
 
 // log msg to .storage.log
+#[tauri::command]
 pub fn log(msg: String) {
     let buf: String = get_data("log");
     set_data(
@@ -85,7 +86,8 @@ pub fn log(msg: String) {
 }
 
 // send a toast notif
-pub fn create_notif(msg: String, app_handle: tauri::AppHandle) {
+#[tauri::command]
+pub fn create_notification(msg: String, app_handle: tauri::AppHandle) {
     Notification::new(app_handle.config().tauri.bundle.identifier.clone())
         .title("ttbl")
         .body(msg.as_str())
@@ -114,8 +116,8 @@ pub fn set_login_details(id: i32, password: String) -> Result<(), String> {
 
 #[tauri::command]
 pub fn get_login_details() -> Result<(i32, String), ()> {
-    (
+    Ok((
         get_data("student_id").parse().unwrap(),
         get_data("password"),
-    )
+    ))
 }

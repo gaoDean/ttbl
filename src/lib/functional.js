@@ -14,6 +14,16 @@ export const bucket = (arr, func) =>
 		return acc;
 	}, {});
 
+// de deplicate sorted array (`f` returns true if they are different)
+export const dedup = (f) => (arr) =>
+	arr.reduce((acc, val, idx, arr) => {
+		if (idx + 1 == arr.length || f(val, arr[idx + 1])) {
+			console.log(arr[idx]);
+			acc.push(arr[idx] || {});
+		}
+		return acc;
+	}, []);
+
 export const find = (f) => (functor) => functor.find(f);
 export const map = (f) => (functor) => functor.map(f);
 export const filter = (f) => (functor) => functor.filter(f);
