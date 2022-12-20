@@ -8,10 +8,6 @@ import 'sticksy';
 import { bucket } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 
-let parsedTimetable;
-let nextClass;
-let title;
-
 dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
@@ -23,15 +19,16 @@ const getDisplayDate = (selected) => {
 	return selectedDate.format('dddd, MMMM Do');
 };
 
+let parsedTimetable;
+let nextClass;
 let timetable;
-let selectedDay;
 let timetableRes;
-let currentTime = dayjs('2022-09-13T23:35:00.000Z');
-/* let currentTime = dayjs(); */
+/* const currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
+let currentTime = dayjs();
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
-	/* currentTime = dayjs(); */
+	currentTime = dayjs();
 };
 
 $: parsedTimetable = timetableRes
