@@ -40,7 +40,7 @@ const getDisplayDate = (selected) => {
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
 	currentTime = dayjs();
-}
+};
 
 let fetchListenerUnsubscribe;
 let timetable;
@@ -56,12 +56,16 @@ $: parsedTimetable = timetableRes
 	  }))
 	: undefined;
 $: timetable = parsedTimetable
-	? bucket(parsedTimetable, (subject) => dayjs(subject.startTime).format('YYYYMMDD'))
+	? bucket(parsedTimetable, (subject) =>
+			dayjs(subject.startTime).format('YYYYMMDD'),
+	  )
 	: undefined;
 $: classesToday = timetable
 	? timetable[currentTime.format('YYYYMMDD')]
 	: undefined;
-$: nextClass = parsedTimetable ? parsedTimetable.find((x) => !x.done) : undefined;
+$: nextClass = parsedTimetable
+	? parsedTimetable.find((x) => !x.done)
+	: undefined;
 $: if (classesToday)
 	invoke('add_to_tray', {
 		items: classesToday || [],
@@ -95,7 +99,7 @@ onMount(async () => {
 				return closest;
 			},
 			{ difference: Infinity },
-			).subject;
+		).subject;
 
 		document
 			.querySelector(
