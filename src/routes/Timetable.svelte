@@ -43,7 +43,8 @@ const getDisplayDate = (selected) => {
 let timetable;
 let selectedDay;
 let timetableRes;
-let currentTime = dayjs("2022-09-13T23:35:00.000Z");
+/* let currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
+let currentTime = dayjs();
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
@@ -71,8 +72,8 @@ $: invoke('add_to_tray', {
 		(timetable ? timetable[currentTime.format('YYYYMMDD')] : undefined) || [],
 	date: getDisplayDate(currentTime),
 });
-/* $: if (nextClass) */
-/* 	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime))); */
+$: if (nextClass)
+	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime)));
 
 onMount(async () => {
 	timetableRes = await invoke('get_timetable');
@@ -108,9 +109,8 @@ onMount(async () => {
 			.getBoundingClientRect();
 
 		window.scroll(elem.left, elem.top - window.innerHeight / 2);
-		Sticksy.initializeAll('.date')
+		window.Sticksy.initializeAll('.date');
 	}, 0); // needs small delay for dom to update
-
 });
 
 listen('fetch-timetable', async () => {
