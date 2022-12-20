@@ -42,8 +42,6 @@ jobs:
 
       - name: run clippy check
         uses: actions-rs/clippy-check@v1
-        env:
-          CACHE_ON_FAILURE: true
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --manifest-path=Cargo.toml --all-targets --all-features -- -D warnings
