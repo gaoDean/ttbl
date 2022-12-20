@@ -7,6 +7,10 @@ import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
 import { bucket } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 
+let parsedTimetable;
+let nextClass;
+let classesToday;
+
 let title;
 
 dayjs.extend(dayjsAdvancedFormat);
@@ -37,16 +41,16 @@ const getDisplayDate = (selected) => {
 	return selectedDate.format('dddd, MMMM Do');
 };
 
+let timetable;
+let selectedDay;
+let timetableRes;
+let currentTime = dayjs();
+
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
 	currentTime = dayjs();
 };
 
-let fetchListenerUnsubscribe;
-let timetable;
-let selectedDay;
-let timetableRes;
-let currentTime = dayjs();
 
 $: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 $: parsedTimetable = timetableRes
