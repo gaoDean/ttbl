@@ -1,5 +1,5 @@
 <script>
-import { onMount, onDestroy } from 'svelte';
+import { onMount } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
 import dayjs from 'dayjs';
