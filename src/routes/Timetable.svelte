@@ -1,126 +1,183 @@
 <script>
+import { onMount, onDestroy } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
+import { listen } from '@tauri-apps/api/event';
+import { bucket } from '$lib/functional';
+import { fetchTimetable } from '$lib/fetch';
+import dayjs from 'dayjs';
+import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
+dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
 
-let title = '';
-let message = '';
-let periodsPassed = -1;
+const getCurrentHoveredDay = (selected, timetable) => {
+	const elementsAtCenter = document.elementsFromPoint(
+		window.innerWidth / 2,
+		window.innerHeight / 2,
+	);
+	if (elementsAtCenter.length > 0) {
+		const dayElement = elementsAtCenter.find((x) =>
+			x.hasAttribute('data-timetablekey'),
+		);
+		const key = dayElement
+			? dayElement.getAttribute('data-timetablekey')
+			: undefined;
+		return key ? timetable[key][0] : selected;
+	}
+};
+
+const getDisplayDate = (selected) => {
+	const selectedDate = dayjs.isDayjs(selected)
+		? selected
+		: dayjs(selected.startTime);
+	return selectedDate.format('dddd, MMMM Do');
+};
+
+let fetchListenerUnsubscribe;
 let timetable;
+let selectedDay;
+$: title = selectedDay ? getDisplayDate(selectedDay) : 'Loading...';
 
-// YYYYMMDD in integer form
-let ymd;
-
-const isCurrentDate = async () => ymd === (await invoke('get_ymd'));
-
-const updateUI = async () => {
-	if (!ymd) {
-		ymd = await invoke('get_ymd');
+onMount(async () => {
+	const res = await invoke('get_timetable');
+	if (!res) {
+		needsLogin = true;
+		return;
 	}
-	let ret;
-	try {
-		ret = await invoke('add_timetable_to_tray', {
-			date: ymd,
-			dryRun: !(await isCurrentDate()),
-		});
-	} catch (err) {
-		// theres probably no token but try to fetch the timetable anyway
-		console.log(err);
+
+	const currentTime = dayjs();
+	timetable = bucket(
+		res.map((subject) => ({
+			...subject,
+			done: currentTime.isAfter(dayjs(subject.startTime)),
+		})),
+		(subject) => dayjs(subject.startTime).format('YYYYMMDD'),
+	); // splits array into 'buckets'
+
+	selectedDay = getCurrentHoveredDay(selectedDay, timetable);
+
+	window.addEventListener('scroll', () => {
+		selectedDay = getCurrentHoveredDay(selectedDay, timetable);
+	});
+
+	const classesToday = timetable[currentTime.format('YYYYMMDD')];
+	invoke('add_to_tray', {
+		items: classesToday || [],
+		date: getDisplayDate(currentTime),
+	});
+
+	fetchListenerUnsubscribe = await listen('fetch-timetable', async (event) => {
 		try {
-			title = 'Give us a sec, something went wrong...';
-			await invoke('fetch_timetable');
-			ret = await invoke('add_timetable_to_tray', { date: ymd });
-		} catch (err2) {
-			// couldn't fetch the timetable probs cus theres no token, go to the login screen
-			console.log(err2);
-			needsLogin = true;
-			return;
+			const res = await fetchTimetable(
+				await invoke('get_token'),
+				await invoke('get_timetable'),
+			);
+			if (res.ok) {
+				invoke('create_notification', { msg: 'Sync successful' });
+			} else {
+				invoke('create_notification', {
+					msg: 'Sync unsuccessful, error ' + res.status,
+				});
+			}
+		} catch (err) {
+			console.log(err);
+			invoke('create_notification', { msg: 'Sync unsuccessful, error ' + err });
 		}
-	}
-	timetable = Object.values(ret[0]);
-	title = ret[1];
-	message = ret[2];
-	periodsPassed = ret[3];
-	console.log(ret);
-};
+	});
+});
 
-const changeDate = async (offset) => {
-	ymd = await invoke('ymd_add', { ymd: ymd, durInDays: offset });
-	updateUI();
-};
-
-const setYmd = async () => (ymd = await invoke('get_ymd'));
-
-setYmd();
-updateUI();
-invoke('spawn_sync_thread');
+onDestroy(() => {
+	// with HMR, it resubscribes every time the window loads
+	fetchListenerUnsubscribe();
+});
 
 // setInterval(updateUI, 5 * 60 * 1000); // every five mins
 // const time = new Date();
 // const secondsRemaining = (60 - time.getSeconds()) * 1000;
 </script>
 
-<div class="grid" style="min-width: 160px; display: inline !important;">
-	<h3 style="display: inline; line-height: 56px">{title}</h3>
-	<div style="min-width: 120px; display: inline; float: right;">
-		{#if ymd}
-			<button
-				class="secondary"
-				style="display: inline-block; max-width: 56px;"
-				on:click={() => changeDate(-1)}>&larr;</button
-			>
-			<button
-				class="secondary"
-				style="display: inline-block; max-width: 56px;"
-				on:click={() => changeDate(1)}>&rarr;</button
-			>
-		{/if}
-	</div>
-</div>
-<div style="padding-top: 20px">
+<h2 class="title">{title}</h2>
+<div class="title-background" />
+<div class="timetable-container" style="padding-top: 20px">
 	{#if timetable}
-		{#each timetable as item}
-			<article
-				class={Number(item.periodName) <= periodsPassed ? 'disabled' : ''}
-			>
-				<hgroup>
-					<h4 style="display: inline">{item.description}</h4>
-					<small style="display: inline; float: right"
-						>Period {item.periodName}</small
-					>
-					<h6>{item.room}</h6>
-					<p>{item.teacherName}</p>
-				</hgroup>
-			</article>
+		{#each Object.entries(timetable) as [key, day] (key)}
+			<div class="full-day" data-timetablekey={key}>
+				<h5 class="day-text">{getDisplayDate(day[0])}</h5>
+				<div class="classes-container">
+					{#each day as subject}
+						<article class={subject.done ? 'disabled' : ''}>
+							<hgroup>
+								<h4 style="display: inline">{subject.description}</h4>
+								<small style="display: inline; float: right"
+									>Period {subject.periodName}</small
+								>
+								<h6>{subject.room}</h6>
+								<p>{subject.teacherName}</p>
+							</hgroup>
+						</article>
+					{/each}
+				</div>
+			</div>
 		{/each}
 	{/if}
 </div>
-<p class="message">
-	{message}
-</p>
 
 <style>
 article {
-	padding-top: calc(var(--spacing)) !important;
-	padding-bottom: calc(var(--spacing) / 2) !important;
-	margin-top: var(--spacing) !important;
-	margin-bottom: var(--spacing) !important;
+	padding-top: calc(var(--spacing));
+	padding-bottom: 1px;
+	margin-top: var(--spacing);
+	margin-bottom: calc(var(--spacing) / 2);
 }
 
 hgroup {
 	margin: 0px !important;
 }
 
-.message {
-	text-align: center;
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
 .disabled {
 	opacity: 0.5;
+}
+
+.full-day {
+	display: flex;
+	flex-direction: row;
+
+	margin-bottom: 5rem;
+
+	scroll-snap-type: x mandatory;
+	scroll-snap-type: mandatory;
+	-ms-scroll-snap-type: mandatory;
+	-webkit-scroll-snap-type: mandatory;
+	-webkit-scroll-snap-destination: 0% 0%;
+	-webkit-overflow-scrolling: touch;
+}
+
+.classes-container {
+	width: 100%;
+}
+
+.day-text {
+	margin-top: 2rem;
+	width: 18rem;
+}
+
+.timetable-container {
+	z-index: -5;
+}
+
+.title-background {
+	position: fixed;
+	width: 60%;
+	height: 70px;
+	z-index: 1;
+	background-color: #000000dd;
+	filter: blur(20px);
+}
+
+.title {
+	line-height: 100px;
+	width: 60%;
+	position: fixed;
+	z-index: 2;
 }
 </style>

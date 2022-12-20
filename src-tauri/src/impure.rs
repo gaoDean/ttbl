@@ -1,13 +1,8 @@
 use chrono::Local; // time
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fs, io::Write};
-use tauri::api::http::{
-    Client, ClientBuilder, HttpRequestBuilder, Response, ResponseData, ResponseType,
-};
+use std::{fs, io::Write};
 use tauri::api::notification::Notification;
-use tauri::http::status::StatusCode;
 
-const HOST: &str = "https://caulfieldsync.vercel.app/api";
 // get the data dir cus it doesn't allow it to be const
 fn datadir() -> std::path::PathBuf {
     let dir = tauri::api::path::data_dir().unwrap();
@@ -16,7 +11,7 @@ fn datadir() -> std::path::PathBuf {
 }
 
 // data of each class, serde_json compatible
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
 pub struct Class {
     pub id: String,
     pub title: String,
@@ -33,6 +28,7 @@ pub struct Class {
     pub period_name: String,
     pub colour: String,
     pub room: String,
+    pub done: Option<bool>,
     #[serde(rename = "teacherName")]
     pub teacher_name: String,
     pub __typename: String,
@@ -40,19 +36,24 @@ pub struct Class {
     pub detailed_name: String,
 }
 
-pub type Timetable = HashMap<String, Vec<Class>>;
-
-// get the date of the class from the id
-fn get_class_date(class: Class) -> String {
-    class.id[7..].to_owned()
-}
+// // get the date of the class from the id
+// fn get_class_date(class: &Class) -> String {
+//     class.id[7..].to_owned()
+// }
 
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
-fn set_data(key: &str, data: &str) -> Result<(), std::io::Error> {
+#[tauri::command]
+pub fn set_data(key: &str, data: &str) -> Result<(), String> {
     let dir = datadir();
-    fs::create_dir_all(dir.clone())?;
-    let mut file = fs::File::create(dir.join(String::from(".storage.") + key).as_path())?;
-    return file.write_all(data.as_bytes());
+    fs::create_dir_all(dir.clone()).unwrap();
+    let mut file = match fs::File::create(dir.join(String::from(".storage.") + key).as_path()) {
+        Ok(s) => s,
+        Err(_) => return Err(String::from("err")),
+    };
+    match file.write_all(data.as_bytes()) {
+        Ok(s) => Ok(s),
+        Err(_) => Err(String::from("err")),
+    }
 }
 
 // get the <data> in the file in datadir, its name being ".storage.${key}"
@@ -64,7 +65,17 @@ fn get_data(key: &str) -> String {
     };
 }
 
+#[tauri::command]
+pub fn get_token() -> Result<String, ()> {
+    let filepath_buf = datadir().join(String::from(".storage.token"));
+    match tauri::api::file::read_string(filepath_buf.as_path()) {
+        Ok(s) => Ok(s),
+        Err(_) => Err(()),
+    }
+}
+
 // log msg to .storage.log
+#[tauri::command]
 pub fn log(msg: String) {
     let buf: String = get_data("log");
     set_data(
@@ -75,7 +86,8 @@ pub fn log(msg: String) {
 }
 
 // send a toast notif
-pub fn create_notif(msg: String, app_handle: tauri::AppHandle) {
+#[tauri::command]
+pub fn create_notification(msg: String, app_handle: tauri::AppHandle) {
     Notification::new(app_handle.config().tauri.bundle.identifier.clone())
         .title("ttbl")
         .body(msg.as_str())
@@ -83,140 +95,9 @@ pub fn create_notif(msg: String, app_handle: tauri::AppHandle) {
         .unwrap();
 }
 
-// generic fetch
-async fn fetch(url: &str) -> Result<ResponseData, StatusCode> {
-    // http client
-    let client: Client = ClientBuilder::new().build().unwrap();
-    // get the response
-    let res: Response = client
-        .send(
-            HttpRequestBuilder::new("GET", url)
-                .unwrap()
-                .response_type(ResponseType::Json),
-        )
-        .await
-        .unwrap();
-
-    if res.status().as_u16() != 200 {
-        return Err(res.status());
-    }
-
-    let read: ResponseData = res.read().await.unwrap();
-    log(read.url.as_str().to_owned());
-    Ok(read)
-}
-
-// use stored login details to refetch token
-// returns true if changed, else false if token unchanged
-async fn refresh_token() -> bool {
-    // tuple: (student_id, password)
-    let details: (i32, String) = get_login_details();
-    let old_token: String = get_data("token");
-
-    if fetch_token(details.0, details.1).await.is_ok() {
-        let new_token: String = get_data("token");
-        return old_token != new_token;
-    }
-
-    false
-}
-
-#[tauri::command]
-pub async fn fetch_token(student_id: i32, password: String) -> Result<(), String> {
-    let url: String = format!(
-        "{}/token?username={}&password={}",
-        HOST, student_id, password
-    );
-    println!("{}", url);
-
-    let res: ResponseData = match fetch(&url).await {
-        Ok(s) => s,
-        Err(e) => return Err(e.as_u16().to_string()),
-    };
-    // get the token from the response
-    let token_data: &str = res.data["token"].as_str().unwrap();
-    if token_data.is_empty() {
-        return Err(String::from("Something went wrong"));
-    }
-    // set the token_data to storage
-    match set_data("token", token_data) {
-        Err(_) => Err(String::from("Couldn't write to storage")),
-        _ => Ok(()),
-    }
-}
-
-#[tauri::command]
-pub async fn fetch_timetable() -> Result<(), String> {
-    // get the token
-    let token: String = get_data("token");
-    if token.is_empty() {
-        return Err(String::from("No token stored"));
-    }
-    let url: String = format!(
-        "{}/timetable/{}?dayMinus={}&dayPlus={}&shorten=true",
-        HOST, token, "15", "15"
-    );
-
-    // fetch the url
-    // if bad res, refresh token and try again
-    let res: ResponseData = match fetch(&url).await {
-        Ok(s) => s,
-        Err(e) => {
-            // if newly fetched token didn't change
-            if !refresh_token().await {
-                // it's not a problem with outdated token, return error
-                return Err(format!("{}", e));
-            };
-            // if no err it was an outdated token and it has been refreshed, continue.
-            match fetch(&url).await {
-                Ok(o) => o,
-                Err(f) => {
-                    return Err(format!("{}", f));
-                }
-            }
-        }
-    };
-
-    // data structures
-    let mut fetched_timetable: Vec<Class> =
-        serde_json::from_value(res.data["data"]["classes"].clone()).unwrap();
-    let mut cached_timetable: Timetable = match serde_json::from_str(get_data("timetable").as_str())
-    {
-        Ok(s) => s,
-        Err(_) => HashMap::new(),
-    };
-    let mut new_timetable: Timetable = HashMap::new();
-
-    // put fetched into data structure
-    for val in &mut fetched_timetable {
-        if val.room.is_empty() {
-            val.room = String::from("N/A");
-        }
-
-        let date: &String = &get_class_date(val.clone());
-        // insert key=date value=classes_on_that_day to new_timetable
-        if !new_timetable.contains_key(date) {
-            new_timetable.insert(date.clone(), Vec::new());
-        }
-        new_timetable.get_mut(date).unwrap().push(val.clone());
-
-        // put the date to cached timetable, only the finished day will be inserted
-        // because all recurring inserts will be removed.
-        cached_timetable.insert(date.clone(), new_timetable.get(date).unwrap().clone());
-    }
-    // set to storage
-    match set_data(
-        "timetable",
-        &serde_json::ser::to_string(&cached_timetable).unwrap(),
-    ) {
-        Err(_) => Err(String::from("Couldn't write to storage")),
-        _ => Ok(()),
-    }
-}
-
 // public func get timetable in Timetable format
 #[tauri::command]
-pub fn get_timetable() -> Option<Timetable> {
+pub fn get_timetable() -> Option<Vec<Class>> {
     return match serde_json::from_str(get_data("timetable").as_str()) {
         Ok(s) => Some(s),
         Err(_) => None,
@@ -233,9 +114,10 @@ pub fn set_login_details(id: i32, password: String) -> Result<(), String> {
     Ok(())
 }
 
-fn get_login_details() -> (i32, String) {
-    (
+#[tauri::command]
+pub fn get_login_details() -> Result<(i32, String), ()> {
+    Ok((
         get_data("student_id").parse().unwrap(),
         get_data("password"),
-    )
+    ))
 }

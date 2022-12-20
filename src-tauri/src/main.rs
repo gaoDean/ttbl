@@ -4,7 +4,6 @@
 )]
 
 mod impure;
-mod time;
 mod tray;
 
 fn main() {
@@ -14,13 +13,14 @@ fn main() {
     let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             // time::get_hour,
-            time::get_ymd,
-            time::ymd_add,
-            time::spawn_sync_thread,
-            tray::add_timetable_to_tray,
-            impure::fetch_token,
-            impure::fetch_timetable,
+            tray::add_to_tray,
+            impure::log,
+            impure::get_token,
+            impure::get_timetable,
+            impure::get_login_details,
             impure::set_login_details,
+            impure::set_data,
+            impure::create_notification,
         ])
         .system_tray(tray)
         .on_system_tray_event(tray::handle_tray_event)

@@ -49,6 +49,7 @@ import { appWindow } from '@tauri-apps/api/window';
 	display: flex;
 	justify-content: flex-end;
 	position: fixed;
+	z-index: 3;
 	top: 0;
 	left: 0;
 	right: 0;
