@@ -15,7 +15,7 @@
 
 Note: still in development
 
-<img width="277" alt="Screen Shot 2022-09-19 at 12 15 55 pm" src="https://user-images.githubusercontent.com/97860672/190939924-a9032c0d-ba76-4706-a6f4-77efcf2b912a.png">
+<img width="294" alt="Screenshot 2022-12-21 at 10 03 45 am" src="https://user-images.githubusercontent.com/97860672/208785945-d3faf55c-8d1a-4a20-919a-e7238c9337e8.png">
 
 ## Installation
 You can grab the stable release [here](https://github.com/gaoDean/ttbl/releases), or latest build [here](https://nightly.link/gaoDean/ttbl/workflows/build/main)
