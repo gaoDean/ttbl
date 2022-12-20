@@ -48,7 +48,7 @@ pub fn set_data(key: &str, data: &str) -> Result<(), String> {
     fs::create_dir_all(dir.clone()).unwrap();
     let mut file = match fs::File::create(dir.join(String::from(".storage.") + key).as_path()) {
         Ok(s) => s,
-        Err(_) => return Err(String::from("err"))
+        Err(_) => return Err(String::from("err")),
     };
     match file.write_all(data.as_bytes()) {
         Ok(s) => Ok(s),

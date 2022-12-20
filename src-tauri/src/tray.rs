@@ -4,7 +4,7 @@ use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemT
 // the payload type must implement `Serialize` and `Clone`.
 #[derive(Clone, serde::Serialize)]
 struct EventPayload {
-  message: String,
+    message: String,
 }
 
 use crate::impure;
@@ -44,7 +44,6 @@ pub fn add_to_tray(
             }
         }
     }
-
 
     menu = menu.add_native_item(SystemTrayMenuItem::Separator);
 

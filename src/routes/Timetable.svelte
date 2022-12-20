@@ -68,15 +68,20 @@ onMount(async () => {
 
 	fetchListenerUnsubscribe = await listen('fetch-timetable', async (event) => {
 		try {
-			const res = await fetchTimetable(await invoke('get_token'), await invoke('get_timetable'));
+			const res = await fetchTimetable(
+				await invoke('get_token'),
+				await invoke('get_timetable'),
+			);
 			if (res.ok) {
-				invoke('create_notification', { msg: "Sync successful" });
+				invoke('create_notification', { msg: 'Sync successful' });
 			} else {
-				invoke('create_notification', { msg: "Sync unsuccessful, error " + res.status });
+				invoke('create_notification', {
+					msg: 'Sync unsuccessful, error ' + res.status,
+				});
 			}
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
-			invoke('create_notification', { msg: "Sync unsuccessful, error " + err });
+			invoke('create_notification', { msg: 'Sync unsuccessful, error ' + err });
 		}
 	});
 });
