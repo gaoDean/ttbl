@@ -59,7 +59,7 @@ $: if (nextClass) {
 }
 
 onMount(async () => {
-	timetableRes = await invoke('get_timetable');
+	timetableRes = await getData('timetable');
 	if (!timetableRes) {
 		needsLogin = true;
 		return;
