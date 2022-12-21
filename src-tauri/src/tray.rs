@@ -26,9 +26,7 @@ pub fn add_to_tray(
 
         for class in items {
             if class.done {
-                menu = menu.add_item(
-                    CustomMenuItem::new(class.id, class.text).disabled(),
-                )
+                menu = menu.add_item(CustomMenuItem::new(class.id, class.text).disabled())
             } else {
                 menu = tray_add_item(menu, &class.id, &class.text);
             }
