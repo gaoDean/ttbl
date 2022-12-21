@@ -23,11 +23,10 @@ let parsedTimetable;
 let nextClass;
 let timetable;
 let timetableRes;
-/* let currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
+/* let currentTime = dayjs('2022-09-14T01:49:59.000Z'); */
 let currentTime = dayjs();
 
 const reloadData = () => {
-	/* console.log('reload'); */
 	// sets off chain reaction of the redefining of reactive statements
 	currentTime = dayjs();
 };
@@ -35,7 +34,7 @@ const reloadData = () => {
 $: parsedTimetable = timetableRes
 	? timetableRes.map((subject) => ({
 			...subject,
-			done: currentTime.isAfter(dayjs(subject.startTime)),
+			done: currentTime.isAfter(dayjs(subject.endTime)),
 			room: subject.room || 'N/A',
 	  }))
 	: undefined;
