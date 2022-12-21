@@ -7,6 +7,7 @@ import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
 import 'sticksy';
 import { group } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
+import { getData } from '$lib/helper.js';
 
 dayjs.extend(dayjsAdvancedFormat);
 
@@ -94,8 +95,8 @@ listen('fetch-timetable', async () => {
 	let notif;
 	try {
 		const status = await fetchTimetable(
-			await invoke('get_token'),
-			await invoke('get_timetable'),
+			await getData('token'),
+			await getData('timetable')
 		);
 		if (status.ok) {
 			notif = 'Sync successful';

@@ -1,5 +1,4 @@
 <script>
-/* import { invoke } from '@tauri-apps/api/tauri'; */
 import { appWindow } from '@tauri-apps/api/window';
 import { fetchToken, fetchTimetable } from '$lib/fetch';
 
@@ -13,11 +12,11 @@ let loginMessage =
 
 const login = async () => {
 	loading = true;
-	loginMessage = 'Trying to log you in...';
 
-	let res = await fetchToken(studentId, password);
-	if (!res.ok) {
-		switch (res.status) {
+	loginMessage = 'Trying to log you in...';
+	const token = await fetchToken(studentId, password);
+	if (!token.ok) {
+		switch (token.status) {
 			case 401:
 				loginMessage =
 					'Authorisation failed. Make sure you have typed in your username and password correctly.';
@@ -26,7 +25,23 @@ const login = async () => {
 				loginMessage = 'Something went wrong, please try again.';
 				break;
 			default:
-				loginMessage = `Error: ${res.status}`;
+				loginMessage = `Error: ${token.status}`;
+		}
+
+		loading = false;
+		return;
+	}
+
+	loginMessage: 'Fetching user ID...';
+	const userInfo = (await fetchUserInfo(token.data));
+	if (!userInfo.ok) {
+		loading = false;
+		switch (userInfo.status) {
+			case 403:
+				loginMessage = 'Wrong token, try again';
+				break;
+			default:
+				loginMessage = `Error: ${userInfo.status}`;
 		}
 
 		loading = false;
@@ -34,17 +49,30 @@ const login = async () => {
 	}
 
 	loginMessage = 'Login successful, fetching timetable...';
-
-	res = await fetchTimetable(res.data, []);
-
-	if (!res.ok) {
+	const timetable = await fetchTimetable(token.data, userInfo.data.id, []);
+	if (!timetable.ok) {
 		loading = false;
-		switch (res.status) {
+		switch (timetable.status) {
 			case 403:
-				loginMessage = 'Wrong token';
+				loginMessage = 'Wrong token, try again';
 				break;
 			default:
-				loginMessage = `Error: ${res.status}`;
+				loginMessage = `Error: ${timetable.status}`;
+		}
+
+		loading = false;
+		return;
+	}
+
+	const events = await fetchEvents(token.data, userInfo.data.id, []);
+	if (!timetable.ok) {
+		loading = false;
+		switch (timetable.status) {
+			case 403:
+				loginMessage = 'Wrong token, try again';
+				break;
+			default:
+				loginMessage = `Error: ${timetable.status}`;
 		}
 
 		loading = false;

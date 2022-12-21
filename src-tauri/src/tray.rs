@@ -1,18 +1,10 @@
+use serde_json::Value;
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 
-// the payload type must implement `Serialize` and `Clone`.
-#[derive(Clone, serde::Serialize)]
-struct EventPayload {
-    message: String,
-}
-
-use crate::impure;
-
-// takes the date, gets the timetable for date and adds classes in timetable to tray
 #[tauri::command]
 pub fn add_to_tray(
-    items: Vec<impure::Class>,
+    items: Vec<Value>,
     date: String,
     app_handle: tauri::AppHandle,
 ) -> Result<(), String> {
@@ -28,19 +20,22 @@ pub fn add_to_tray(
         let padding: &str = "        ";
         // add the class to the tray
         for class in items {
-            let room_padding: &str = &padding[..(padding.len() - class.room.len())];
+            let room_padding: &str =
+                &padding[..(padding.len() - class["room"].as_str().unwrap().len())];
             let text: String = format!(
                 "{}\t{}{}\t{}",
-                &class.period_name.clone(),
-                &class.room,
+                &class["period_name"].clone(),
+                &class["room"],
                 room_padding,
-                &class.description
+                &class["description"]
             );
 
-            if class.done.unwrap() {
-                menu = menu.add_item(CustomMenuItem::new(&class.period_name, &text).disabled())
+            if class["done"].as_bool().unwrap() {
+                menu = menu.add_item(
+                    CustomMenuItem::new(class["period_name"].as_str().unwrap(), &text).disabled(),
+                )
             } else {
-                menu = tray_add_item(menu, &class.period_name, &text);
+                menu = tray_add_item(menu, &class["period_name"].as_str().unwrap(), &text);
             }
         }
     }
