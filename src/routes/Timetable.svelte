@@ -5,7 +5,7 @@ import { listen } from '@tauri-apps/api/event';
 import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
 import 'sticksy';
-import { bucket } from '$lib/functional.js';
+import { group } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 
 dayjs.extend(dayjsAdvancedFormat);
@@ -23,10 +23,11 @@ let parsedTimetable;
 let nextClass;
 let timetable;
 let timetableRes;
-/* const currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
+/* let currentTime = dayjs('2022-09-13T23:35:00.000Z'); */
 let currentTime = dayjs();
 
 const reloadData = () => {
+	/* console.log('reload'); */
 	// sets off chain reaction of the redefining of reactive statements
 	currentTime = dayjs();
 };
@@ -39,7 +40,7 @@ $: parsedTimetable = timetableRes
 	  }))
 	: undefined;
 $: timetable = parsedTimetable
-	? bucket(parsedTimetable, (subject) =>
+	? group(parsedTimetable, (subject) =>
 			dayjs(subject.startTime).format('YYYYMMDD'),
 	  )
 	: undefined;
@@ -51,8 +52,11 @@ $: invoke('add_to_tray', {
 		(timetable ? timetable[currentTime.format('YYYYMMDD')] : undefined) || [],
 	date: getDisplayDate(currentTime),
 });
-$: if (nextClass)
-	setTimeout(reloadData, currentTime.diff(dayjs(nextClass.startTime)));
+$: if (nextClass) {
+	const nextClassEnd = dayjs(nextClass.endTime).add(100, 'millisecond'); // 100 millisecond buffer
+	const diff = nextClassEnd.diff(currentTime);
+	setTimeout(reloadData, diff);
+}
 
 onMount(async () => {
 	timetableRes = await invoke('get_timetable');
