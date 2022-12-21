@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
 import 'sticksy';
 import { group } from '$lib/functional.js';
-import { fetchTimetable, fetchUserInfo } from '$lib/fetch.js';
+import { fetchTimetable } from '$lib/fetch.js';
 import { getData } from '$lib/helper.js';
 
 dayjs.extend(dayjsAdvancedFormat);
@@ -14,13 +14,15 @@ dayjs.extend(dayjsAdvancedFormat);
 export let needsLogin;
 
 const getTrayText = (classes) =>
-	classes ? classes.reduce((acc, val) => {
-		const padding = '        ';
-		if (val.__typename !== 'Class') return acc;
-		const room_padding = padding.slice(-(padding.length - val.room.length));
-		const text = `${val.periodName}\t${val.room}${room_padding}\t${val.description}`;
-		return [...acc, { done: val.done, id: val.periodName, text }];
-	}, []) : [];
+	classes
+		? classes.reduce((acc, val) => {
+				const padding = '        ';
+				if (val.__typename !== 'Class') return acc;
+				const room_padding = padding.slice(-(padding.length - val.room.length));
+				const text = `${val.periodName}\t${val.room}${room_padding}\t${val.description}`;
+				return [...acc, { done: val.done, id: val.periodName, text }];
+		  }, [])
+		: [];
 
 const getDisplayTimeRange = (a, b) =>
 	`${dayjs(a).format('h:mm A')} to ${dayjs(b).format('h:mm A')}`;
@@ -36,12 +38,12 @@ let parsedTimetable;
 let nextClass;
 let timetable;
 let timetableRes;
-let currentTime = dayjs('2022-09-14T01:49:59.000Z');
-/* let currentTime = dayjs(); */
+/* const currentTime = dayjs('2022-09-14T01:49:59.000Z'); */
+let currentTime = dayjs();
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
-	/* currentTime = dayjs(); */
+	currentTime = dayjs();
 };
 
 $: {
@@ -50,20 +52,21 @@ $: {
 				...subject,
 				done: currentTime.isAfter(dayjs(subject.endTime)),
 				room: subject.room || 'N/A',
-			}))
+		  }))
 		: undefined;
 	timetable = parsedTimetable
 		? group(parsedTimetable, (subject) =>
 				dayjs(subject.startTime).format('YYYYMMDD'),
-			)
+		  )
 		: undefined;
 	nextClass = parsedTimetable
 		? parsedTimetable.find((x) => !x.done)
 		: undefined;
 	invoke('add_to_tray', {
 		items:
-			(timetable ? getTrayText(timetable[currentTime.format('YYYYMMDD')]) : []) ||
-			[],
+			(timetable
+				? getTrayText(timetable[currentTime.format('YYYYMMDD')])
+				: []) || [],
 		date: getDisplayDate(currentTime),
 	});
 	if (nextClass) {

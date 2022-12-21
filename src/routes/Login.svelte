@@ -32,7 +32,7 @@ const login = async () => {
 		return;
 	}
 
-	loginMessage: 'Fetching user ID...';
+	loginMessage = 'Fetching user ID...';
 	const userInfo = await fetchUserInfo(token.data);
 	if (!userInfo.ok) {
 		loading = false;

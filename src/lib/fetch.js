@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import { getData, setData } from './helper';
 import dayjs from 'dayjs';
+import { getData, setData } from './helper';
 import { dedup, sort, map, concat, flat, pipe } from './functional';
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
