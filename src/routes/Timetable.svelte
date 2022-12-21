@@ -44,31 +44,33 @@ const reloadData = () => {
 	/* currentTime = dayjs(); */
 };
 
-$: parsedTimetable = timetableRes
-	? timetableRes.map((subject) => ({
-			...subject,
-			done: currentTime.isAfter(dayjs(subject.endTime)),
-			room: subject.room || 'N/A',
-	  }))
-	: undefined;
-$: timetable = parsedTimetable
-	? group(parsedTimetable, (subject) =>
-			dayjs(subject.startTime).format('YYYYMMDD'),
-	  )
-	: undefined;
-$: nextClass = parsedTimetable
-	? parsedTimetable.find((x) => !x.done)
-	: undefined;
-$: invoke('add_to_tray', {
-	items:
-		(timetable ? getTrayText(timetable[currentTime.format('YYYYMMDD')]) : []) ||
-		[],
-	date: getDisplayDate(currentTime),
-});
-$: if (nextClass) {
-	const nextClassEnd = dayjs(nextClass.endTime).add(100, 'millisecond'); // 100 millisecond buffer
-	const diff = nextClassEnd.diff(currentTime);
-	setTimeout(reloadData, diff);
+$: {
+	parsedTimetable = timetableRes
+		? timetableRes.map((subject) => ({
+				...subject,
+				done: currentTime.isAfter(dayjs(subject.endTime)),
+				room: subject.room || 'N/A',
+			}))
+		: undefined;
+	timetable = parsedTimetable
+		? group(parsedTimetable, (subject) =>
+				dayjs(subject.startTime).format('YYYYMMDD'),
+			)
+		: undefined;
+	nextClass = parsedTimetable
+		? parsedTimetable.find((x) => !x.done)
+		: undefined;
+	invoke('add_to_tray', {
+		items:
+			(timetable ? getTrayText(timetable[currentTime.format('YYYYMMDD')]) : []) ||
+			[],
+		date: getDisplayDate(currentTime),
+	});
+	if (nextClass) {
+		const nextClassEnd = dayjs(nextClass.endTime).add(100, 'millisecond'); // 100 millisecond buffer
+		const diff = nextClassEnd.diff(currentTime);
+		setTimeout(reloadData, diff);
+	}
 }
 
 onMount(async () => {
