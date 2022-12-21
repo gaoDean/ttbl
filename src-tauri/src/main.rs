@@ -12,14 +12,10 @@ fn main() {
     #[allow(unused_mut)]
     let mut app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            // time::get_hour,
             tray::add_to_tray,
             impure::log,
-            impure::get_token,
-            impure::get_timetable,
-            impure::get_login_details,
-            impure::set_login_details,
             impure::set_data,
+            impure::get_data,
             impure::create_notification,
         ])
         .system_tray(tray)

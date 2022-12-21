@@ -1,6 +1,6 @@
-import { invoke } from '@tauri-apps/api/tauri';
 import dayjs from 'dayjs';
-import { dedup, sort, map, concat, pipe } from './functional';
+import { getData, setData } from './helper';
+import { dedup, sort, map, concat, flat, pipe } from './functional';
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
 const serverError = {
@@ -22,51 +22,76 @@ export const fetchToken = async (studentId, password) => {
 	const { token } = await res.json();
 	if (!token) return serverError;
 
-	invoke('set_data', {
-		key: 'token',
-		data: token,
-	});
-	invoke('set_login_details', {
-		id: studentId,
-		password,
-	});
+	setData('student_id', studentId);
+	setData('password', password);
+	setData('token', token);
 
-	return { ok: true, status: 200, data: token };
+	return { ok: true, status: res.status, data: token };
 };
 
-export const fetchTimetable = async (token, oldTimetable) => {
-	if (!token || Number.isInteger(token)) return serverError;
-
-	const bias = -30; // TODO: remove this after the holidays
-	const backward = 15 + bias;
-	const forward = 15 + bias;
-
-	const url = `${hostUrl}/timetable/${token}?dayMinus=${backward}&dayPlus=${forward}&shorten=true`;
+export const fetchUserInfo = async (token) => {
+	const url = `${hostUrl}/userInfo/${token}`;
 
 	const res = await fetch(url);
+	if (!res.ok) return res;
 
-	if (!res.ok) {
-		if (oldTimetable === undefined) {
-			return res; // first time logging in
+	const info = await res.json();
+	if (!info) return serverError;
+
+	setData('info', info);
+
+	return { ok: true, status: res.status, data: info };
+};
+
+export const fetchTimetable = async (token, userID, oldTimetable) => {
+	if (!token || Number.isInteger(token)) return serverError;
+
+	const backward = 30;
+	const forward = 15;
+
+	const fetches = [
+		fetch(
+			`${hostUrl}/timetable/${token}/${userID}?dayMinus=${backward}&dayPlus=${forward}&shorten=true`,
+		),
+		fetch(
+			`${hostUrl}/events/${token}/${userID}?dayMinus=${backward}&dayPlus=${forward}`,
+		),
+	];
+
+	const res = await Promise.all(fetches);
+
+	for (let idx = 0; idx < res.length; idx += 1) {
+		if (!res[idx].ok) {
+			if (oldTimetable === undefined) {
+				return res[idx]; // first time logging in
+			}
+			return fetchTimetable(
+				fetchToken(getData('student_id'), getData('password')),
+				userID,
+				[],
+			);
 		}
-		return fetchTimetable(fetchToken(invoke('get_login_details')), undefined);
 	}
 
-	const timetable = (await res.json()).data.classes;
-	if (!timetable) return serverError;
+	const data = await res.reduce(
+		async (acc, val, idx) => [
+			...(await acc),
+			(await val.json()).data[idx === 0 ? 'classes' : 'events'],
+		],
+		[],
+	);
+	if (!data[0] || !data[1]) return serverError;
 
 	const mergedTimetable = pipe(
-		timetable,
+		data,
+		flat(1), // merge timetable and events
 		map((x) => formatValues(x)),
 		concat(oldTimetable),
 		sort((a, b) => !dayjs(a.startTime).isBefore(dayjs(b.startTime))),
 		dedup((a, b) => a.id !== b.id),
 	);
 
-	invoke('set_data', {
-		key: 'timetable',
-		data: JSON.stringify(mergedTimetable),
-	});
+	setData('timetable', mergedTimetable);
 
-	return res;
+	return { ok: true, status: res[0].status, data: mergedTimetable };
 };
