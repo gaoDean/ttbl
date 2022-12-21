@@ -1,7 +1,7 @@
 import { invoke } from '@tauri-apps/api/tauri';
 import { getData, setData } from './helper';
 import dayjs from 'dayjs';
-import { dedup, sort, map, concat, pipe } from './functional';
+import { dedup, sort, map, concat, flat, pipe } from './functional';
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
 const serverError = {
@@ -31,7 +31,7 @@ export const fetchToken = async (studentId, password) => {
 };
 
 export const fetchUserInfo = async (token) => {
-	const url = `${hostUrl}/token?username=${studentId}&password=${password}`;
+	const url = `${hostUrl}/userInfo/${token}`;
 
 	const res = await fetch(url);
 	if (!res.ok) return res;
@@ -42,34 +42,51 @@ export const fetchUserInfo = async (token) => {
 	setData('info', info);
 
 	return { ok: true, status: res.status, data: info };
-}
+};
 
-export const fetchTimetable = async (token, userId, oldTimetable) => {
+export const fetchTimetable = async (token, userID, oldTimetable) => {
 	if (!token || Number.isInteger(token)) return serverError;
 
-	const backward = 15;
+	const backward = 30;
 	const forward = 15;
 
-	const url = `${hostUrl}/timetable/${token}/${userId}?dayMinus=${backward}&dayPlus=${forward}&shorten=true`;
+	const fetches = [
+		fetch(
+			`${hostUrl}/timetable/${token}/${userID}?dayMinus=${backward}&dayPlus=${forward}&shorten=true`,
+		),
+		fetch(
+			`${hostUrl}/events/${token}/${userID}?dayMinus=${backward}&dayPlus=${forward}`,
+		),
+	];
 
-	const res = await fetch(url);
+	const res = await Promise.all(fetches);
 
-	if (!res.ok) {
-		if (oldTimetable === undefined) {
-			return res; // first time logging in
+	res.forEach((response) => {
+		if (!response.ok) {
+			if (oldTimetable === undefined) {
+				return response; // first time logging in
+			}
+			return fetchTimetable(
+				fetchToken(getData('student_id'), getData('password')),
+				userID,
+				[],
+			);
 		}
-		return fetchTimetable(
-			fetchToken(getData('student_id'), getData('password')),
-			userId,
-			[],
-		);
-	}
+	});
 
-	const timetable = (await res.json()).data.classes;
-	if (!timetable) return serverError;
+	const data = await res.reduce(
+		async (acc, val, idx) => [
+			...(await acc),
+			(await val.json()).data[idx === 0 ? 'classes' : 'events'],
+		],
+		[],
+	);
+	console.log(data);
+	if (!data[0] || !data[1]) return serverError;
 
 	const mergedTimetable = pipe(
-		timetable,
+		data,
+		flat(1), // merge timetable and events
 		map((x) => formatValues(x)),
 		concat(oldTimetable),
 		sort((a, b) => !dayjs(a.startTime).isBefore(dayjs(b.startTime))),
@@ -78,42 +95,5 @@ export const fetchTimetable = async (token, userId, oldTimetable) => {
 
 	setData('timetable', mergedTimetable);
 
-	return res;
-}
-
-export const fetchEvents = async (token, userId, oldEvents) => {
-	if (!token || Number.isInteger(token)) return serverError;
-
-	const backward = 15;
-	const forward = 15;
-
-	const url = `${hostUrl}/events/${token}/${userId}?dayMinus=${backward}&dayPlus=${forward};
-
-	const res = await fetch(url);
-
-	if (!res.ok) {
-		if (oldEvents === undefined) {
-			return res; // first time logging in
-		}
-		return fetchEvents(
-			fetchToken(getData('student_id'), getData('password')),
-			userId,
-			[],
-		);
-	}
-
-	const events = (await res.json()).data.events;
-	if (!events) return serverError;
-
-	const mergedEvents = pipe(
-		events,
-		map((x) => formatValues(x)),
-		concat(oldEvents),
-		sort((a, b) => !dayjs(a.startTime).isBefore(dayjs(b.startTime))),
-		dedup((a, b) => a.id !== b.id),
-	);
-
-	setData('events', mergedEvents);
-
-	return res;
-}
+	return { ok: true, status: res[0].status, data: mergedTimetable };
+};

@@ -1,6 +1,6 @@
 <script>
 import { appWindow } from '@tauri-apps/api/window';
-import { fetchToken, fetchTimetable } from '$lib/fetch';
+import { fetchToken, fetchUserInfo, fetchTimetable } from '$lib/fetch';
 
 export let needsLogin;
 
@@ -33,7 +33,7 @@ const login = async () => {
 	}
 
 	loginMessage: 'Fetching user ID...';
-	const userInfo = (await fetchUserInfo(token.data));
+	const userInfo = await fetchUserInfo(token.data);
 	if (!userInfo.ok) {
 		loading = false;
 		switch (userInfo.status) {
@@ -50,21 +50,6 @@ const login = async () => {
 
 	loginMessage = 'Login successful, fetching timetable...';
 	const timetable = await fetchTimetable(token.data, userInfo.data.id, []);
-	if (!timetable.ok) {
-		loading = false;
-		switch (timetable.status) {
-			case 403:
-				loginMessage = 'Wrong token, try again';
-				break;
-			default:
-				loginMessage = `Error: ${timetable.status}`;
-		}
-
-		loading = false;
-		return;
-	}
-
-	const events = await fetchEvents(token.data, userInfo.data.id, []);
 	if (!timetable.ok) {
 		loading = false;
 		switch (timetable.status) {

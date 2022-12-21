@@ -6,8 +6,8 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"lint": "eslint ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}",
-		"format": "prettier --write --plugin-search-dir=. ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}"
+		"lint": "eslint ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte} ./src/lib/api/*.{js,svelte}",
+		"format": "prettier --write --plugin-search-dir=. ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte} ./src/lib/api/*.{js,svelte}"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^1.0.0",
