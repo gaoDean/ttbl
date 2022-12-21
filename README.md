@@ -20,6 +20,34 @@ Note: still in development
 ## Installation
 You can grab the stable release [here](https://github.com/gaoDean/ttbl/releases), or latest build [here](https://nightly.link/gaoDean/ttbl/workflows/build/main)
 
+## Development
+Install the rust MacOS build targets with
+```
+rustup target add aarch64-apple-darwin
+rustup target add x86_64-apple-darwin
+```
+and run `yarn install` (or `npm install`)
+
+To open a dev server, run
+```
+yarn tauri dev
+```
+
+To build, run
+```
+yarn build
+```
+
+To lint and format, run
+```
+yarn format && yarn lint
+```
+
+To flush your app data, run
+```
+rm -rf ~/Library/Application\ Support/ttbl
+```
+
 ## Credit
 * This app was built with [Tauri](https://github.com/tauri-apps/tauri).
 * This app uses [CaulfieldSync](https://caulfieldsync.vercel.app) to access the CaulfieldLife endpoints.
