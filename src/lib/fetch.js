@@ -1,4 +1,3 @@
-import { invoke } from '@tauri-apps/api/tauri';
 import dayjs from 'dayjs';
 import { getData, setData } from './helper';
 import { dedup, sort, map, concat, flat, pipe } from './functional';
@@ -61,10 +60,10 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 
 	const res = await Promise.all(fetches);
 
-	res.forEach((response) => {
-		if (!response.ok) {
+	for (let idx = 0; idx < res.length; idx += 1) {
+		if (!res[idx].ok) {
 			if (oldTimetable === undefined) {
-				return response; // first time logging in
+				return res[idx]; // first time logging in
 			}
 			return fetchTimetable(
 				fetchToken(getData('student_id'), getData('password')),
@@ -72,7 +71,7 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 				[],
 			);
 		}
-	});
+	}
 
 	const data = await res.reduce(
 		async (acc, val, idx) => [
@@ -81,7 +80,6 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 		],
 		[],
 	);
-	console.log(data);
 	if (!data[0] || !data[1]) return serverError;
 
 	const mergedTimetable = pipe(

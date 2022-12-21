@@ -21,5 +21,6 @@ module.exports = {
 		'import/prefer-default-export': 'off',
 		'import/no-mutable-exports': 'off',
 		'import/extensions': 'off',
+		'no-underscore-dangle': 'off',
 	}
 };

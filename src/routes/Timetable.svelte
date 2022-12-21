@@ -18,8 +18,8 @@ const getTrayText = (classes) =>
 		? classes.reduce((acc, val) => {
 				const padding = '        ';
 				if (val.__typename !== 'Class') return acc;
-				const room_padding = padding.slice(-(padding.length - val.room.length));
-				const text = `${val.periodName}\t${val.room}${room_padding}\t${val.description}`;
+				const roomPadding = padding.slice(-(padding.length - val.room.length));
+				const text = `${val.periodName}\t${val.room}${roomPadding}\t${val.description}`;
 				return [...acc, { done: val.done, id: val.periodName, text }];
 		  }, [])
 		: [];
