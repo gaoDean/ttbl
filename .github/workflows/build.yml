@@ -82,7 +82,6 @@ jobs:
           path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
 
   check-release:
-    needs: build-binaries
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
