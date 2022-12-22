@@ -10,7 +10,7 @@ import { group } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 import { getData } from '$lib/helper.js';
 
-const DEV = import.meta.env.DEV;
+const { DEV } = import.meta.env;
 
 dayjs.extend(dayjsAdvancedFormat);
 
@@ -50,17 +50,13 @@ let nextClass;
 let timetable;
 let timetableRes;
 let currentTime;
-if (DEV)
-	currentTime = dayjs('2022-09-14T01:49:00.000Z');
-else
-	currentTime = dayjs();
+if (DEV) currentTime = dayjs('2022-09-14T01:49:00.000Z');
+else currentTime = dayjs();
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
-	if (DEV)
-		currentTime = dayjs('2022-09-14T01:50:00.100Z');
-	else
-		currentTime = dayjs();
+	if (DEV) currentTime = dayjs('2022-09-14T01:50:00.100Z');
+	else currentTime = dayjs();
 };
 
 $: {
