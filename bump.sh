@@ -40,4 +40,4 @@ git add src-tauri/Cargo.toml
 git add src-tauri/tauri.conf.json
 git add Cargo.lock
 git commit -m "chore: version bump to v${ver}"
-git tag -a "v${ver}" -m "v${ver}" HEAD
+git tag "v${ver}" HEAD
