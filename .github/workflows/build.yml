@@ -1,5 +1,10 @@
 name: Build
 
+env:
+  IS_MAIN: github.ref == 'refs/heads/main'
+  IS_MAJOR: startsWith(github.event.head_commit.message, 'feat!:') || contains(github.event.head_commit.message, 'BREAKING_CHANGE')
+  IS_MINOR: startsWith('feat:', github.event.head_commit.message)
+
 on: [push]
 
 concurrency:
@@ -75,3 +80,19 @@ jobs:
         with:
           name: artifacts-${{ matrix.config.arch }}
           path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
+
+  check-release:
+    needs: build-binaries
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: |
+          sh bump.sh major
+          git push
+        if: ${{ IS_MAJOR && IS_MAIN }}
+
+      - run: |
+          sh bump.sh minor
+          git push
+        if: ${{ IS_MINOR && IS_MAIN }}
