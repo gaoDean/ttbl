@@ -15,4 +15,13 @@ import Titlebar from '$lib/Titlebar.svelte';
 /* 	--primary: #3fb8be !important; */
 /* 	--primary-hover: #3aacb2 !important; */
 /* } */
+::-webkit-scrollbar {
+	height: 1px;
+	width: 1px;
+}
+
+::-webkit-scrollbar:hover {
+	height: 4px;
+	width: 4px;
+}
 </style>
