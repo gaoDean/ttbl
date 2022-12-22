@@ -90,9 +90,9 @@ jobs:
       - run: |
           sh bump.sh major
           git push
-        if: ${{ IS_MAJOR && IS_MAIN }}
+        if: startsWith(github.event.head_commit.message, 'feat!:') || contains(github.event.head_commit.message, 'BREAKING_CHANGE') && github.ref == 'refs/heads/main'
 
       - run: |
           sh bump.sh minor
           git push
-        if: ${{ IS_MINOR && IS_MAIN }}
+        if: startsWith('feat:', github.event.head_commit.message) && github.ref == 'refs/heads/main'
