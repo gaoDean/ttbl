@@ -20,8 +20,12 @@ const findClassElement = (classid) =>
 	document.querySelector(`article[data-classid="${classid}"]`);
 
 const scrollToClassElement = (classid) => {
-	const elem = findClassElement(classid).getBoundingClientRect();
-	window.scroll(elem.left, elem.top + window.innerHeight / 2);
+	const target = findClassElement(classid);
+	target.scrollIntoView({
+		behavior: 'smooth',
+		block: 'center',
+		inline: 'center',
+	});
 };
 
 const getTrayText = (classes) =>
