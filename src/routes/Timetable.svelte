@@ -2,6 +2,7 @@
 import { onMount } from 'svelte';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
+import { appWindow } from '@tauri-apps/api/window';
 import dayjs from 'dayjs';
 import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
 import 'sticksy';
@@ -9,9 +10,19 @@ import { group } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 import { getData } from '$lib/helper.js';
 
+const { DEV } = import.meta.env;
+
 dayjs.extend(dayjsAdvancedFormat);
 
 export let needsLogin;
+
+const findClassElement = (classid) =>
+	document.querySelector(`article[data-classid="${classid}"]`);
+
+const scrollToClassElement = (classid) => {
+	const elem = findClassElement(classid).getBoundingClientRect();
+	window.scroll(elem.left, elem.top + window.innerHeight / 2);
+};
 
 const getTrayText = (classes) =>
 	classes
@@ -20,7 +31,7 @@ const getTrayText = (classes) =>
 				if (val.__typename !== 'Class') return acc;
 				const roomPadding = padding.slice(-(padding.length - val.room.length));
 				const text = `${val.periodName}\t${val.room}${roomPadding}\t${val.description}`;
-				return [...acc, { done: val.done, id: val.periodName, text }];
+				return [...acc, { done: val.done, id: val.id, text }];
 		  }, [])
 		: [];
 
@@ -38,12 +49,14 @@ let parsedTimetable;
 let nextClass;
 let timetable;
 let timetableRes;
-/* const currentTime = dayjs('2022-09-14T01:49:59.000Z'); */
-let currentTime = dayjs();
+let currentTime;
+if (DEV) currentTime = dayjs('2022-09-14T01:49:00.000Z');
+else currentTime = dayjs();
 
 const reloadData = () => {
 	// sets off chain reaction of the redefining of reactive statements
-	currentTime = dayjs();
+	if (DEV) currentTime = dayjs('2022-09-14T01:50:00.100Z');
+	else currentTime = dayjs();
 };
 
 $: {
@@ -105,18 +118,12 @@ onMount(async () => {
 			{ difference: Infinity },
 		).subject;
 
-		const elem = document
-			.querySelector(
-				`article[data-starttime="${closestClassToCurrentTime.startTime}"]`,
-			)
-			.getBoundingClientRect();
-
-		window.scroll(elem.left, elem.top - window.innerHeight / 2);
+		scrollToClassElement(closestClassToCurrentTime.id);
 		window.Sticksy.initializeAll('.date');
 	}, 0); // needs small delay for dom to update
 });
 
-listen('fetch-timetable', async () => {
+listen('sync-timetable-clicked', async () => {
 	let notif;
 	try {
 		const status = await fetchTimetable(
@@ -134,6 +141,12 @@ listen('fetch-timetable', async () => {
 	}
 	invoke('create_notification', { msg: notif });
 });
+
+listen('tray-class-clicked', (event) => {
+	appWindow.show();
+	appWindow.setFocus();
+	scrollToClassElement(event.payload.data);
+});
 </script>
 
 <div class="timetable-container" style="padding-top: 20px">
@@ -148,7 +161,7 @@ listen('fetch-timetable', async () => {
 						{#if subject.__typename === 'Class'}
 							<article
 								class={subject.done ? 'disabled' : ''}
-								data-starttime={subject.startTime}
+								data-classid={subject.id}
 							>
 								<hgroup>
 									<h4 style="display: inline">{subject.description}</h4>
@@ -162,7 +175,7 @@ listen('fetch-timetable', async () => {
 						{:else}
 							<article
 								class={subject.done ? 'disabled' : ''}
-								data-starttime={subject.startTime}
+								data-classid={subject.id}
 							>
 								<hgroup>
 									<h4 style="display: inline">{subject.title}</h4>
