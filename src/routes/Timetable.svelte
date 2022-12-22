@@ -62,18 +62,25 @@ $: {
 	nextClass = parsedTimetable
 		? parsedTimetable.find((x) => !x.done)
 		: undefined;
-	invoke('add_to_tray', {
-		items:
-			(timetable
-				? getTrayText(timetable[currentTime.format('YYYYMMDD')])
-				: []) || [],
-		date: getDisplayDate(currentTime),
-	});
 	if (nextClass) {
 		const nextClassEnd = dayjs(nextClass.endTime).add(100, 'millisecond'); // 100 millisecond buffer
 		const diff = nextClassEnd.diff(currentTime);
 		setTimeout(reloadData, diff);
 	}
+	invoke('add_to_tray', {
+		items:
+			(timetable
+				? getTrayText(
+						timetable[
+							(currentTime.isAfter(currentTime.startOf('day').add(17, 'hour')) // is after 5pm
+								? currentTime.add(1, 'day') // display next day
+								: currentTime
+							).format('YYYYMMDD')
+						],
+				  )
+				: []) || [],
+		date: getDisplayDate(currentTime),
+	});
 }
 
 onMount(async () => {
