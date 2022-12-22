@@ -123,7 +123,7 @@ onMount(async () => {
 		).subject;
 
 		scrollToClassElement(closestClassToCurrentTime.id);
-		window.Sticksy.initializeAll('.date');
+		window.Sticksy.initializeAll('.date', { topSpacing: 40 });
 	}, 0); // needs small delay for dom to update
 });
 
@@ -157,7 +157,7 @@ listen('tray-class-clicked', (event) => {
 	{#if timetable}
 		{#each Object.entries(timetable) as [key, day] (key)}
 			<div class="full-day" data-timetablekey={key}>
-				<div>
+				<div class="date-container">
 					<h4 class="date">{getDisplayDate(day[0])}</h4>
 				</div>
 				<div class="classes-container">
@@ -241,12 +241,11 @@ hgroup {
 	width: 100%;
 }
 
-.date {
-	margin-top: 2rem;
-	width: 90%;
+.date-container {
+	width: 20rem;
 }
 
-.timetable-container {
-	z-index: -5;
+.date {
+	width: 90%;
 }
 </style>
