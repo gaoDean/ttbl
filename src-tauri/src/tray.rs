@@ -2,11 +2,16 @@ use serde::{Deserialize, Serialize};
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct TrayText {
     done: bool,
     id: String,
     text: String,
+}
+
+#[derive(Clone, Serialize)]
+struct EventPayload {
+    data: String,
 }
 
 #[tauri::command]
@@ -81,14 +86,23 @@ pub fn handle_tray_event(app_handle: &tauri::AppHandle, evt: SystemTrayEvent) {
                 app_handle.exit(0);
             }
             "sync" => {
-                app_handle.emit_all("fetch-timetable", "").unwrap();
+                app_handle.emit_all("sync-timetable-clicked", "").unwrap();
             }
             "more" => {
                 let window = (*app_handle).get_window("main").unwrap();
                 window.show().unwrap();
                 window.set_focus().unwrap();
             }
-            _ => {}
+            class_id => {
+                app_handle
+                    .emit_all(
+                        "tray-class-clicked",
+                        EventPayload {
+                            data: String::from(class_id),
+                        },
+                    )
+                    .unwrap();
+            }
         }
     }
 }
