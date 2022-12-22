@@ -16,12 +16,12 @@ import Titlebar from '$lib/Titlebar.svelte';
 /* 	--primary-hover: #3aacb2 !important; */
 /* } */
 ::-webkit-scrollbar {
-    height: 1px;
-    width: 1px;
+	height: 1px;
+	width: 1px;
 }
 
 ::-webkit-scrollbar:hover {
-    height: 4px;
-    width: 4px;
+	height: 4px;
+	width: 4px;
 }
 </style>
