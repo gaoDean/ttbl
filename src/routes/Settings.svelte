@@ -16,6 +16,8 @@ const timeToDuration = (timeString) =>
 		minutes: timeString.slice(timeString.indexOf(':')),
 	});
 
+export let currentPage;
+
 let settings;
 let infoModal;
 let confirmModal;
@@ -61,7 +63,10 @@ onMount(async () => {
 						func: async () => {
 							confirmModal = {
 								body: 'Are you sure you want to logout? This will clear all your user data, and you will need to go through the whole login process again if you want to log back in.',
-								execute: clearData,
+								execute: () => {
+									clearData();
+									currentPage = 'login';
+								},
 							};
 						},
 					},
