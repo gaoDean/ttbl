@@ -20,21 +20,15 @@ export let selectedDate;
 const findClassElement = (classid) =>
 	document.querySelector(`article[data-classid="${classid}"]`);
 
-const scrollToClassElement = (classid) => {
-	const target = findClassElement(classid);
-	target.scrollIntoView({
+const scrollToClassElement = (classid) =>
+	findClassElement(classid).scrollIntoView({
 		behavior: 'smooth',
 		block: 'center',
 		inline: 'center',
 	});
-};
 
-const scrollToDate = (date, timetable) => {
-	const classes = timetable[date];
-	if (classes) {
-		scrollToClassElement(classes[0].id);
-	}
-};
+const scrollToDate = (date, timetable) =>
+	timetable[date] ? scrollToClassElement(timetable[date][0].id) : undefined;
 
 const getTrayText = (classes) =>
 	classes
@@ -50,12 +44,11 @@ const getTrayText = (classes) =>
 const getDisplayTimeRange = (a, b) =>
 	`${dayjs(a).format('h:mm A')} to ${dayjs(b).format('h:mm A')}`;
 
-const getDisplayDate = (subjectOrDate) => {
-	const date = dayjs.isDayjs(subjectOrDate)
+const getDisplayDate = (subjectOrDate) =>
+	(dayjs.isDayjs(subjectOrDate)
 		? subjectOrDate
-		: dayjs(subjectOrDate.startTime);
-	return date.format('dddd, MMMM Do');
-};
+		: dayjs(subjectOrDate.startTime)
+	).format('dddd, MMMM Do');
 
 let parsedTimetable;
 let nextClass;
@@ -64,12 +57,6 @@ let timetableRes;
 let currentTime;
 if (DEV) currentTime = dayjs('2022-09-14T01:49:00.000Z');
 else currentTime = dayjs();
-
-const reloadData = () => {
-	// sets off chain reaction of the redefining of reactive statements
-	if (DEV) currentTime = dayjs('2022-09-14T01:50:00.100Z');
-	else currentTime = dayjs();
-};
 
 $: {
 	parsedTimetable = timetableRes
@@ -88,9 +75,16 @@ $: {
 		? parsedTimetable.find((x) => !x.done)
 		: undefined;
 	if (nextClass) {
-		const nextClassEnd = dayjs(nextClass.endTime).add(100, 'millisecond'); // 100 millisecond buffer
-		const diff = nextClassEnd.diff(currentTime);
-		setTimeout(reloadData, diff);
+		// sets off chain reaction of the redefining of reactive statements
+		// reload data at the end of nextClass
+		setTimeout(
+			() => {
+				currentTime = DEV ? dayjs('2022-09-14T01:50:00.100Z') : dayjs();
+			},
+			dayjs(nextClass.endTime)
+				.add(100, 'millisecond') // 100 millisecond buffer
+				.diff(currentTime),
+		);
 	}
 	invoke('add_to_tray', {
 		items:
