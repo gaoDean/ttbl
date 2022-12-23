@@ -8,7 +8,7 @@ const { title, body, htmlBody } = data;
 		<header>
 			<button
 				class="secondray outline close"
-				on:click={() => (data = undefined)}
+				on:click={() => {data = undefined}}
 			/>
 			<h3>{title}</h3>
 		</header>

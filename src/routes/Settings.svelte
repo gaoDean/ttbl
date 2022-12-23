@@ -1,13 +1,13 @@
 <script>
 import { onMount } from 'svelte';
-import { setData, getData, clearData } from '$lib/helper.js';
+import { getData, clearData } from '$lib/helper.js';
 import InfoModal from '$lib/InfoModal.svelte';
 import ConfirmModal from '$lib/ConfirmModal.svelte';
 import dayjs from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration';
 dayjs.extend(dayjsDuration);
 
-const save = (settings) => console.log('test')
+const save = (settings) => console.log('test');
 
 const timeToDuration = (timeString) =>
 	dayjs.duration({
@@ -82,7 +82,9 @@ onMount(async () => {
 								{option.name}
 								<input type="time" bind:value={option.value} />
 							{:else if option.type === 'button'}
-								<button class="outline" on:click={option.func}>{option.name}</button>
+								<button class="outline" on:click={option.func}
+									>{option.name}</button
+								>
 							{/if}
 						</label>
 					{/each}
