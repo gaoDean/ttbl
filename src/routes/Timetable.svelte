@@ -114,7 +114,9 @@ $: {
 	});
 }
 $: if (selectedDate && parsedTimetable)
-	scrollToClassElement(getClosestClass(dayjs(selectedDate), parsedTimetable).id);
+	scrollToClassElement(
+		getClosestClass(dayjs(selectedDate), parsedTimetable).id,
+	);
 
 onMount(async () => {
 	timetableRes = await getData('timetable');
