@@ -8,6 +8,12 @@ fn datadir() -> std::path::PathBuf {
     dir.join("ttbl/")
 }
 
+#[tauri::command]
+pub fn clear_all_data() {
+    let dir = datadir();
+    fs::remove_dir_all(dir.as_path()).unwrap();
+}
+
 // write the <data> to a file in datadir with the file name being ".storage.${key}"
 #[tauri::command]
 pub fn set_data(key: &str, data: &str) -> Result<(), String> {
