@@ -14,7 +14,7 @@ let selectedDate;
 	{#if currentPage === 'timetable'}
 		<Timetable bind:currentPage bind:selectedDate />
 	{:else if currentPage === 'settings'}
-		<Settings bind:currentPage />
+		<Settings />
 	{:else}
 		<Login bind:currentPage />
 	{/if}
