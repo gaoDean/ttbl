@@ -11,3 +11,6 @@ export const getData = async (key) => {
 
 export const setData = (key, data) =>
 	invoke('set_data', { key, data: JSON.stringify(data) });
+
+export const clearData = () =>
+	invoke('clear_all_data');

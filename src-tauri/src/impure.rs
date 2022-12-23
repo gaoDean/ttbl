@@ -11,7 +11,7 @@ fn datadir() -> std::path::PathBuf {
 #[tauri::command]
 pub fn clear_all_data() {
     let dir = datadir();
-    fs::remove_dir_all(dir.as_path());
+    fs::remove_dir_all(dir.as_path()).unwrap();
 }
 
 // write the <data> to a file in datadir with the file name being ".storage.${key}"

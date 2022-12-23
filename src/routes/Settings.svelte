@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import { setData, getData } from '$lib/helper.js';
+import { setData, getData, clearData } from '$lib/helper.js';
 import InfoModal from '$lib/InfoModal.svelte';
 import ConfirmModal from '$lib/ConfirmModal.svelte';
 import dayjs from 'dayjs';
@@ -60,7 +60,7 @@ onMount(async () => {
 						func: async () => {
 							confirmModal = {
 								body: 'Are you sure you want to logout? This will clear all your user data, and you will need to go through the whole login process again if you want to log back in.',
-								execute: (() => undefined),
+								execute: clearData,
 							};
 						},
 					},
