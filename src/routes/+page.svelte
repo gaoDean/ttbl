@@ -1,6 +1,6 @@
 <script>
-import Titlebar from './Titlebar.svelte';
-import Bottombar from './Bottombar.svelte';
+import Titlebar from '$lib/Titlebar.svelte';
+import Bottombar from '$lib/Bottombar.svelte';
 import Settings from './Settings.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
