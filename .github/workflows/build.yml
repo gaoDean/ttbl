@@ -80,18 +80,3 @@ jobs:
         with:
           name: artifacts-${{ matrix.config.arch }}
           path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
-
-  check-release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - run: |
-          sh bump.sh major
-          git push
-        if: startsWith(github.event.head_commit.message, 'feat!:') || contains(github.event.head_commit.message, 'BREAKING_CHANGE') && github.ref == 'refs/heads/main'
-
-      - run: |
-          sh bump.sh minor
-          git push
-        if: startsWith('feat:', github.event.head_commit.message) && github.ref == 'refs/heads/main'
