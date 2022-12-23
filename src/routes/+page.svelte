@@ -19,7 +19,9 @@ let selectedDate;
 		<Login bind:currentPage />
 	{/if}
 </main>
-<Bottombar bind:currentPage bind:selectedDate />
+{#if currentPage !== 'login'}
+	<Bottombar bind:currentPage bind:selectedDate />
+{/if}
 
 <style>
 main {
