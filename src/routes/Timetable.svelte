@@ -14,7 +14,7 @@ const { DEV } = import.meta.env;
 
 dayjs.extend(dayjsAdvancedFormat);
 
-export let page;
+export let currentPage;
 
 const findClassElement = (classid) =>
 	document.querySelector(`article[data-classid="${classid}"]`);
@@ -103,7 +103,7 @@ $: {
 onMount(async () => {
 	timetableRes = await getData('timetable');
 	if (!timetableRes) {
-		page = 'login';
+		currentPage = 'login';
 		return;
 	}
 

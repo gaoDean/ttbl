@@ -1,18 +1,21 @@
 <script>
 import Titlebar from './Titlebar.svelte';
 import Bottombar from'./Bottombar.svelte';
+import Settings from './Settings.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
 
-let page = 'login';
+let currentPage = 'timetable';
 </script>
 
 <Titlebar />
 <main class="container">
-	{#if page == 'login'}
-		<Login bind:page />
+	{#if currentPage == 'timetable'}
+		<Timetable bind:currentPage />
+	{:else if currentPage == 'settings'}
+		<Settings bind:currentPage />
 	{:else}
-		<Timetable bind:page />
+		<Login bind:currentPage />
 	{/if}
 </main>
-<Bottombar />
+<Bottombar bind:currentPage />

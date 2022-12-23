@@ -2,7 +2,7 @@
 import { appWindow } from '@tauri-apps/api/window';
 import { fetchToken, fetchUserInfo, fetchTimetable } from '$lib/fetch';
 
-export let page;
+export let currentPage;
 
 let studentId;
 let password = '';
@@ -66,7 +66,7 @@ const login = async () => {
 
 	loading = false;
 	loginMessage = 'Timetable fetched';
-	page = 'timetable';
+	currentPage = 'timetable';
 };
 
 appWindow.show();
