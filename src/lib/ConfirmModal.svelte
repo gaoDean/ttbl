@@ -1,13 +1,11 @@
 <script>
 export let data;
-const { title, body, htmlBody, execute } = data;
+const { body, htmlBody, execute } = data;
 </script>
 
 <dialog open>
 	<article>
-		<header>
-			<h3>{title}</h3>
-		</header>
+		<h3>Confirm your action!</h3>
 		<p>{body}</p>
 		{#if htmlBody}
 			{@html htmlBody}

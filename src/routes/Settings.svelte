@@ -55,23 +55,11 @@ onMount(async () => {
 						},
 					},
 					{
-						name: 'Logout',
+						name: 'Logout and clear user data',
 						type: 'button',
 						func: async () => {
 							confirmModal = {
-								title: 'Confirm',
-								body: 'Are you sure',
-								execute: (() => undefined),
-							};
-						},
-					},
-					{
-						name: 'Clear user data',
-						type: 'button',
-						func: async () => {
-							confirmModal = {
-								title: 'Confirm',
-								body: 'Are you sure',
+								body: 'Are you sure you want to logout? This will clear all your user data, and you will need to go through the whole login process again if you want to log back in.',
 								execute: (() => undefined),
 							};
 						},
