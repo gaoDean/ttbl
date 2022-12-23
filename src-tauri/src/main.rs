@@ -16,6 +16,7 @@ fn main() {
             impure::log,
             impure::set_data,
             impure::get_data,
+            impure::clear_all_data,
             impure::create_notification,
         ])
         .system_tray(tray)
