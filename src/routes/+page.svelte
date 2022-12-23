@@ -20,3 +20,9 @@ let selectedDate;
 	{/if}
 </main>
 <Bottombar bind:currentPage bind:selectedDate />
+
+<style>
+main {
+	margin-left: 3rem;
+}
+</style>

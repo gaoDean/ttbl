@@ -17,6 +17,21 @@ dayjs.extend(dayjsAdvancedFormat);
 export let currentPage;
 export let selectedDate;
 
+const getClosestClass = (datetime, nonGroupedTimetable) =>
+	nonGroupedTimetable.reduce(
+		(closest, subject) => {
+			const difference = Math.abs(datetime.diff(subject.startTime));
+			if (difference < closest.difference) {
+				return {
+					difference,
+					subject,
+				};
+			}
+			return closest;
+		},
+		{ difference: Infinity },
+	).subject;
+
 const findClassElement = (classid) =>
 	document.querySelector(`article[data-classid="${classid}"]`);
 
@@ -111,21 +126,7 @@ onMount(async () => {
 	}
 
 	window.setTimeout(() => {
-		const closestClassToCurrentTime = parsedTimetable.reduce(
-			(closest, subject) => {
-				const difference = Math.abs(currentTime.diff(subject.startTime));
-				if (difference < closest.difference) {
-					return {
-						difference,
-						subject,
-					};
-				}
-				return closest;
-			},
-			{ difference: Infinity },
-		).subject;
-
-		scrollToClassElement(closestClassToCurrentTime.id);
+		scrollToClassElement(getClosestClass(currentTime, parsedTimetable).id);
 		window.Sticksy.initializeAll('.date', { topSpacing: 40 });
 	}, 0); // needs small delay for dom to update
 });
@@ -173,7 +174,7 @@ listen('tray-class-clicked', (event) => {
 								<hgroup>
 									<h4 style="display: inline">{subject.description}</h4>
 									<small style="display: inline; float: right"
-										>Period {subject.periodName}</small
+										>{getDisplayTimeRange(subject.startTime, subject.endTime)}</small
 									>
 									<h6>{subject.room}</h6>
 									<p>{subject.teacherName}</p>
