@@ -1,14 +1,18 @@
 <script>
+import Titlebar from './Titlebar.svelte';
+import Bottombar from'./Bottombar.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
 
-let needsLogin = false;
+let page = 'login';
 </script>
 
+<Titlebar />
 <main class="container">
-	{#if needsLogin}
-		<Login bind:needsLogin />
+	{#if page == 'login'}
+		<Login bind:page />
 	{:else}
-		<Timetable bind:needsLogin />
+		<Timetable bind:page />
 	{/if}
 </main>
+<Bottombar />

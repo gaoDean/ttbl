@@ -1,13 +1,11 @@
 <script>
 import '$lib/css/main.scss';
-import Titlebar from '$lib/Titlebar.svelte';
 </script>
 
 <svelte:head>
 	<title>ttbl</title>
 </svelte:head>
 
-<Titlebar />
 <slot />
 
 <style>

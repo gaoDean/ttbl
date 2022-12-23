@@ -3,9 +3,9 @@ import { appWindow } from '@tauri-apps/api/window';
 </script>
 
 <div style="height: 30px">
-	<div data-tauri-drag-region class="titlebar">
+	<div data-tauri-drag-region class="bar">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="titlebar-button" on:click={appWindow.hide}>
+		<div class="bar-button" on:click={appWindow.hide}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -23,7 +23,7 @@ import { appWindow } from '@tauri-apps/api/window';
 		</div>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
-			class="titlebar-button"
+			class="bar-button"
 			style="margin-right: 8px"
 			on:click={appWindow.close}
 		>
@@ -46,7 +46,7 @@ import { appWindow } from '@tauri-apps/api/window';
 </div>
 
 <style>
-.titlebar {
+.bar {
 	user-select: none;
 	display: flex;
 	justify-content: flex-end;
@@ -57,7 +57,7 @@ import { appWindow } from '@tauri-apps/api/window';
 	right: 0;
 }
 
-.titlebar-button {
+.bar-button {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
@@ -65,7 +65,7 @@ import { appWindow } from '@tauri-apps/api/window';
 	height: 30px;
 	opacity: 0.6;
 }
-.titlebar-button:hover {
+.bar-button:hover {
 	opacity: 1;
 }
 </style>
