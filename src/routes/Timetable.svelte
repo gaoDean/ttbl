@@ -42,9 +42,6 @@ const scrollToClassElement = (classid) =>
 		inline: 'center',
 	});
 
-const scrollToDate = (date, timetable) =>
-	timetable[date] ? scrollToClassElement(timetable[date][0].id) : undefined;
-
 const getTrayText = (classes) =>
 	classes
 		? classes.reduce((acc, val) => {
@@ -116,7 +113,10 @@ $: {
 		date: getDisplayDate(currentTime),
 	});
 }
-$: if (selectedDate) scrollToDate(selectedDate.replaceAll('-', ''), timetable);
+$: if (selectedDate && parsedTimetable)
+	scrollToClassElement(
+		getClosestClass(dayjs(selectedDate), parsedTimetable).id,
+	);
 
 onMount(async () => {
 	timetableRes = await getData('timetable');
@@ -174,7 +174,10 @@ listen('tray-class-clicked', (event) => {
 								<hgroup>
 									<h4 style="display: inline">{subject.description}</h4>
 									<small style="display: inline; float: right"
-										>{getDisplayTimeRange(subject.startTime, subject.endTime)}</small
+										>{getDisplayTimeRange(
+											subject.startTime,
+											subject.endTime,
+										)}</small
 									>
 									<h6>{subject.room}</h6>
 									<p>{subject.teacherName}</p>
