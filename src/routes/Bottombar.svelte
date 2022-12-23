@@ -1,19 +1,26 @@
 <script>
 export let currentPage;
-
-let date;
+export let selectedDate;
 </script>
 
 <div style="height: 30px">
 	<div class="bar">
-		<input class="date-input button" bind:value={date} type="date" on:click={() => {if (currentPage == 'settings') currentPage = 'timetable' }}/>
+		<input
+			class="date-input button"
+			bind:value={selectedDate}
+			type="date"
+			on:click={() => {
+				if (currentPage === 'settings') currentPage = 'timetable';
+			}}
+		/>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="settings button" on:click={() => {
-			if (currentPage == 'settings')
-				currentPage = 'timetable'
-			else
-				currentPage = 'settings'
-		}}/>
+		<div
+			class="settings button"
+			on:click={() => {
+				if (currentPage === 'settings') currentPage = 'timetable';
+				else currentPage = 'settings';
+			}}
+		/>
 	</div>
 	<div style="width: 100%" />
 </div>

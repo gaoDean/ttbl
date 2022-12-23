@@ -15,6 +15,7 @@ const { DEV } = import.meta.env;
 dayjs.extend(dayjsAdvancedFormat);
 
 export let currentPage;
+export let selectedDate;
 
 const findClassElement = (classid) =>
 	document.querySelector(`article[data-classid="${classid}"]`);
@@ -26,6 +27,13 @@ const scrollToClassElement = (classid) => {
 		block: 'center',
 		inline: 'center',
 	});
+};
+
+const scrollToDate = (date, timetable) => {
+	const classes = timetable[date];
+	if (classes) {
+		scrollToClassElement(classes[0].id);
+	}
 };
 
 const getTrayText = (classes) =>
@@ -42,11 +50,11 @@ const getTrayText = (classes) =>
 const getDisplayTimeRange = (a, b) =>
 	`${dayjs(a).format('h:mm A')} to ${dayjs(b).format('h:mm A')}`;
 
-const getDisplayDate = (selected) => {
-	const selectedDate = dayjs.isDayjs(selected)
-		? selected
-		: dayjs(selected.startTime);
-	return selectedDate.format('dddd, MMMM Do');
+const getDisplayDate = (subjectOrDate) => {
+	const date = dayjs.isDayjs(subjectOrDate)
+		? subjectOrDate
+		: dayjs(subjectOrDate.startTime);
+	return date.format('dddd, MMMM Do');
 };
 
 let parsedTimetable;
@@ -99,6 +107,7 @@ $: {
 		date: getDisplayDate(currentTime),
 	});
 }
+$: if (selectedDate) scrollToDate(selectedDate.replaceAll('-', ''), timetable);
 
 onMount(async () => {
 	timetableRes = await getData('timetable');
