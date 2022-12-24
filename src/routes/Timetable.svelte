@@ -8,7 +8,7 @@ import dayjsAdvancedFormat from 'dayjs/plugin/advancedFormat';
 import 'sticksy';
 import { group } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
-import { getData } from '$lib/helper.js';
+import { getData, getSetting } from '$lib/helper.js';
 
 const { DEV } = import.meta.env;
 
@@ -103,7 +103,11 @@ $: {
 			(timetable
 				? getTrayText(
 						timetable[
-							(currentTime.isAfter(currentTime.startOf('day').add(17, 'hour')) // is after 5pm
+							(currentTime.isAfter(
+								currentTime
+									.startOf('day')
+									.add(await getSetting('datetime', 'dayRolloverTime')),
+							) // is after dayRolloverTime
 								? currentTime.add(1, 'day') // display next day
 								: currentTime
 							).format('YYYYMMDD')

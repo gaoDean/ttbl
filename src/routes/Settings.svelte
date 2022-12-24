@@ -49,7 +49,7 @@ const buttons = [
 			},
 		],
 	},
-]
+];
 
 onMount(async () => {
 	settings = await getData('settings');
@@ -66,7 +66,7 @@ onMount(async () => {
 						parse: timeToDuration,
 					},
 					dayRolloverTime: {
-						name: 'Set the time after the day has ended when the tray menu should display the next day\'s classes',
+						name: "Set the time after the day has ended when the tray menu should display the next day's classes",
 						type: 'time',
 						value: '17:00',
 						parse: timeToDuration,
@@ -81,7 +81,7 @@ onMount(async () => {
 	<article>
 		<hgroup>
 			<h2>{topic.name}</h2>
-			{#each (topic.options) as option}
+			{#each topic.options as option}
 				<button class="outline button" on:click={option.func}
 					>{option.name}</button
 				>

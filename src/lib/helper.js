@@ -13,3 +13,8 @@ export const setData = (key, data) =>
 	invoke('set_data', { key, data: JSON.stringify(data) });
 
 export const clearData = () => invoke('clear_all_data');
+
+export const getSetting = async (topic, optionName) => {
+	const opt = (await getData('settings'))[topic].options[optionName];
+	return opt.parse(opt.value);
+};
