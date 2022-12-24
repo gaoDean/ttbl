@@ -105,9 +105,7 @@ $: {
 				? getTrayText(
 						timetable[
 							(currentTime.isAfter(
-								currentTime
-									.startOf('day')
-									.add(dayRolloverTime),
+								currentTime.startOf('day').add(dayRolloverTime),
 							) // is after dayRolloverTime
 								? currentTime.add(1, 'day') // display next day
 								: currentTime

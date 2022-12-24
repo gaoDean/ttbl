@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api/tauri';
+import dayjs from 'dayjs';
 
 export const getData = async (key) => {
 	try {
@@ -18,3 +19,9 @@ export const getSetting = async (topic, optionName) => {
 	const opt = (await getData('settings'))[topic].options[optionName];
 	return opt.parse(opt.value);
 };
+
+export const timeToDuration = (timeString) =>
+	dayjs.duration({
+		hours: timeString.slice(0, timeString.indexOf(':')),
+		minutes: timeString.slice(timeString.indexOf(':')),
+	});
