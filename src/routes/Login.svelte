@@ -1,6 +1,6 @@
 <script>
 import { appWindow } from '@tauri-apps/api/window';
-import { setData, timeToDuration } from '$lib/helper.js';
+import { setData } from '$lib/helper.js';
 import { fetchToken, fetchUserInfo, fetchTimetable } from '$lib/fetch.js';
 
 export let currentPage;

@@ -4,7 +4,7 @@ import Bottombar from '$lib/Bottombar.svelte';
 import Settings from './Settings.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
-import { syncTimetableProcess } from '$lib/helper.js';
+import { syncTimetableProcess } from '$lib/fetch.js';
 
 let currentPage = 'timetable';
 let selectedDate;

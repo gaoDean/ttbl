@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getData, setData } from './helper';
+import { getSetting, getData, setData, log } from './helper';
 import { dedup, sort, map, concat, flat, pipe } from './functional';
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
@@ -94,4 +94,21 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 	setData('timetable', mergedTimetable);
 
 	return { ok: true, status: res[0].status, data: mergedTimetable };
+};
+
+export const syncTimetableProcess = async () => {
+	const time = dayjs()
+		.startOf('day')
+		.add(await getSetting('datetime', 'syncTime'));
+	const checkedTime = time.isBefore(dayjs()) ? time.add(1, 'day') : time;
+	const msUntilTime = checkedTime.diff(dayjs());
+	log(`Syncing timetable at ${checkedTime.format()}, in ${msUntilTime}ms`);
+	setTimeout(async () => {
+		fetchTimetable(
+			await getData('token'),
+			(await getData('info')).id,
+			await getData('timetable'),
+		);
+		syncTimetableProcess();
+	}, msUntilTime);
 };
