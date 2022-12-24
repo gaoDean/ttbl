@@ -62,6 +62,7 @@ const getDisplayDate = (subjectOrDate) =>
 		: dayjs(subjectOrDate.startTime)
 	).format('dddd, MMMM Do');
 
+let dayRolloverTime;
 let parsedTimetable;
 let nextClass;
 let timetable;
@@ -100,13 +101,13 @@ $: {
 	}
 	invoke('add_to_tray', {
 		items:
-			(timetable
+			(timetable && dayRolloverTime
 				? getTrayText(
 						timetable[
 							(currentTime.isAfter(
 								currentTime
 									.startOf('day')
-									.add(await getSetting('datetime', 'dayRolloverTime')),
+									.add(dayRolloverTime),
 							) // is after dayRolloverTime
 								? currentTime.add(1, 'day') // display next day
 								: currentTime
@@ -128,6 +129,8 @@ onMount(async () => {
 		currentPage = 'login';
 		return;
 	}
+
+	dayRolloverTime = await getSetting('datetime', 'dayRolloverTime');
 
 	window.setTimeout(() => {
 		scrollToClassElement(getClosestClass(currentTime, parsedTimetable).id);
