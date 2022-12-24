@@ -13,7 +13,6 @@ import { appWindow } from '@tauri-apps/api/window';
 				height="1em"
 				preserveAspectRatio="xMidYMid meet"
 				viewBox="0 0 24 24"
-				style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
 			>
 				<path
 					fill="currentColor"
