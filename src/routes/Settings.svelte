@@ -1,12 +1,8 @@
 <script>
 import { onMount } from 'svelte';
-import dayjs from 'dayjs';
-import dayjsDuration from 'dayjs/plugin/duration';
 import { getData, setData, clearData } from '$lib/helper.js';
 import InfoModal from '$lib/InfoModal.svelte';
 import ConfirmModal from '$lib/ConfirmModal.svelte';
-
-dayjs.extend(dayjsDuration);
 
 const save = (settings) => setData('settings', settings);
 

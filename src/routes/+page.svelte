@@ -4,6 +4,7 @@ import Bottombar from '$lib/Bottombar.svelte';
 import Settings from './Settings.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
+import { syncTimetableProcess } from '$lib/helper.js';
 
 let currentPage = 'timetable';
 let selectedDate;
@@ -20,6 +21,7 @@ let selectedDate;
 	{/if}
 </main>
 {#if currentPage !== 'login'}
+	{syncTimetableProcess()}
 	<Bottombar bind:currentPage bind:selectedDate />
 {/if}
 
