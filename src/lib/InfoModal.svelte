@@ -5,7 +5,7 @@ const { title, body, htmlBody } = data;
 
 <dialog open>
 	<article>
-		<header>
+		<header style="margin-bottom: 0px">
 			<button
 				class="secondray outline close"
 				on:click={() => {
@@ -14,7 +14,7 @@ const { title, body, htmlBody } = data;
 			/>
 			<h3 style="margin-bottom: 0px">{title}</h3>
 		</header>
-		<p>{body}</p>
+		<span style="white-space: pre-wrap">{body}</span>
 		{#if htmlBody}
 			{@html htmlBody}
 		{/if}
