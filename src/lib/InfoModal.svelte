@@ -12,7 +12,7 @@ const { title, body, htmlBody } = data;
 					data = undefined;
 				}}
 			/>
-			<h3>{title}</h3>
+			<h3 style="margin-bottom: 0px">{title}</h3>
 		</header>
 		<p>{body}</p>
 		{#if htmlBody}

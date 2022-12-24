@@ -22,82 +22,91 @@ let settings;
 let infoModal;
 let confirmModal;
 
+const buttons = [
+	{
+		name: 'User',
+		options: [
+			{
+				name: 'Get user info',
+				func: async () => {
+					infoModal = {
+						title: 'User info',
+						body: JSON.stringify(await getData('info')),
+					};
+				},
+			},
+			{
+				name: 'Logout and clear user data',
+				func: async () => {
+					confirmModal = {
+						body: 'Are you sure you want to logout? This will clear all your user data, and you will need to go through the whole login process again if you want to log back in.',
+						execute: () => {
+							clearData();
+							currentPage = 'login';
+						},
+					};
+				},
+			},
+		],
+	},
+]
+
 onMount(async () => {
 	settings = await getData('settings');
 	if (!settings)
-		settings = [
+		settings = {
 			// defaults
-			{
+			datetime: {
 				name: 'Date and time',
-				options: [
-					{
+				options: {
+					syncTime: {
 						name: 'Set scheduled time to sync the timetable every day',
 						type: 'time',
 						value: '00:00',
 						parse: timeToDuration,
 					},
-					{
-						name: "Set the time after the day has ended when the tray menu should display the next day's classes",
+					dayRolloverTime: {
+						name: 'Set the time after the day has ended when the tray menu should display the next day\'s classes',
 						type: 'time',
 						value: '17:00',
 						parse: timeToDuration,
 					},
-				],
+				},
 			},
-			{
-				name: 'User',
-				options: [
-					{
-						name: 'Get user info',
-						type: 'button',
-						func: async () => {
-							infoModal = {
-								title: 'User info',
-								body: JSON.stringify(await getData('info')),
-							};
-						},
-					},
-					{
-						name: 'Logout and clear user data',
-						type: 'button',
-						func: async () => {
-							confirmModal = {
-								body: 'Are you sure you want to logout? This will clear all your user data, and you will need to go through the whole login process again if you want to log back in.',
-								execute: () => {
-									clearData();
-									currentPage = 'login';
-								},
-							};
-						},
-					},
-				],
-			},
-		];
+		};
 });
 </script>
 
+{#each buttons as topic}
+	<article>
+		<hgroup>
+			<h2>{topic.name}</h2>
+			{#each (topic.options) as option}
+				<button class="outline button" on:click={option.func}
+					>{option.name}</button
+				>
+			{/each}
+		</hgroup>
+	</article>
+{/each}
 {#if settings}
 	<form on:submit|preventDefault={save(settings)}>
-		{#each settings as topic}
+		{#each Object.values(settings) as topic}
 			<article>
 				<hgroup>
 					<h2>{topic.name}</h2>
-					{#each topic.options as option}
+					{#each Object.values(topic.options) as option}
 						<label>
+							{option.name}
 							{#if option.type === 'time'}
-								{option.name}
 								<input type="time" bind:value={option.value} />
-							{:else if option.type === 'button'}
-								<button class="outline" on:click={option.func}
-									>{option.name}</button
-								>
 							{/if}
 						</label>
 					{/each}
 				</hgroup>
 			</article>
 		{/each}
-		<button type="submit">Submit</button>
+		<button type="submit" class="outline button">Save</button>
 	</form>
 {/if}
 {#if infoModal}
@@ -108,4 +117,9 @@ onMount(async () => {
 {/if}
 
 <style>
+.button {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
 </style>
