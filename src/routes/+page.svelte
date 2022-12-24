@@ -21,7 +21,7 @@ let selectedDate;
 	{/if}
 </main>
 {#if currentPage !== 'login'}
-	{syncTimetableProcess()}
+	{syncTimetableProcess() && ''}
 	<Bottombar bind:currentPage bind:selectedDate />
 {/if}
 
