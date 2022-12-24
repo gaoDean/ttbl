@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import { getData, setData, clearData } from '$lib/helper.js';
+import { getData, getDataRaw, setData, clearData } from '$lib/helper.js';
 import InfoModal from '$lib/InfoModal.svelte';
 import ConfirmModal from '$lib/ConfirmModal.svelte';
 
@@ -17,11 +17,22 @@ const buttons = [
 		name: 'User',
 		options: [
 			{
-				name: 'Get user info',
+				name: 'View user info',
 				func: async () => {
 					infoModal = {
 						title: 'User info',
-						body: JSON.stringify(await getData('info')),
+						body: JSON.stringify(await getData('info'), null, 4)
+							.replace(/[",{}[\]]/g, '')
+							.replace(/\\n/g, '\t\t'),
+					};
+				},
+			},
+			{
+				name: 'View log',
+				func: async () => {
+					infoModal = {
+						title: 'User info',
+						body: (await getDataRaw('log')).split('\n').reverse().join('\n\n'),
 					};
 				},
 			},
