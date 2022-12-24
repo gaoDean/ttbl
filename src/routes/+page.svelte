@@ -24,9 +24,3 @@ let selectedDate;
 	{syncTimetableProcess() && ''}
 	<Bottombar bind:currentPage bind:selectedDate />
 {/if}
-
-<style>
-main {
-	margin-left: 3rem;
-}
-</style>
