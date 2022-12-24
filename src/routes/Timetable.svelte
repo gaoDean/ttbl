@@ -133,7 +133,7 @@ onMount(async () => {
 	window.setTimeout(() => {
 		scrollToClassElement(getClosestClass(currentTime, parsedTimetable).id);
 		window.Sticksy.initializeAll('.date', { topSpacing: 40 });
-	}, 0); // needs small delay for dom to update
+	}, 1); // needs small delay for dom to update
 });
 
 listen('sync-timetable-clicked', async () => {

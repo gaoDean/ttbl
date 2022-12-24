@@ -1,6 +1,6 @@
 <script>
 import { appWindow } from '@tauri-apps/api/window';
-import { setData, timeToDuration } from '$lib/helper.js';
+import { setData } from '$lib/helper.js';
 import { fetchToken, fetchUserInfo, fetchTimetable } from '$lib/fetch.js';
 
 export let currentPage;
@@ -75,13 +75,11 @@ const login = async () => {
 					name: 'Set scheduled time to sync the timetable every day',
 					type: 'time',
 					value: '00:00',
-					parse: timeToDuration,
 				},
 				dayRolloverTime: {
 					name: "Set the time after the day has ended when the tray menu should display the next day's classes",
 					type: 'time',
 					value: '17:00',
-					parse: timeToDuration,
 				},
 			},
 		},
