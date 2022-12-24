@@ -17,6 +17,9 @@ export const fetchToken = async (studentId, password) => {
 	const url = `${hostUrl}/token?username=${studentId}&password=${password}`;
 
 	const res = await fetch(url);
+
+	log(`Fetched token (${res.ok})`);
+
 	if (!res.ok) return res;
 
 	const { token } = await res.json();
@@ -33,6 +36,9 @@ export const fetchUserInfo = async (token) => {
 	const url = `${hostUrl}/userInfo/${token}`;
 
 	const res = await fetch(url);
+
+	log(`Fetched user info (${res.ok})`);
+
 	if (!res.ok) return res;
 
 	const info = await res.json();
@@ -59,6 +65,8 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 	];
 
 	const res = await Promise.all(fetches);
+
+	log(`Fetched timetable (${res[0].ok})`);
 
 	for (let idx = 0; idx < res.length; idx += 1) {
 		if (!res[idx].ok) {
