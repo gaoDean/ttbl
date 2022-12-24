@@ -22,7 +22,7 @@ const buttons = [
 					infoModal = {
 						title: 'User info',
 						body: JSON.stringify(await getData('info'), null, 4)
-							.replace(/[",\{\}\[\]]/g, '')
+							.replace(/[",{}[\]]/g, '')
 							.replace(/\\n/g, '\t\t'),
 					};
 				},

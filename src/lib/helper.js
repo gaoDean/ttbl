@@ -15,9 +15,7 @@ export const getData = async (key) => {
 	}
 };
 
-export const getDataRaw = async (key) => {
-	return await invoke('get_data', { key });
-};
+export const getDataRaw = async (key) => invoke('get_data', { key });
 
 export const setData = (key, data) =>
 	invoke('set_data', { key, data: JSON.stringify(data) });
