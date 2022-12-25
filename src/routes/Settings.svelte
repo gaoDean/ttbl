@@ -4,6 +4,10 @@ import { getData, getDataRaw, setData, clearData } from '$lib/helper.js';
 import InfoModal from '$lib/InfoModal.svelte';
 import ConfirmModal from '$lib/ConfirmModal.svelte';
 
+const prettifyJSON = (json) => JSON.stringify(json, null, 4)
+							.replace(/[",{}[\]]/g, '')
+							.replace(/\\n/g, '\t\t');
+
 const save = (settings) => setData('settings', settings);
 
 export let currentPage;
@@ -14,19 +18,8 @@ let confirmModal;
 
 const buttons = [
 	{
-		name: 'User',
+		name: 'App data',
 		options: [
-			{
-				name: 'View user info',
-				func: async () => {
-					infoModal = {
-						title: 'User info',
-						body: JSON.stringify(await getData('info'), null, 4)
-							.replace(/[",{}[\]]/g, '')
-							.replace(/\\n/g, '\t\t'),
-					};
-				},
-			},
 			{
 				name: 'View log',
 				func: async () => {
@@ -45,6 +38,38 @@ const buttons = [
 							clearData();
 							currentPage = 'login';
 						},
+					};
+				},
+			},
+		],
+	},
+	{
+		name: 'User info',
+		options: [
+			{
+				name: 'View user info',
+				func: async () => {
+					infoModal = {
+						title: 'User info',
+						body: prettifyJSON(await getData('info'), null, 4),
+					};
+				},
+			},
+			{
+				name: 'View token',
+				func: async () => {
+					infoModal = {
+						title: 'Token',
+						body: await getData('token'),
+					};
+				},
+			},
+			{
+				name: 'View timetable',
+				func: async () => {
+					infoModal = {
+						title: 'Timetable',
+						body: prettifyJSON(await getData('timetable')),
 					};
 				},
 			},
