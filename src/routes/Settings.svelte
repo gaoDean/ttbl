@@ -4,9 +4,10 @@ import { getData, getDataRaw, setData, clearData } from '$lib/helper.js';
 import InfoModal from '$lib/InfoModal.svelte';
 import ConfirmModal from '$lib/ConfirmModal.svelte';
 
-const prettifyJSON = (json) => JSON.stringify(json, null, 4)
-							.replace(/[",{}[\]]/g, '')
-							.replace(/\\n/g, '\t\t');
+const prettifyJSON = (json) =>
+	JSON.stringify(json, null, 4)
+		.replace(/[",{}[\]]/g, '')
+		.replace(/\\n/g, '\t\t');
 
 const save = (settings) => setData('settings', settings);
 
