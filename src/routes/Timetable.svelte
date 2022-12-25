@@ -141,6 +141,7 @@ listen('sync-timetable-clicked', async () => {
 	try {
 		const status = await fetchTimetable(
 			await getData('token'),
+			(await getData('info')).id,
 			await getData('timetable'),
 		);
 		if (status.ok) {
