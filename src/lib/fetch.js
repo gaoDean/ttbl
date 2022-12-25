@@ -19,8 +19,8 @@ export const fetchToken = async (studentId, password) => {
 	let res;
 	try {
 		res = await fetch(url);
-	} catch(e) {
-		log(`Token fetch failed: ${JSON.stringify(e)}`)
+	} catch (e) {
+		log(`Token fetch failed: ${JSON.stringify(e)}`);
 		return { ok: false, status: 500 };
 	}
 
@@ -44,8 +44,8 @@ export const fetchUserInfo = async (token) => {
 	let res;
 	try {
 		res = await fetch(url);
-	} catch(e) {
-		log(`User info fetch failed: ${JSON.stringify(e)}`)
+	} catch (e) {
+		log(`User info fetch failed: ${JSON.stringify(e)}`);
 		return { ok: false, status: 500 };
 	}
 
@@ -80,24 +80,28 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 
 	try {
 		res = await Promise.all(fetches);
-	} catch(e) {
-		log(`Timetable fetch failed: ${JSON.stringify(e)}`)
+	} catch (e) {
+		log(`Timetable fetch failed: ${JSON.stringify(e)}`);
 		return { ok: false, status: 500 };
 	}
 
 	log(`Fetched timetable (${res[0].ok})`);
 
+	let refetch = false;
 	for (let idx = 0; idx < res.length; idx += 1) {
 		if (!res[idx].ok) {
 			if (oldTimetable === undefined || oldTimetable.length === 0) {
 				return res[idx]; // first time logging in
 			}
-			return fetchTimetable(
-				fetchToken(await getData('student_id'), await getData('password')),
-				userID,
-				[],
-			);
+			refetch = true;
 		}
+	}
+	if (refetch) {
+		return fetchTimetable(
+			fetchToken(await getData('student_id'), await getData('password')),
+			userID,
+			[],
+		);
 	}
 
 	const data = await res.reduce(
