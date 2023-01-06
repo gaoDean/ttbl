@@ -31,13 +31,31 @@ case "$response" in
 		;;
 esac
 
-sed -E -i "s/(.*)\"version\".*/\1\"version\": \"${ver}\",/" package.json
-sed -i "s/^version.*/version = \"${ver}\"/" src-tauri/Cargo.toml
-sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"${ver}\"/" src-tauri/tauri.conf.json
-perl -i -p0e "s/name = \"app\"\nversion = \".*\"/name = \"app\"\nversion = \"${ver}\"/" Cargo.lock
-git add package.json
-git add src-tauri/Cargo.toml
-git add src-tauri/tauri.conf.json
-git add Cargo.lock
-git commit -m "chore: version bump to v${ver}"
-git tag "v${ver}" HEAD
+# sed -E -i "s/(.*)\"version\".*/\1\"version\": \"${ver}\",/" package.json
+# sed -i "s/^version.*/version = \"${ver}\"/" src-tauri/Cargo.toml
+# sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"${ver}\"/" src-tauri/tauri.conf.json
+# perl -i -p0e "s/name = \"app\"\nversion = \".*\"/name = \"app\"\nversion = \"${ver}\"/" Cargo.lock
+# git add package.json
+# git add src-tauri/Cargo.toml
+# git add src-tauri/tauri.conf.json
+# git add Cargo.lock
+# git commit -m "chore: version bump to v${ver}"
+# git tag "v${ver}" HEAD
+
+date=$(gdate --rfc-3339=seconds | sed 's/ /T/')
+tmp=$(jq ".[. | length] += {
+	\"version\": \"${ver}\",
+	\"notes\": \"https://github.com/gaoDean/ttbl/releases/tag/${ver}\",
+	\"pub_date\": \"${date}\",
+	\"platforms\": {
+		\"darwin-x86_64\": {
+			\"signature\": \"\",
+			\"url\": \"https://github.com/gaoDean/ttbl/releases/download/${ver}/ttbl-intel_tarball.tar.gz\"
+		},
+		\"darwin-aarch64\": {
+			\"signature\": \"\",
+			\"url\": \"https://github.com/gaoDean/ttbl/releases/download/${ver}/ttbl-m1_tarball.tar.gz\"
+		}
+	}
+}" < updates.json)
+echo "${tmp}" > updates.json
