@@ -32,7 +32,7 @@ case "$response" in
 esac
 
 date=$(gdate --rfc-3339=seconds | sed 's/ /T/')
-notes=$(git log v1.18.0..HEAD --grep="\(#[0-9]\)" --oneline --graph | sed -E "s/^\* .{7} (.*)\(#[0-9]*\)/\1/ ; s/\*/-/")
+notes=$(git log v${oldver}..HEAD --grep="\(#[0-9]\)" --oneline --graph | sed -E "s/^\* .{7} (.*)\(#[0-9]*\)/\1/ ; s/\*/-/")
 tmp=$(jq ".[. | length] += {
 	\"version\": \"${ver}\",
 	\"notes\": \"${notes}\n\nYou can find the complete release notes at https://github.com/gaoDean/ttbl/releases/tag/${ver}\",
@@ -48,17 +48,16 @@ tmp=$(jq ".[. | length] += {
 		}
 	}
 }" < updates.json)
-echo "${tmp}"
-# echo "${tmp}" > updates.json
+echo "${tmp}" > updates.json
 
-# sed -E -i "s/(.*)\"version\".*/\1\"version\": \"${ver}\",/" package.json
-# sed -i "s/^version.*/version = \"${ver}\"/" src-tauri/Cargo.toml
-# sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"${ver}\"/" src-tauri/tauri.conf.json
-# perl -i -p0e "s/name = \"app\"\nversion = \".*\"/name = \"app\"\nversion = \"${ver}\"/" Cargo.lock
-# git add updates.json
-# git add package.json
-# git add src-tauri/Cargo.toml
-# git add src-tauri/tauri.conf.json
-# git add Cargo.lock
-# git commit -m "chore: version bump to v${ver}"
-# git tag "v${ver}" HEAD
+sed -E -i "s/(.*)\"version\".*/\1\"version\": \"${ver}\",/" package.json
+sed -i "s/^version.*/version = \"${ver}\"/" src-tauri/Cargo.toml
+sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"${ver}\"/" src-tauri/tauri.conf.json
+perl -i -p0e "s/name = \"app\"\nversion = \".*\"/name = \"app\"\nversion = \"${ver}\"/" Cargo.lock
+git add updates.json
+git add package.json
+git add src-tauri/Cargo.toml
+git add src-tauri/tauri.conf.json
+git add Cargo.lock
+git commit -m "chore: version bump to v${ver}"
+git tag "v${ver}" HEAD
