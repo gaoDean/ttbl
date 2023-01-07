@@ -32,7 +32,7 @@ case "$response" in
 esac
 
 date=$(gdate --rfc-3339=seconds | sed 's/ /T/')
-notes=$(git log v${oldver}..HEAD --grep="\(#[0-9]\)" --oneline --graph | sed -E "s/^(\*) .{7} (.*)\(#[0-9]*\)/\1\2/ ; s/\*/-/")
+notes=$(git log v${oldver}..HEAD --grep="\(#[0-9]\)" --oneline --graph | sed -E "s/^(\*) .{7} (.*)\s*\(#[0-9]*\)/\1\2/ ; s/\*/-/")
 tmp=$(jq ".[. | length] += {
 	\"version\": \"${ver}\",
 	\"notes\": \"${notes}\n\nYou can find the complete release notes at https://github.com/gaoDean/ttbl/releases/tag/${ver}\",
