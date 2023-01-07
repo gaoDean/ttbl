@@ -268,5 +268,23 @@
         "url": "https://github.com/gaoDean/ttbl/releases/download/v1.21.0/ttbl-m1_tarball.tar.gz"
       }
     }
+  },
+  {
+    "version": "2.0.0",
+    "notes": "feat: auto updater 
+feat: add settings to show user info like token 
+
+You can find the complete release notes at https://github.com/gaoDean/ttbl/releases/tag/2.0.0",
+    "pub_date": "2023-01-07T11:30:48+11:00",
+    "platforms": {
+      "darwin-x86_64": {
+        "signature": "",
+        "url": "https://github.com/gaoDean/ttbl/releases/download/2.0.0/ttbl-intel_tarball.tar.gz"
+      },
+      "darwin-aarch64": {
+        "signature": "",
+        "url": "https://github.com/gaoDean/ttbl/releases/download/2.0.0/ttbl-m1_tarball.tar.gz"
+      }
+    }
   }
 ]
