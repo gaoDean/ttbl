@@ -4,8 +4,8 @@ import Bottombar from '$lib/Bottombar.svelte';
 import Settings from './Settings.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
-import { syncTimetableProcess } from '$lib/fetch.js';
 import { currentPage } from './stores.js';
+import { syncTimetableProcess } from '$lib/fetch.js';
 
 let selectedDate;
 </script>

@@ -19,6 +19,7 @@ module.exports = {
 	rules: {
 		'no-tabs': 'off',
 		'import/no-unresolved': 'off',
+		'import/first': 'off',
 		'import/prefer-default-export': 'off',
 		'import/no-mutable-exports': 'off',
 		'import/extensions': 'off',
