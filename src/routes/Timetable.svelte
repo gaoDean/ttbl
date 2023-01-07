@@ -9,12 +9,12 @@ import 'sticksy';
 import { group } from '$lib/functional.js';
 import { fetchTimetable } from '$lib/fetch.js';
 import { getData, getSetting } from '$lib/helper.js';
+import { currentPage } from './stores.js';
 
 const { DEV } = import.meta.env;
 
 dayjs.extend(dayjsAdvancedFormat);
 
-export let currentPage;
 export let selectedDate;
 
 const getClosestClass = (datetime, nonGroupedTimetable) =>
@@ -124,7 +124,7 @@ $: if (selectedDate && parsedTimetable)
 onMount(async () => {
 	timetableRes = await getData('timetable');
 	if (!timetableRes) {
-		currentPage = 'login';
+		currentPage.set('login');
 		return;
 	}
 

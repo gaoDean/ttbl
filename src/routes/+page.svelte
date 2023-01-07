@@ -5,22 +5,22 @@ import Settings from './Settings.svelte';
 import Timetable from './Timetable.svelte';
 import Login from './Login.svelte';
 import { syncTimetableProcess } from '$lib/fetch.js';
+import { currentPage } from './stores.js';
 
-let currentPage = 'timetable';
 let selectedDate;
 </script>
 
 <Titlebar />
 <main class="container">
-	{#if currentPage === 'timetable'}
-		<Timetable bind:currentPage bind:selectedDate />
-	{:else if currentPage === 'settings'}
-		<Settings bind:currentPage />
+	{#if $currentPage === 'timetable'}
+		<Timetable bind:selectedDate />
+	{:else if $currentPage === 'settings'}
+		<Settings />
 	{:else}
-		<Login bind:currentPage />
+		<Login />
 	{/if}
 </main>
-{#if currentPage !== 'login'}
+{#if $currentPage !== 'login'}
 	{syncTimetableProcess() && ''}
-	<Bottombar bind:currentPage bind:selectedDate />
+	<Bottombar bind:selectedDate />
 {/if}
