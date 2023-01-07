@@ -271,10 +271,7 @@
   },
   {
     "version": "2.0.0",
-    "notes": "feat: auto updater 
-feat: add settings to show user info like token 
-
-You can find the complete release notes at https://github.com/gaoDean/ttbl/releases/tag/2.0.0",
+    "notes": "feat: auto updater\nfeat: add settings to show user info like token\n\nYou can find the complete release notes at https://github.com/gaoDean/ttbl/releases/tag/2.0.0",
     "pub_date": "2023-01-07T11:30:48+11:00",
     "platforms": {
       "darwin-x86_64": {
