@@ -1,5 +1,6 @@
 <script>
-export let currentPage;
+import { currentPage } from '../routes/stores.js';
+
 export let selectedDate;
 </script>
 
@@ -10,15 +11,15 @@ export let selectedDate;
 			bind:value={selectedDate}
 			type="date"
 			on:click={() => {
-				if (currentPage === 'settings') currentPage = 'timetable';
+				if ($currentPage === 'settings') currentPage.set('timetable');
 			}}
 		/>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			class="settings button"
 			on:click={() => {
-				if (currentPage === 'settings') currentPage = 'timetable';
-				else currentPage = 'settings';
+				if ($currentPage === 'settings') currentPage.set('timetable');
+				else $currentPage = 'settings';
 			}}
 		/>
 	</div>

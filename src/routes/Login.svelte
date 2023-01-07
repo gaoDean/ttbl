@@ -2,8 +2,7 @@
 import { appWindow } from '@tauri-apps/api/window';
 import { setData } from '$lib/helper.js';
 import { fetchToken, fetchUserInfo, fetchTimetable } from '$lib/fetch.js';
-
-export let currentPage;
+import { currentPage } from './stores.js';
 
 let studentId;
 let password = '';
@@ -87,7 +86,7 @@ const login = async () => {
 
 	setData('settings', defaultSettings);
 
-	currentPage = 'timetable';
+	currentPage.set('timetable');
 };
 
 appWindow.show();
