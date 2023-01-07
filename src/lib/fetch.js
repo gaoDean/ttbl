@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { onDestroy } from 'svelte';
 import { currentPage } from '../routes/stores.js';
 import { getSetting, getData, setData, log } from './helper';
 import { dedup, sort, map, concat, flat, pipe } from './functional';
