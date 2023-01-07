@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { currentPage } from '../routes/stores.js';
 import { getSetting, getData, setData, log } from './helper';
 import { dedup, sort, map, concat, flat, pipe } from './functional';
 
@@ -97,11 +98,14 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 		}
 	}
 	if (refetch) {
-		return fetchTimetable(
+		res = fetchTimetable(
 			fetchToken(await getData('student_id'), await getData('password')),
 			userID,
 			[],
 		);
+		if (!res.ok) {
+			currentPage.set('login');
+		}
 	}
 
 	const data = await res.reduce(
