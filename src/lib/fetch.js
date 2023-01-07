@@ -1,15 +1,15 @@
 import dayjs from 'dayjs';
-import { onDestroy } from 'svelte';
-import { currentPage } from '../routes/stores.js';
+// import { onDestroy } from 'svelte';
+// import { currentPage } from '../routes/stores.js';
 import { getSetting, getData, setData, log } from './helper';
 import { dedup, sort, map, concat, flat, pipe } from './functional';
 
-let currentPageRead;
-
-const unsubscribe = currentPage.subscribe((value) => {
-	currentPageRead = value;
-});
-onDestroy(unsubscribe);
+// let currentPageRead;
+//
+// const unsubscribe = currentPage.subscribe((value) => {
+// 	currentPageRead = value;
+// });
+// onDestroy(unsubscribe);
 
 const hostUrl = 'https://caulfieldsync.vercel.app/api';
 const serverError = {
@@ -111,9 +111,9 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 			userID,
 			[],
 		);
-		if (!res.ok && currentPageRead !== 'login') {
-			currentPage.set('login');
-		}
+		// if (!res.ok && currentPageRead !== 'login') {
+		// 	currentPage.set('login');
+		// }
 	}
 
 	const data = await res.reduce(

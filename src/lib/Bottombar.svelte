@@ -19,7 +19,7 @@ export let selectedDate;
 			class="settings button"
 			on:click={() => {
 				if ($currentPage === 'settings') currentPage.set('timetable');
-				else $currentPage = 'settings';
+				else currentPage.set('settings');
 			}}
 		/>
 	</div>
