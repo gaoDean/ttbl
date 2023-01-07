@@ -43,24 +43,24 @@
 				"icons/128x128@2x.png",
 				"icons/icon.icns",
 				"icons/icon.ico"
-	  ],
-	  "identifier": "ttbl",
-	  "longDescription": "",
-	  "macOS": {
-		  "entitlements": null,
-		  "exceptionDomain": "",
-		  "frameworks": [],
-		  "providerShortName": null,
-		  "signingIdentity": null
-	  },
-	  "resources": [],
-	  "shortDescription": "",
-	  "targets": "dmg",
-	  "windows": {
-		  "certificateThumbprint": null,
-		  "digestAlgorithm": "sha256",
-		  "timestampUrl": ""
-	  }
+			],
+			"identifier": "ttbl",
+			"longDescription": "",
+			"macOS": {
+				"entitlements": null,
+				"exceptionDomain": "",
+				"frameworks": [],
+				"providerShortName": null,
+				"signingIdentity": null
+			},
+			"resources": [],
+			"shortDescription": "",
+			"targets": "dmg",
+			"windows": {
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": ""
+			}
 		},
 		"systemTray": {
 			"iconPath": "icons/tray-icon.png",
@@ -70,7 +70,12 @@
 			"csp": null
 		},
 		"updater": {
-			"active": false
+			"active": true,
+			"endpoints": [
+        "https://raw.githubusercontent.com/gaoDean/ttbl/main/updates.json"
+			],
+			"dialog": true,
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc3NTUyODlCMjU4NkVFMUIKUldRYjdvWWxteWhWZDdOYU4zYldwZE1YK3FsOVlWSm1EQ3o4MG9UWU02eit4QmJNbTJxbUQ3RHIK"
 		},
 		"windows": [
 			{
