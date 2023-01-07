@@ -6,7 +6,7 @@ import { dedup, sort, map, concat, flat, pipe } from './functional';
 
 let currentPageRead;
 
-const unsubscribe = currentPage.subscribe(value => {
+const unsubscribe = currentPage.subscribe((value) => {
 	currentPageRead = value;
 });
 onDestroy(unsubscribe);
