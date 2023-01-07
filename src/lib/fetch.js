@@ -103,7 +103,7 @@ export const fetchTimetable = async (token, userID, oldTimetable) => {
 			userID,
 			[],
 		);
-		if (!res.ok) {
+		if (!res.ok && $currentPage != 'login') {
 			currentPage.set('login');
 		}
 	}
