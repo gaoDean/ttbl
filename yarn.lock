@@ -269,16 +269,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-static@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@sveltejs/adapter-static@npm:1.0.0"
+"@sveltejs/adapter-static@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@sveltejs/adapter-static@npm:1.0.1"
   peerDependencies:
     "@sveltejs/kit": ^1.0.0
-  checksum: 1b48a93189f5bd4470092f55026bd1c297cd7d3fef34304c159ac3b3e695a3bd1cb851c1b239f56041bc0b93afd63e450098e531afe369173ac0d9df6e9863a1
+  checksum: 5d40859d3b925dd2ff595af971ec0feeca3ec4672f4a0291dc5a5ff572c05a3bce202228376cd348aec65687337b740a2fb3456a0b118807a37272c2fec754b0
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.0.1":
+"@sveltejs/kit@npm:1.0.1":
   version: 1.0.1
   resolution: "@sveltejs/kit@npm:1.0.1"
   dependencies:
@@ -321,7 +321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tauri-apps/api@npm:^1.2.0":
+"@tauri-apps/api@npm:1.2.0":
   version: 1.2.0
   resolution: "@tauri-apps/api@npm:1.2.0"
   checksum: 15b0b805d9a30dce4e722b48330566cb95d79f92d626741f49735dfb7e7a044836a7c45a0537e03fd0acb48965c723ff31a6931289f81c9bcafa4e13c3a2aa2b
@@ -391,7 +391,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli@npm:^1.2.2":
+"@tauri-apps/cli@npm:1.2.2":
   version: 1.2.2
   resolution: "@tauri-apps/cli@npm:1.2.2"
   dependencies:
@@ -859,7 +859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.7":
+"dayjs@npm:1.11.7":
   version: 1.11.7
   resolution: "dayjs@npm:1.11.7"
   checksum: 5003a7c1dd9ed51385beb658231c3548700b82d3548c0cfbe549d85f2d08e90e972510282b7506941452c58d32136d6362f009c77ca55381a09c704e9f177ebb
@@ -1147,7 +1147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-airbnb-base@npm:^15.0.0":
+"eslint-config-airbnb-base@npm:15.0.0":
   version: 15.0.0
   resolution: "eslint-config-airbnb-base@npm:15.0.0"
   dependencies:
@@ -1162,7 +1162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.5.0":
+"eslint-config-prettier@npm:8.5.0":
   version: 8.5.0
   resolution: "eslint-config-prettier@npm:8.5.0"
   peerDependencies:
@@ -1195,7 +1195,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.26.0":
+"eslint-plugin-import@npm:2.26.0":
   version: 2.26.0
   resolution: "eslint-plugin-import@npm:2.26.0"
   dependencies:
@@ -1218,7 +1218,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte3@npm:^4.0.0":
+"eslint-plugin-svelte3@npm:4.0.0":
   version: 4.0.0
   resolution: "eslint-plugin-svelte3@npm:4.0.0"
   peerDependencies:
@@ -1263,7 +1263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.30.0":
+"eslint@npm:8.30.0":
   version: 8.30.0
   resolution: "eslint@npm:8.30.0"
   dependencies:
@@ -1478,7 +1478,7 @@ __metadata:
 
 "fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -2582,22 +2582,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:^2.7.0":
-  version: 2.9.0
-  resolution: "prettier-plugin-svelte@npm:2.9.0"
+"prettier-plugin-svelte@npm:2.7.0":
+  version: 2.7.0
+  resolution: "prettier-plugin-svelte@npm:2.7.0"
   peerDependencies:
     prettier: ^1.16.4 || ^2.0.0
     svelte: ^3.2.0
-  checksum: 2d74a960783a1974a4818ebac25145ee26095c5652a777584b7eb8f08907702160263538396c03dce7f9bcd5b313f914b234eb809ccc1550a5933fc5e919ca88
+  checksum: 4b38d0d856f5d9099ce64cbfaeffc941f4b408285eb8bb6c0624ba484b2cad99c90e82da00bd8ab55eeaa54caf8d0bd89af602cdf63f5b6e1f0b7e0a53672503
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.6.2":
-  version: 2.8.1
-  resolution: "prettier@npm:2.8.1"
+"prettier@npm:2.6.2":
+  version: 2.6.2
+  resolution: "prettier@npm:2.6.2"
   bin:
     prettier: bin-prettier.js
-  checksum: 4f21a0f1269f76fb36f54e9a8a1ea4c11e27478958bf860661fb4b6d7ac69aac1581f8724fa98ea3585e56d42a2ea317a17ff6e3324f40cb11ff9e20b73785cc
+  checksum: 48d08dde8e9fb1f5bccdd205baa7f192e9fc8bc98f86e1b97d919de804e28c806b0e6cc685e4a88211aa7987fa9668f30baae19580d87ced3ed0f2ec6572106f
   languageName: node
   linkType: hard
 
@@ -2706,7 +2706,7 @@ __metadata:
 
 "resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
   version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -2822,16 +2822,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.56.2":
-  version: 1.57.0
-  resolution: "sass@npm:1.57.0"
+"sass@npm:1.56.2":
+  version: 1.56.2
+  resolution: "sass@npm:1.56.2"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: fb6358b9541dc7a5bc23dbbae85223e99fbadc1f4ae911e7c32c6e22fd7b617e20a0e8cd1213f23c97c621b067bfb0b9ca45e65d6ce4ca5fea5949f41bd428ed
+  checksum: 7b1f524d04bc42df3bac6dc5201ff7475635b7df9a1390430ed5bd58b6a73ea1ae58b83ccea8da293cb77b85b4c848faf5f2779ca4b91b9303948c251d0ddca4
   languageName: node
   linkType: hard
 
@@ -2993,7 +2993,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sticksy@npm:^0.2.0":
+"sticksy@npm:0.2.0":
   version: 0.2.0
   resolution: "sticksy@npm:0.2.0"
   checksum: 556575b25dbf453e6860604674d854f42082a5b3f572477dca9b92ef24f0066580498fc40e223939b29fb64009fcb78b6c9fa7068bb9a8aab0bf7da7b413c9cf
@@ -3106,7 +3106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-preprocess@npm:^5.0.0":
+"svelte-preprocess@npm:5.0.0":
   version: 5.0.0
   resolution: "svelte-preprocess@npm:5.0.0"
   dependencies:
@@ -3153,10 +3153,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^3.44.0":
-  version: 3.55.0
-  resolution: "svelte@npm:3.55.0"
-  checksum: 0b182973a4152fec8baa59cc168ca4528d63faba130bc83063a7d55d1732a81303b48745f4bffe53436b875b9c98960b0265d45473e5b3d25c77b116fdc274f0
+"svelte@npm:3.44.0":
+  version: 3.44.0
+  resolution: "svelte@npm:3.44.0"
+  checksum: f02a9b5aa27f40c4b5bde8f44b4357c8da4ca4c0009b3c5b41ed556cf34bd0c5bcdeb5023dac71374926b1158a5ead314f96a75292d9b310e1d3f98f0284f712
   languageName: node
   linkType: hard
 
@@ -3230,24 +3230,24 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ttbl@workspace:."
   dependencies:
-    "@sveltejs/adapter-static": ^1.0.0
-    "@sveltejs/kit": ^1.0.1
-    "@tauri-apps/api": ^1.2.0
-    "@tauri-apps/cli": ^1.2.2
-    dayjs: ^1.11.7
-    eslint: ^8.30.0
-    eslint-config-airbnb-base: ^15.0.0
-    eslint-config-prettier: ^8.5.0
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-svelte3: ^4.0.0
-    prettier: ^2.6.2
-    prettier-plugin-svelte: ^2.7.0
-    sass: ^1.56.2
-    sticksy: ^0.2.0
-    svelte: ^3.44.0
-    svelte-preprocess: ^5.0.0
-    ultra-runner: ^3.10.5
-    vite: ^4.0.1
+    "@sveltejs/adapter-static": 1.0.1
+    "@sveltejs/kit": 1.0.1
+    "@tauri-apps/api": 1.2.0
+    "@tauri-apps/cli": 1.2.2
+    dayjs: 1.11.7
+    eslint: 8.30.0
+    eslint-config-airbnb-base: 15.0.0
+    eslint-config-prettier: 8.5.0
+    eslint-plugin-import: 2.26.0
+    eslint-plugin-svelte3: 4.0.0
+    prettier: 2.6.2
+    prettier-plugin-svelte: 2.7.0
+    sass: 1.56.2
+    sticksy: 0.2.0
+    svelte: 3.44.0
+    svelte-preprocess: 5.0.0
+    ultra-runner: 3.10.5
+    vite: 4.0.1
   languageName: unknown
   linkType: soft
 
@@ -3274,7 +3274,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ultra-runner@npm:^3.10.5":
+"ultra-runner@npm:3.10.5":
   version: 3.10.5
   resolution: "ultra-runner@npm:3.10.5"
   dependencies:
@@ -3357,7 +3357,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.0.1":
+"vite@npm:4.0.1":
   version: 4.0.1
   resolution: "vite@npm:4.0.1"
   dependencies:
