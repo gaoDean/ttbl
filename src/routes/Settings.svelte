@@ -36,7 +36,7 @@ const buttons = [
 						body: 'Are you sure you want to logout? This will clear all your user data, and you will need to go through the whole login process again if you want to log back in.',
 						execute: () => {
 							clearData();
-							currentPage.set('login');
+							$currentPage = 'login';
 						},
 					};
 				},
@@ -79,7 +79,7 @@ const buttons = [
 
 onMount(async () => {
 	settings = await getData('settings');
-	if (!settings) currentPage.set('login');
+	if (!settings) $currentPage = 'login';
 });
 </script>
 

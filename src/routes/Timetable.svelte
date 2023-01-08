@@ -124,7 +124,7 @@ $: if (selectedDate && parsedTimetable)
 onMount(async () => {
 	timetableRes = await getData('timetable');
 	if (!timetableRes) {
-		currentPage.set('login');
+		$currentPage = 'login';
 		return;
 	}
 
