@@ -3153,10 +3153,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:3.44.0":
-  version: 3.44.0
-  resolution: "svelte@npm:3.44.0"
-  checksum: f02a9b5aa27f40c4b5bde8f44b4357c8da4ca4c0009b3c5b41ed556cf34bd0c5bcdeb5023dac71374926b1158a5ead314f96a75292d9b310e1d3f98f0284f712
+"svelte@npm:3.55.0":
+  version: 3.55.0
+  resolution: "svelte@npm:3.55.0"
+  checksum: 0b182973a4152fec8baa59cc168ca4528d63faba130bc83063a7d55d1732a81303b48745f4bffe53436b875b9c98960b0265d45473e5b3d25c77b116fdc274f0
   languageName: node
   linkType: hard
 
@@ -3244,7 +3244,7 @@ __metadata:
     prettier-plugin-svelte: 2.7.0
     sass: 1.56.2
     sticksy: 0.2.0
-    svelte: 3.44.0
+    svelte: 3.55.0
     svelte-preprocess: 5.0.0
     ultra-runner: 3.10.5
     vite: 4.0.1
