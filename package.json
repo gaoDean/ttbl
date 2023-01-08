@@ -6,6 +6,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
+		"check": "yarn format && yarn lint",
 		"lint": "eslint ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}",
 		"format": "prettier --write --plugin-search-dir=. ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}"
 	},
@@ -22,6 +23,7 @@
 		"prettier-plugin-svelte": "^2.7.0",
 		"sass": "^1.56.2",
 		"svelte-preprocess": "^5.0.0",
+		"ultra-runner": "^3.10.5",
 		"vite": "^4.0.1"
 	},
 	"type": "module",
@@ -30,5 +32,6 @@
 		"dayjs": "^1.11.7",
 		"sticksy": "^0.2.0",
 		"svelte": "^3.44.0"
-	}
+	},
+	"packageManager": "yarn@3.3.1"
 }

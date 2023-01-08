@@ -86,7 +86,7 @@ const login = async () => {
 
 	setData('settings', defaultSettings);
 
-	currentPage.set('timetable');
+	$currentPage = 'timetable';
 };
 
 appWindow.show();
