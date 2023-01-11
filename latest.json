@@ -1,15 +1,22 @@
 {
-	"version": "2.1.0",
-	"notes": "- chore(deps): update dependency prettier-plugin-svelte to v2.9.0 \n- chore(deps): update dependency vite to v4.0.4 \n- chore(deps): update dependency eslint to v8.31.0 \n- chore(deps): update dependency eslint-config-prettier to v8.6.0 \n- chore(deps): update dependency prettier to v2.8.2 \n- chore(deps): update dependency sass to v1.57.1 \n- fix(deps): update dependency svelte to v3.55.0 \n- chore(deps): update dependency @sveltejs/kit to v1.0.7 \n- chore(deps): update dependency @sveltejs/adapter-static to v1.0.1 \n- chore(deps): update deps versions \n- fix: svelte stores syntax \n- feat: fallback to login page when fetch timetable fails twice \n\nYou can find the complete release notes at https://github.com/gaoDean/ttbl/releases/tag/2.1.0",
-	"pub_date": "2023-01-08T14:53:09+11:00",
+	"version": "2.2.0",
+	"notes": "- chore(deps): update dependency prettier-plugin-svelte to v2.9.0 \
+- chore(deps): update dependency vite to v4.0.4 \
+- chore(deps): update dependency eslint to v8.31.0 \
+- chore(deps): update dependency eslint-config-prettier to v8.6.0 \
+- chore(deps): update dependency prettier to v2.8.2 \
+- chore(deps): update dependency sass to v1.57.1 \
+- fix(deps): update dependency svelte to v3.55.0 \
+- chore(deps): update dependency @sveltejs/kit to v1.0.7 \.",
+	"pub_date": "2023-01-11T15:29:01+11:00",
 	"platforms": {
 		"darwin-x86_64": {
 			"signature": "",
-			"url": "https://github.com/gaoDean/ttbl/releases/download/2.1.0/ttbl-intel_tarball.tar.gz"
+			"url": "https://github.com/gaoDean/ttbl/releases/download/2.2.0/ttbl-intel_tarball.tar.gz"
 		},
 		"darwin-aarch64": {
 			"signature": "",
-			"url": "https://github.com/gaoDean/ttbl/releases/download/2.1.0/ttbl-m1_tarball.tar.gz"
+			"url": "https://github.com/gaoDean/ttbl/releases/download/2.2.0/ttbl-m1_tarball.tar.gz"
 		}
 	}
 }
