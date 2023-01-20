@@ -208,7 +208,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/sourcemap-codec@npm:^1.4.13":
+"@jridgewell/sourcemap-codec@npm:^1.4.13, @jridgewell/sourcemap-codec@npm:^1.4.14":
   version: 1.4.14
   resolution: "@jridgewell/sourcemap-codec@npm:1.4.14"
   checksum: 61100637b6d173d3ba786a5dff019e1a74b1f394f323c1fee337ff390239f053b87266c7a948777f4b1ee68c01a8ad0ab61e5ff4abb5a012a0b091bec391ab97
@@ -2948,17 +2948,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sorcery@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "sorcery@npm:0.10.0"
+"sorcery@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "sorcery@npm:0.11.0"
   dependencies:
+    "@jridgewell/sourcemap-codec": ^1.4.14
     buffer-crc32: ^0.2.5
     minimist: ^1.2.0
     sander: ^0.5.0
-    sourcemap-codec: ^1.3.0
   bin:
-    sorcery: bin/index.js
-  checksum: e23fc06336c6e47274bd5e23849f8a7a40071d06a6fe1105f2557eb8613563b4c867230fd5f7b143e86a9bf45f62279e39ce68545482821d7b51b185133f2bc9
+    sorcery: bin/sorcery
+  checksum: b79a4194f5ab7ee1d19d5cd2a683bd605762d5cbeeb238f46a71af357a179a6193d64a92ef2af1e05e4261cb3797be8694ad9b7ecfea9ca0d8f14d98f449dff5
   languageName: node
   linkType: hard
 
@@ -2966,13 +2966,6 @@ __metadata:
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: c049a7fc4deb9a7e9b481ae3d424cc793cb4845daa690bc5a05d428bf41bf231ced49b4cf0c9e77f9d42fdb3d20d6187619fc586605f5eabe995a316da8d377c
-  languageName: node
-  linkType: hard
-
-"sourcemap-codec@npm:^1.3.0":
-  version: 1.4.8
-  resolution: "sourcemap-codec@npm:1.4.8"
-  checksum: b57981c05611afef31605732b598ccf65124a9fcb03b833532659ac4d29ac0f7bfacbc0d6c5a28a03e84c7510e7e556d758d0bb57786e214660016fb94279316
   languageName: node
   linkType: hard
 
@@ -3105,15 +3098,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-preprocess@npm:5.0.0":
-  version: 5.0.0
-  resolution: "svelte-preprocess@npm:5.0.0"
+"svelte-preprocess@npm:5.0.1":
+  version: 5.0.1
+  resolution: "svelte-preprocess@npm:5.0.1"
   dependencies:
     "@types/pug": ^2.0.6
     "@types/sass": ^1.43.1
     detect-indent: ^6.1.0
     magic-string: ^0.27.0
-    sorcery: ^0.10.0
+    sorcery: ^0.11.0
     strip-indent: ^3.0.0
   peerDependencies:
     "@babel/core": ^7.10.2
@@ -3148,7 +3141,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: ef70e6286942d291f6063e3aa10f2f00e33fc36a5fbee765c4abfbfc01a817ceaf6a395d0b4ad163c5849aceea027dfc181f50205bd53772444781a41cec8e38
+  checksum: 80b317b25657a53d0343472560d13a3feb1b0e23cd15278cf491c802f027fca9313b17a652ce7a106263ce5e679bb0c3599daf4e7b9ab66fb794554ed6228d7d
   languageName: node
   linkType: hard
 
@@ -3244,7 +3237,7 @@ __metadata:
     sass: 1.57.1
     sticksy: 0.2.0
     svelte: 3.55.1
-    svelte-preprocess: 5.0.0
+    svelte-preprocess: 5.0.1
     ultra-runner: 3.10.5
     vite: 4.0.4
   languageName: unknown
