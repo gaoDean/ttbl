@@ -67,9 +67,7 @@ let parsedTimetable;
 let nextClass;
 let timetable;
 let timetableRes;
-let currentTime;
-if (DEV) currentTime = dayjs('2022-09-14T01:49:00.000Z');
-else currentTime = dayjs();
+let currentTime = dayjs();
 
 $: {
 	parsedTimetable = timetableRes
@@ -92,7 +90,7 @@ $: {
 		// reload data at the end of nextClass
 		setTimeout(
 			() => {
-				currentTime = DEV ? dayjs('2022-09-14T01:50:00.100Z') : dayjs();
+				currentTime = dayjs();
 			},
 			dayjs(nextClass.endTime)
 				.add(100, 'millisecond') // 100 millisecond buffer
