@@ -11,8 +11,6 @@ import { fetchTimetable } from '$lib/fetch.js';
 import { getData, getSetting } from '$lib/helper.js';
 import { currentPage } from './stores.js';
 
-const { DEV } = import.meta.env;
-
 dayjs.extend(dayjsAdvancedFormat);
 
 export let selectedDate;
