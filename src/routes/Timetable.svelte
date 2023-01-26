@@ -195,6 +195,7 @@ listen('tray-class-clicked', (event) => {
 							<article
 								class={subject.done ? 'disabled' : ''}
 								data-classid={subject.id}
+								style="padding-bottom: 1rem"
 							>
 								<hgroup>
 									<h4 style="display: inline">{subject.title}</h4>
