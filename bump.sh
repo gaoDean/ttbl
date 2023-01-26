@@ -32,7 +32,7 @@ case "$response" in
 esac
 
 date=$(gdate --rfc-3339=seconds | sed 's/ /T/')
-notes=$(git log ${oldver}..HEAD --grep="\(#[0-9]\)" --oneline --graph | sed -E "s/^(\* ).{7} (.*)\s*\(#[0-9]*\).*$/\1\2\\\/ ; s/\*/-/")
+notes=$(git log v${oldver}..HEAD --grep="\(#[0-9]\)" --oneline --graph | sed -E "s/^(\* ).{7} (.*)\s*\(#[0-9]*\).*$/\1\2\\\/ ; s/\*/-/")
 echo "{
 	\"version\": \"${ver}\",
 	\"notes\": \"${notes}.\",
@@ -53,7 +53,7 @@ sed -E -i "s/(.*)\"version\".*/\1\"version\": \"${ver}\",/" package.json
 sed -i "s/^version.*/version = \"${ver}\"/" src-tauri/Cargo.toml
 sed -i "s/^\s\s\"version\".*/\t\t\"version\": \"${ver}\"/" src-tauri/tauri.conf.json
 perl -i -p0e "s/name = \"app\"\nversion = \".*\"/name = \"app\"\nversion = \"${ver}\"/" Cargo.lock
-git add updates.json
+git add latest.json
 git add package.json
 git add src-tauri/Cargo.toml
 git add src-tauri/tauri.conf.json
