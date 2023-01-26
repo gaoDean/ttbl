@@ -109,7 +109,11 @@ $: {
 						],
 				  )
 				: []) || [],
-		date: getDisplayDate(currentTime),
+		date: getDisplayDate(
+			currentTime.isAfter(currentTime.startOf('day').add(dayRolloverTime)) // is after dayRolloverTime
+				? currentTime.add(1, 'day') // display next day
+				: currentTime,
+		),
 	});
 }
 $: if (selectedDate && parsedTimetable)
