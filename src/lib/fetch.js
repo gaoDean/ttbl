@@ -65,8 +65,8 @@ export const fetchUserInfo = async (token) => {
 export const fetchTimetable = async (token, userID, oldTimetable) => {
 	if (!token || Number.isInteger(token)) return serverError;
 
-	const backward = 30;
-	const forward = 15;
+	const backward = 10;
+	const forward = 60;
 
 	const fetches = [
 		fetch(
