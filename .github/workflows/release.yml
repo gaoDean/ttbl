@@ -63,56 +63,18 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: install uncached dependencies
-        run: yarn install
+        run: yarn install && yarn build
 
-      - name: build app
-        uses: JonasKruckenberg/tauri-build@v1
-        id: tauri_build
-        with:
-          target: ${{ matrix.config.rust_target }}
-          args: --verbose
-
-      # The `artifacts` output can now be used by a different action to upload the artifacts
-      - name: upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifacts-${{ matrix.config.arch }}
-          path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
-
-  publish-to-github:
-    needs: build-binaries
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Download x86_64 artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts-x86_64
-          path: artifacts/x86_64
-
-      - name: Download aarch64 artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts-aarch64
-          path: artifacts/aarch64
-
-      - name: Rename .app artifacts
-        run: |
-          mv ./artifacts/x86_64/dmg/**.dmg ./artifacts/ttbl-intel.dmg
-          mv ./artifacts/aarch64/dmg/**.dmg ./artifacts/ttbl-m1.dmg
-          mv ./artifacts/x86_64/macos/**.tar.gz ./artifacts/ttbl-intel_tarball.tar.gz
-          mv ./artifacts/aarch64/macos/**.tar.gz ./artifacts/ttbl-m1_tarball.tar.gz
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
-          generate_release_notes: true
-          draft: true
-          files: |
-            ./artifacts/**.dmg
-            ./artifacts/**.tar.gz
-          body: "
-            Download the asset that matches your operating system below."
+          # tauri-action replaces \_\_VERSION\_\_ with the app version
+          tagName: ${{ github.ref_name }}
+          releaseName: "v__VERSION__"
+          releaseBody: "Download the asset that matches your operating system below."
+          releaseDraft: true
+          prerelease: false
