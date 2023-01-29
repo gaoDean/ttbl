@@ -73,6 +73,8 @@ $: {
 				...subject,
 				done: currentTime.isAfter(dayjs(subject.endTime)),
 				room: subject.room || 'N/A',
+				periodName:
+					subject.periodName === 'Community_Life' ? 'L' : subject.periodName,
 		  }))
 		: undefined;
 	timetable = parsedTimetable
@@ -187,7 +189,7 @@ listen('tray-class-clicked', (event) => {
 											subject.endTime,
 										)}</small
 									>
-									<h6>{subject.room}</h6>
+									<h6>{`${subject.room  } Period ${  subject.periodName  }`}</h6>
 									<p>{subject.teacherName}</p>
 								</hgroup>
 							</article>

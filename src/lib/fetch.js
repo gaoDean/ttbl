@@ -11,7 +11,6 @@ const serverError = {
 
 const formatValues = (classValues) => ({
 	...classValues,
-	room: classValues.room ? classValues.room : 'N/A',
 });
 
 export const fetchToken = async (studentId, password) => {
