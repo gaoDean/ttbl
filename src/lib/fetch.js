@@ -138,7 +138,7 @@ export const syncTimetableProcess = async () => {
 	const msUntilTime = checkedTime.diff(dayjs());
 	log(`Syncing timetable at ${checkedTime.format()}, in ${msUntilTime}ms`);
 	setTimeout(async () => {
-		fetchTimetable(
+		await fetchTimetable(
 			await getData('token'),
 			(await getData('info')).id,
 			await getData('timetable'),
