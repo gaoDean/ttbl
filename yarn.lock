@@ -278,14 +278,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:1.7.2":
-  version: 1.7.2
-  resolution: "@sveltejs/kit@npm:1.7.2"
+"@sveltejs/kit@npm:1.8.3":
+  version: 1.8.3
+  resolution: "@sveltejs/kit@npm:1.8.3"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^2.0.0
     "@types/cookie": ^0.5.1
     cookie: ^0.5.0
-    devalue: ^4.2.3
+    devalue: ^4.3.0
     esm-env: ^1.0.0
     kleur: ^4.1.5
     magic-string: ^0.29.0
@@ -294,13 +294,13 @@ __metadata:
     set-cookie-parser: ^2.5.1
     sirv: ^2.0.2
     tiny-glob: ^0.2.9
-    undici: 5.19.1
+    undici: 5.20.0
   peerDependencies:
     svelte: ^3.54.0
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 51b8bc89745f41023b5138cde049010ec6e4eed20e678f5908940ac31550ddf69d42a7614177692ce5dc89acf08d59a114381afe4d8f63efe4c7e8c6f3a30cde
+  checksum: c97a667f7c4f554281e2b7acb19e5549e993e0ef922b0e73a18873e2bc1e3709533d26aa07e512ecf285e3240d9bb27892bb2ca9a6fa8dcaab9779b4eb4c1e4c
   languageName: node
   linkType: hard
 
@@ -951,7 +951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"devalue@npm:^4.2.3":
+"devalue@npm:^4.3.0":
   version: 4.3.0
   resolution: "devalue@npm:4.3.0"
   checksum: ad9a7d496e0b4f878ecf799bd93250330d226c525e5e5ac709cb63e267f800a5a85de21ad1d32e2981533f99bfc5025e480b1af2fe9d7cef6cd3bb8c55d7b04c
@@ -3305,7 +3305,7 @@ __metadata:
   resolution: "ttbl@workspace:."
   dependencies:
     "@sveltejs/adapter-static": 1.0.6
-    "@sveltejs/kit": 1.7.2
+    "@sveltejs/kit": 1.8.3
     "@tauri-apps/api": 1.2.0
     "@tauri-apps/cli": 1.2.3
     dayjs: 1.11.7
@@ -3399,12 +3399,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:5.19.1":
-  version: 5.19.1
-  resolution: "undici@npm:5.19.1"
+"undici@npm:5.20.0":
+  version: 5.20.0
+  resolution: "undici@npm:5.20.0"
   dependencies:
     busboy: ^1.6.0
-  checksum: 57ee94ee74d944faa41dbcb2faf4e0c90069708d3aaae860185884e51376b5d457728352a8396d69a3c9cb752b62ff99a19a664c5aacb7ee61cc488af499a01c
+  checksum: 25412a785b2bd0b12f0bb0ec47ef00aa7a611ca0e570cb7af97cffe6a42e0d78e4b15190363a43771e9002defc3c6647c1b2d52201b3f64e2196819db4d150d3
   languageName: node
   linkType: hard
 
