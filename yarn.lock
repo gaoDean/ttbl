@@ -312,19 +312,19 @@ __metadata:
   linkType: hard
 
 "@sveltejs/vite-plugin-svelte@npm:^2.0.0":
-  version: 2.0.2
-  resolution: "@sveltejs/vite-plugin-svelte@npm:2.0.2"
+  version: 2.0.3
+  resolution: "@sveltejs/vite-plugin-svelte@npm:2.0.3"
   dependencies:
     debug: ^4.3.4
-    deepmerge: ^4.2.2
+    deepmerge: ^4.3.0
     kleur: ^4.1.5
-    magic-string: ^0.27.0
+    magic-string: ^0.29.0
     svelte-hmr: ^0.15.1
-    vitefu: ^0.2.3
+    vitefu: ^0.2.4
   peerDependencies:
     svelte: ^3.54.0
     vite: ^4.0.0
-  checksum: 6a223da864d74c4e6ea05881ee0cf79db8390953df6d506b79d2c37a365fe291e5a5bb330dcfb5366b61ee3915544fd37db3e134865085981342bab392a6a991
+  checksum: 2584728109c6d52d310c7112554afb5b029da2b077809bf7fc5841f489198921609fb1957ff85d4aa176e89a6f32713447a60eb3db57249244f8536b4bf36872
   languageName: node
   linkType: hard
 
@@ -458,9 +458,9 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 18.14.0
-  resolution: "@types/node@npm:18.14.0"
-  checksum: d83fcf5e4ed544755dd9028f5cbb6b9d46235043159111bb2ad62223729aee581c0144a9f6df8ba73d74011db9ed4ebd7af2fd5e0996714e3beb508a5da8ac5c
+  version: 18.14.2
+  resolution: "@types/node@npm:18.14.2"
+  checksum: 53c07e721f6ae33de71306f6a0b75dae6066a4f55bd5484c93bd59ff25f0c5f004ceafeef509a4d0cb9e24a247efc34d50489bcc1b05a53ecc68e2fc088e65cb
   languageName: node
   linkType: hard
 
@@ -920,7 +920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.2.2":
+"deepmerge@npm:^4.3.0":
   version: 4.3.0
   resolution: "deepmerge@npm:4.3.0"
   checksum: c7980eb5c5be040b371f1df0d566473875cfabed9f672ccc177b81ba8eee5686ce2478de2f1d0076391621cbe729e5eacda397179a59ef0f68901849647db126
@@ -2114,7 +2114,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^1.0.1":
+"json5@npm:^1.0.2":
   version: 1.0.2
   resolution: "json5@npm:1.0.2"
   dependencies:
@@ -2177,9 +2177,9 @@ __metadata:
   linkType: hard
 
 "lru-cache@npm:^7.7.1":
-  version: 7.16.1
-  resolution: "lru-cache@npm:7.16.1"
-  checksum: 64618e3ed4fd1203afedd9bbf5247921b1419f8e3100f20e58e5f04e741f8287bd7d04fefaad332411bb53b3a73445714b235de750cf5d310cba1fa23bd82795
+  version: 7.17.0
+  resolution: "lru-cache@npm:7.17.0"
+  checksum: 28c2a98ad313b8d61beac1f08257b6f0ca990e39d24a9bc831030b6e209447cfb11c6d9d1a774282189bfc9609d1dfd17ebe485228dd68f7b96b6b9b7740894e
   languageName: node
   linkType: hard
 
@@ -2189,6 +2189,15 @@ __metadata:
   dependencies:
     "@jridgewell/sourcemap-codec": ^1.4.13
   checksum: 273faaa50baadb7a2df6e442eac34ad611304fc08fe16e24fe2e472fd944bfcb73ffb50d2dc972dc04e92784222002af46868cb9698b1be181c81830fd95a13e
+  languageName: node
+  linkType: hard
+
+"magic-string@npm:^0.29.0":
+  version: 0.29.0
+  resolution: "magic-string@npm:0.29.0"
+  dependencies:
+    "@jridgewell/sourcemap-codec": ^1.4.13
+  checksum: 19e5398fcfc44804917127c72ad622c68a19a0a10cbdb8d4f9f9417584a087fe9e117140bfb2463d86743cf1ed9cf4182ae0b0ad1a7536f7fdda257ee4449ffb
   languageName: node
   linkType: hard
 
@@ -2351,9 +2360,9 @@ __metadata:
   linkType: hard
 
 "minipass@npm:^4.0.0":
-  version: 4.0.3
-  resolution: "minipass@npm:4.0.3"
-  checksum: a09f405e2f380ae7f6ee0cbb53b45c1fcc1b6c70fc3896f4d20649d92a10e61892c57bd9960a64cedf6c90b50022cb6c195905b515039c335b423202f99e6f18
+  version: 4.2.4
+  resolution: "minipass@npm:4.2.4"
+  checksum: c664f2ae4401408d1e7a6e4f50aca45f87b1b0634bc9261136df5c378e313e77355765f73f59c4a5abcadcdf43d83fcd3eb14e4a7cdcce8e36508e2290345753
   languageName: node
   linkType: hard
 
@@ -2729,13 +2738,13 @@ __metadata:
   linkType: hard
 
 "readable-stream@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "readable-stream@npm:3.6.0"
+  version: 3.6.1
+  resolution: "readable-stream@npm:3.6.1"
   dependencies:
     inherits: ^2.0.3
     string_decoder: ^1.1.1
     util-deprecate: ^1.0.1
-  checksum: d4ea81502d3799439bb955a3a5d1d808592cf3133350ed352aeaa499647858b27b1c4013984900238b0873ec8d0d8defce72469fb7a83e61d53f5ad61cb80dc8
+  checksum: b7ab0508dba3c37277b9e43c0a970ea27635375698859a687f558c3c9393154b6c4f39c3aa5689641de183fffa26771bc1a45878ddde0236ad18fc8fdfde50ea
   languageName: node
   linkType: hard
 
@@ -2843,8 +2852,8 @@ __metadata:
   linkType: hard
 
 "rollup@npm:^3.10.0":
-  version: 3.17.1
-  resolution: "rollup@npm:3.17.1"
+  version: 3.17.3
+  resolution: "rollup@npm:3.17.3"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -2852,7 +2861,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 3c6076eba228a6623b886929154ebbb9ddfb6a044e567456eeb6257b5235f4fd740655836b539155b1b25697f38f5d189bf81b9ce0624ce5aafc6c8620bd80c0
+  checksum: afce20a6ef4a613e5803eff7fb17a3efe740e326257b43f48bdbe10783f3eae79587d7e455234bc68f3c3154a50f2c29c85d4d2a42cdebcc17a5abeaeb04e0ed
   languageName: node
   linkType: hard
 
@@ -3290,14 +3299,14 @@ __metadata:
   linkType: hard
 
 "tsconfig-paths@npm:^3.14.1":
-  version: 3.14.1
-  resolution: "tsconfig-paths@npm:3.14.1"
+  version: 3.14.2
+  resolution: "tsconfig-paths@npm:3.14.2"
   dependencies:
     "@types/json5": ^0.0.29
-    json5: ^1.0.1
+    json5: ^1.0.2
     minimist: ^1.2.6
     strip-bom: ^3.0.0
-  checksum: 8afa01c673ebb4782ba53d3a12df97fa837ce524f8ad38ee4e2b2fd57f5ac79abc21c574e9e9eb014d93efe7fe8214001b96233b5c6ea75bd1ea82afe17a4c6d
+  checksum: a6162eaa1aed680537f93621b82399c7856afd10ec299867b13a0675e981acac4e0ec00896860480efc59fc10fd0b16fdc928c0b885865b52be62cadac692447
   languageName: node
   linkType: hard
 
@@ -3488,7 +3497,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitefu@npm:^0.2.3":
+"vitefu@npm:^0.2.4":
   version: 0.2.4
   resolution: "vitefu@npm:0.2.4"
   peerDependencies:
