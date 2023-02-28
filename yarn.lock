@@ -285,9 +285,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:1.8.5":
-  version: 1.8.5
-  resolution: "@sveltejs/kit@npm:1.8.5"
+"@sveltejs/kit@npm:1.8.7":
+  version: 1.8.7
+  resolution: "@sveltejs/kit@npm:1.8.7"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^2.0.0
     "@types/cookie": ^0.5.1
@@ -307,7 +307,7 @@ __metadata:
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: bc9b7ac45c28bd4d4677bfabe38a52eaaf4c8ede18d2094cc7a1c4e2c7e8beebeb0faa1e65bde893a0a5ae576bfa84d1aea6a2cb80ce8b081d3bbee128d9ca28
+  checksum: bba5d41b239c545cbea99a9725dc7f661e26c2e0ab9bdc1ed18ff8f3638ee7b02e3329b8c58b1feb3d5fc63783f864f2a2b4e61274a186e828fc6b9ceaff6293
   languageName: node
   linkType: hard
 
@@ -3322,7 +3322,7 @@ __metadata:
   resolution: "ttbl@workspace:."
   dependencies:
     "@sveltejs/adapter-static": 1.0.6
-    "@sveltejs/kit": 1.8.5
+    "@sveltejs/kit": 1.8.7
     "@tauri-apps/api": 1.2.0
     "@tauri-apps/cli": 1.2.3
     dayjs: 1.11.7
