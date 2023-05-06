@@ -31,7 +31,7 @@
 		"@tauri-apps/api": "1.3.0",
 		"dayjs": "1.11.7",
 		"sticksy": "0.2.0",
-		"svelte": "3.58.0"
+		"svelte": "3.59.0"
 	},
 	"packageManager": "yarn@3.5.1"
 }
