@@ -12,7 +12,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "1.0.6",
-		"@sveltejs/kit": "1.20.4",
+		"@sveltejs/kit": "1.20.5",
 		"@tauri-apps/cli": "1.4.0",
 		"eslint": "8.43.0",
 		"eslint-config-airbnb-base": "15.0.0",
