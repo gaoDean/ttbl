@@ -24,7 +24,7 @@
 		"sass": "1.64.1",
 		"svelte-preprocess": "5.0.4",
 		"ultra-runner": "3.10.5",
-		"vite": "4.4.6"
+		"vite": "4.4.7"
 	},
 	"type": "module",
 	"dependencies": {
