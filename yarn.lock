@@ -3062,16 +3062,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.65.0":
-  version: 1.65.0
-  resolution: "sass@npm:1.65.0"
+"sass@npm:1.65.1":
+  version: 1.65.1
+  resolution: "sass@npm:1.65.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
     immutable: ^4.0.0
     source-map-js: ">=0.6.2 <2.0.0"
   bin:
     sass: sass.js
-  checksum: 61d3ff52cbddb0bda3ea6624b2f63cb3bec910a5b1142708c0497238f06e09cb734a8340db385f31aa84fc1ac8f84169b6e4c2b5d6cedd72d087643fbd031ecf
+  checksum: 33e325fc80cd07489992e0814cd4929496f87493ffe78c423c2dbafa5746a574e6f3bde20c2a3e4ea47b16ee3d6bc5afcf1d36b405227b829d6c4c9ddcc7f8e2
   languageName: node
   linkType: hard
 
@@ -3502,7 +3502,7 @@ __metadata:
     eslint-plugin-svelte3: 4.0.0
     prettier: 3.0.1
     prettier-plugin-svelte: 3.0.3
-    sass: 1.65.0
+    sass: 1.65.1
     sticksy: 0.2.0
     svelte: 3.59.2
     svelte-preprocess: 5.0.4
