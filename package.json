@@ -29,7 +29,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tauri-apps/api": "1.4.0",
-		"dayjs": "1.11.9",
+		"dayjs": "1.11.10",
 		"sticksy": "0.2.0",
 		"svelte": "3.59.2"
 	},
