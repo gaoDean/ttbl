@@ -21,7 +21,7 @@
 		"eslint-plugin-svelte3": "4.0.0",
 		"prettier": "3.0.3",
 		"prettier-plugin-svelte": "3.0.3",
-		"sass": "1.68.0",
+		"sass": "1.69.0",
 		"svelte-preprocess": "5.0.4",
 		"ultra-runner": "3.10.5",
 		"vite": "4.4.11"
