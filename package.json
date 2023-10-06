@@ -14,7 +14,7 @@
 		"@sveltejs/adapter-static": "1.0.6",
 		"@sveltejs/kit": "1.25.1",
 		"@tauri-apps/cli": "1.5.1",
-		"eslint": "8.50.0",
+		"eslint": "8.51.0",
 		"eslint-config-airbnb-base": "15.0.0",
 		"eslint-config-prettier": "9.0.0",
 		"eslint-plugin-import": "2.28.1",
