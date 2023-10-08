@@ -377,90 +377,90 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-darwin-arm64@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-darwin-arm64@npm:1.5.1"
+"@tauri-apps/cli-darwin-arm64@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-darwin-arm64@npm:1.5.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-darwin-x64@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-darwin-x64@npm:1.5.1"
+"@tauri-apps/cli-darwin-x64@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-darwin-x64@npm:1.5.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-linux-arm-gnueabihf@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-linux-arm-gnueabihf@npm:1.5.1"
+"@tauri-apps/cli-linux-arm-gnueabihf@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-linux-arm-gnueabihf@npm:1.5.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-linux-arm64-gnu@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-linux-arm64-gnu@npm:1.5.1"
+"@tauri-apps/cli-linux-arm64-gnu@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-linux-arm64-gnu@npm:1.5.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-linux-arm64-musl@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-linux-arm64-musl@npm:1.5.1"
+"@tauri-apps/cli-linux-arm64-musl@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-linux-arm64-musl@npm:1.5.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-linux-x64-gnu@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-linux-x64-gnu@npm:1.5.1"
+"@tauri-apps/cli-linux-x64-gnu@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-linux-x64-gnu@npm:1.5.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-linux-x64-musl@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-linux-x64-musl@npm:1.5.1"
+"@tauri-apps/cli-linux-x64-musl@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-linux-x64-musl@npm:1.5.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-win32-arm64-msvc@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-win32-arm64-msvc@npm:1.5.1"
+"@tauri-apps/cli-win32-arm64-msvc@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-win32-arm64-msvc@npm:1.5.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-win32-ia32-msvc@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-win32-ia32-msvc@npm:1.5.1"
+"@tauri-apps/cli-win32-ia32-msvc@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-win32-ia32-msvc@npm:1.5.2"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli-win32-x64-msvc@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli-win32-x64-msvc@npm:1.5.1"
+"@tauri-apps/cli-win32-x64-msvc@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli-win32-x64-msvc@npm:1.5.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@tauri-apps/cli@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@tauri-apps/cli@npm:1.5.1"
+"@tauri-apps/cli@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@tauri-apps/cli@npm:1.5.2"
   dependencies:
-    "@tauri-apps/cli-darwin-arm64": 1.5.1
-    "@tauri-apps/cli-darwin-x64": 1.5.1
-    "@tauri-apps/cli-linux-arm-gnueabihf": 1.5.1
-    "@tauri-apps/cli-linux-arm64-gnu": 1.5.1
-    "@tauri-apps/cli-linux-arm64-musl": 1.5.1
-    "@tauri-apps/cli-linux-x64-gnu": 1.5.1
-    "@tauri-apps/cli-linux-x64-musl": 1.5.1
-    "@tauri-apps/cli-win32-arm64-msvc": 1.5.1
-    "@tauri-apps/cli-win32-ia32-msvc": 1.5.1
-    "@tauri-apps/cli-win32-x64-msvc": 1.5.1
+    "@tauri-apps/cli-darwin-arm64": 1.5.2
+    "@tauri-apps/cli-darwin-x64": 1.5.2
+    "@tauri-apps/cli-linux-arm-gnueabihf": 1.5.2
+    "@tauri-apps/cli-linux-arm64-gnu": 1.5.2
+    "@tauri-apps/cli-linux-arm64-musl": 1.5.2
+    "@tauri-apps/cli-linux-x64-gnu": 1.5.2
+    "@tauri-apps/cli-linux-x64-musl": 1.5.2
+    "@tauri-apps/cli-win32-arm64-msvc": 1.5.2
+    "@tauri-apps/cli-win32-ia32-msvc": 1.5.2
+    "@tauri-apps/cli-win32-x64-msvc": 1.5.2
   dependenciesMeta:
     "@tauri-apps/cli-darwin-arm64":
       optional: true
@@ -484,7 +484,7 @@ __metadata:
       optional: true
   bin:
     tauri: tauri.js
-  checksum: 9ade0491d1ff5a9d1b49f524c8ec56edd86e9c550074ed2f0178d56090690ddc9d07f8ae9b5cb380da13b090277bfbc26ee0224733479b66bec292f292cbec84
+  checksum: 84465dbb90bc902809ac2e43e4f8666c5ad613e750a0e5cca3cc81ed09b699a14a85475c3176cf5cb33d074ef826962bea7479bccc9ffc853dcb5819fb2c1687
   languageName: node
   linkType: hard
 
@@ -3542,7 +3542,7 @@ __metadata:
     "@sveltejs/adapter-static": 1.0.6
     "@sveltejs/kit": 1.25.1
     "@tauri-apps/api": 1.5.0
-    "@tauri-apps/cli": 1.5.1
+    "@tauri-apps/cli": 1.5.2
     dayjs: 1.11.10
     eslint: 8.51.0
     eslint-config-airbnb-base: 15.0.0
