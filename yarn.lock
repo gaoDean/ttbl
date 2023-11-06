@@ -2504,8 +2504,8 @@ __metadata:
   linkType: hard
 
 "node-gyp@npm:latest":
-  version: 10.0.0
-  resolution: "node-gyp@npm:10.0.0"
+  version: 10.0.1
+  resolution: "node-gyp@npm:10.0.1"
   dependencies:
     env-paths: ^2.2.0
     exponential-backoff: ^3.1.1
@@ -2519,7 +2519,7 @@ __metadata:
     which: ^4.0.0
   bin:
     node-gyp: bin/node-gyp.js
-  checksum: 65fa5d9f8ef03fa22c5f2d34da23435a63d3743400ca941a4394eb943cf340796456697a7797af1451606dbbeecb663be9328995dadc0b99e58dd583dc3a7a0f
+  checksum: 60a74e66d364903ce02049966303a57f898521d139860ac82744a5fdd9f7b7b3b61f75f284f3bfe6e6add3b8f1871ce305a1d41f775c7482de837b50c792223f
   languageName: node
   linkType: hard
 
@@ -2801,9 +2801,9 @@ __metadata:
   linkType: hard
 
 "punycode@npm:^2.1.0":
-  version: 2.3.0
-  resolution: "punycode@npm:2.3.0"
-  checksum: 39f760e09a2a3bbfe8f5287cf733ecdad69d6af2fe6f97ca95f24b8921858b91e9ea3c9eeec6e08cede96181b3bb33f95c6ffd8c77e63986508aa2e8159fa200
+  version: 2.3.1
+  resolution: "punycode@npm:2.3.1"
+  checksum: bb0a0ceedca4c3c57a9b981b90601579058903c62be23c5e8e843d2c2d4148a3ecf029d5133486fb0e1822b098ba8bba09e89d6b21742d02fa26bda6441a6fb2
   languageName: node
   linkType: hard
 
