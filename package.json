@@ -22,7 +22,7 @@
 		"prettier": "3.0.3",
 		"prettier-plugin-svelte": "3.0.3",
 		"sass": "1.69.5",
-		"svelte-preprocess": "5.0.4",
+		"svelte-preprocess": "5.1.0",
 		"ultra-runner": "3.10.5",
 		"vite": "4.5.0"
 	},
