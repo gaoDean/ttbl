@@ -2757,13 +2757,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-svelte@npm:3.0.3":
-  version: 3.0.3
-  resolution: "prettier-plugin-svelte@npm:3.0.3"
+"prettier-plugin-svelte@npm:3.1.0":
+  version: 3.1.0
+  resolution: "prettier-plugin-svelte@npm:3.1.0"
   peerDependencies:
     prettier: ^3.0.0
-    svelte: ^3.2.0 || ^4.0.0-next.0
-  checksum: 411e50afabb5925bd73e85d35f989f3ffbd9b96764aebe733ea03f0b0eeb8add5a7452d5c1e68a1dff20b8615f99fa2c92db62f2d8b7d892325bdb587284f46e
+    svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
+  checksum: c1676220c7f27c27e0e649aac15aaab2c71916670ecd0208c43cdc772583253f8ce5e9efa6855d3f95add9fec9c80c2e656bc003bab8477c9d78549a820b16ed
   languageName: node
   linkType: hard
 
@@ -3426,7 +3426,7 @@ __metadata:
     eslint-plugin-import: 2.29.0
     eslint-plugin-svelte3: 4.0.0
     prettier: 3.0.3
-    prettier-plugin-svelte: 3.0.3
+    prettier-plugin-svelte: 3.1.0
     sass: 1.69.5
     sticksy: 0.2.0
     svelte: 3.59.2
