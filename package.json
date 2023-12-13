@@ -11,7 +11,7 @@
 		"format": "prettier --write --plugin-search-dir=. ./src/routes/**/*.{js,svelte} ./src/lib/*.{js,svelte}"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "1.0.6",
+		"@sveltejs/adapter-static": "2.0.3",
 		"@sveltejs/kit": "1.30.3",
 		"@tauri-apps/cli": "1.5.7",
 		"eslint": "8.55.0",
