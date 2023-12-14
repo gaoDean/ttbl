@@ -86,13 +86,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Download x86_64 artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: artifacts-x86_64
           path: artifacts/x86_64
 
       - name: Download aarch64 artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: artifacts-aarch64
           path: artifacts/aarch64
