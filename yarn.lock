@@ -390,10 +390,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tauri-apps/api@npm:1.5.2":
-  version: 1.5.2
-  resolution: "@tauri-apps/api@npm:1.5.2"
-  checksum: fa1fc158fec8f80fc6f0ac06ef693cea6d3edbb08abc1f163e81d98d01f6015497a9d38511fb5049d26cd1842adfb215b3bde32323571d559a81c325c3b49a58
+"@tauri-apps/api@npm:1.5.3":
+  version: 1.5.3
+  resolution: "@tauri-apps/api@npm:1.5.3"
+  checksum: 396f6f0630ab2cff0700f016eb84a8150cb8f16ec280e43975952448a0243503c0a0421ffa02ed7b79accef354e044dbd457ec9f73bd98273cf920610474bfbb
   languageName: node
   linkType: hard
 
@@ -3408,7 +3408,7 @@ __metadata:
   dependencies:
     "@sveltejs/adapter-static": 1.0.6
     "@sveltejs/kit": 1.30.3
-    "@tauri-apps/api": 1.5.2
+    "@tauri-apps/api": 1.5.3
     "@tauri-apps/cli": 1.5.8
     dayjs: 1.11.10
     eslint: 8.56.0
