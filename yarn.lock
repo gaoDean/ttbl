@@ -324,12 +324,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-static@npm:1.0.6":
-  version: 1.0.6
-  resolution: "@sveltejs/adapter-static@npm:1.0.6"
+"@sveltejs/adapter-static@npm:3.0.5":
+  version: 3.0.5
+  resolution: "@sveltejs/adapter-static@npm:3.0.5"
   peerDependencies:
-    "@sveltejs/kit": ^1.0.0
-  checksum: dcbd6c0f0142523fa376d4878e6edc9aaaeaf011be94bae3ae6de8cc82f6d6f4a91d4e02381bce653528e9ea74f6a20d46f6a93e80e38205215bd5df2c12bb69
+    "@sveltejs/kit": ^2.0.0
+  checksum: 9534cce2398193ff08663a048aadec02afda2f414e9c67d717e97fab43eb5913eb4432641304327280fd9b8adec43703168cbe35ab6147ce978c2a5498a5290c
   languageName: node
   linkType: hard
 
@@ -3487,7 +3487,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ttbl@workspace:."
   dependencies:
-    "@sveltejs/adapter-static": 1.0.6
+    "@sveltejs/adapter-static": 3.0.5
     "@sveltejs/kit": 1.30.4
     "@tauri-apps/api": 1.5.3
     "@tauri-apps/cli": 1.5.11
